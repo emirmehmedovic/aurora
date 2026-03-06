@@ -12,6 +12,7 @@ export default function AdminSidebar() {
     { href: "/admin", icon: LayoutDashboard, label: "Dashboard" },
     { href: "/admin/orders", icon: ShoppingCart, label: "Narudžbe" },
     { href: "/admin/leads", icon: Users, label: "Leadovi" },
+    { href: "/admin/campaigns", icon: TrendingUp, label: "Kampanje" },
     { href: "/admin/products", icon: Package, label: "Proizvodi" },
     { href: "/admin/analytics", icon: TrendingUp, label: "Analitika" },
   ];
