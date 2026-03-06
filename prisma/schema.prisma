@@ -1,0 +1,229 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(OPERATOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders Order[]
+  leads  Lead[]
+
+  @@map("users")
+}
+
+enum Role {
+  SUPER_ADMIN
+  OPERATOR
+  MARKETING
+  CONTENT_ADMIN
+}
+
+model Product {
+  id                  String   @id @default(cuid())
+  name                String
+  slug                String   @unique
+  shortDescription    String?
+  description         String?
+  price               Int
+  compareAtPrice      Int?
+  active              Boolean  @default(true)
+  seoTitle            String?
+  seoDescription      String?
+  heroCopy            String?
+  benefitsJson        String?
+  faqJson             String?
+  testimonialsJson    String?
+  images              String[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  orderItems OrderItem[]
+
+  @@map("products")
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  fullName  String
+  phone     String
+  email     String?
+  address   String?
+  city      String?
+  zipCode   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders Order[]
+  leads  Lead[]
+
+  @@map("customers")
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique
+  customerId    String
+  customer      Customer    @relation(fields: [customerId], references: [id])
+  status        OrderStatus @default(NEW)
+  totalAmount   Int
+  shippingFee   Int         @default(0)
+  codAmount     Int?
+  source        String?
+  utmSource     String?
+  utmMedium     String?
+  utmCampaign   String?
+  utmContent    String?
+  utmTerm       String?
+  fbclid        String?
+  trackingNumber String?
+  notes         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  items OrderItem[]
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  @@map("orders")
+}
+
+enum OrderStatus {
+  NEW
+  CONFIRMED
+  PREPARING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Int
+  createdAt DateTime @default(now())
+
+  @@map("order_items")
+}
+
+model Lead {
+  id           String     @id @default(cuid())
+  fullName     String
+  phone        String
+  email        String?
+  productId    String?
+  status       LeadStatus @default(NEW)
+  source       String?
+  landingPage  String?
+  utmSource    String?
+  utmMedium    String?
+  utmCampaign  String?
+  utmContent   String?
+  utmTerm      String?
+  fbclid       String?
+  assignedToId String?
+  assignedTo   User?      @relation(fields: [assignedToId], references: [id])
+  customerId   String?
+  customer     Customer?  @relation(fields: [customerId], references: [id])
+  notes        String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("leads")
+}
+
+enum LeadStatus {
+  NEW
+  CALLED
+  CONFIRMED
+  CANCELLED
+  NO_ANSWER
+  FOLLOW_UP
+}
+
+model Campaign {
+  id          String   @id @default(cuid())
+  name        String
+  source      String
+  medium      String?
+  description String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("campaigns")
+}
+
+model AdSpendImport {
+  id        String   @id @default(cuid())
+  filename  String
+  uploadedAt DateTime @default(now())
+  rows      AdSpendRow[]
+
+  @@map("ad_spend_imports")
+}
+
+model AdSpendRow {
+  id            String         @id @default(cuid())
+  importId      String
+  import        AdSpendImport  @relation(fields: [importId], references: [id])
+  date          DateTime
+  campaignName  String
+  adSetName     String?
+  adName        String?
+  spend         Float
+  impressions   Int?
+  clicks        Int?
+  cpm           Float?
+  cpc           Float?
+  createdAt     DateTime       @default(now())
+
+  @@map("ad_spend_rows")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  name      String
+  content   String
+  rating    Int      @default(5)
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("reviews")
+}
+
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("faq")
+}
+
+model Settings {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+
+  @@map("settings")
+}
