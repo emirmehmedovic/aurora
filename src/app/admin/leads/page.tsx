@@ -98,7 +98,7 @@ export default function LeadsPage() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -117,7 +117,7 @@ export default function LeadsPage() {
             </div>
           ) : (
             leads.map((lead) => (
-              <div key={lead.id} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <div key={lead.id} className="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-100">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <div className="flex items-center gap-3 mb-2">

@@ -74,7 +74,7 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -176,12 +176,16 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Nedavna aktivnost</h2>
-          <div className="overflow-x-auto">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="p-6 border-b border-gray-100">
+            <h2 className="text-xl font-bold text-gray-800">Nedavna aktivnost</h2>
+          </div>
+          
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-gray-200">
+                <tr className="border-b border-gray-200 bg-gray-50">
                   <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Datum</th>
                   <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Narudžbe</th>
                   <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Prihod</th>
@@ -201,6 +205,26 @@ export default function AnalyticsPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile List */}
+          <div className="md:hidden divide-y divide-gray-100">
+            {analytics.recentActivity.map((activity, index) => (
+              <div key={index} className="p-4 flex items-center justify-between">
+                <div>
+                  <p className="font-semibold text-gray-800">
+                    {new Date(activity.date).toLocaleDateString("bs-BA")}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {activity.orders} narudžbi • {activity.leads} leadova
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold text-gray-800">{formatPrice(activity.revenue)} KM</p>
+                  <p className="text-xs text-gray-500">prihod</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

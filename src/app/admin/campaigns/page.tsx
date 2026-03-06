@@ -78,23 +78,23 @@ export default function CampaignsPage() {
   const overallCPA = totalOrders > 0 ? totalSpend / totalOrders : 0;
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-800">Marketing Kampanje</h1>
             <p className="text-gray-600">Praćenje Facebook/Instagram kampanja</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => setShowUpload(!showUpload)}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-2"
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center justify-center gap-2"
             >
               <Upload className="w-5 h-5" />
               Import CSV
             </button>
-            <button className="px-4 py-2 bg-[#563435] text-white rounded-lg hover:bg-[#6d4446] flex items-center gap-2">
+            <button className="px-4 py-2 bg-[#563435] text-white rounded-lg hover:bg-[#6d4446] flex items-center justify-center gap-2">
               <Plus className="w-5 h-5" />
               Nova kampanja
             </button>
@@ -176,12 +176,14 @@ export default function CampaignsPage() {
           </div>
         )}
 
-        {/* Campaigns Table */}
+        {/* Campaigns List */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="p-6 border-b border-gray-100">
             <h2 className="text-xl font-bold text-gray-800">Sve kampanje</h2>
           </div>
-          <div className="overflow-x-auto">
+          
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
@@ -239,6 +241,67 @@ export default function CampaignsPage() {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="md:hidden">
+            {campaigns.length === 0 ? (
+              <div className="p-8 text-center text-gray-500">
+                Nema kampanja. Kreiraj novu ili importuj CSV.
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-100">
+                {campaigns.map((campaign) => (
+                  <div key={campaign.id} className="p-4 space-y-4">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h3 className="font-bold text-gray-800">{campaign.name}</h3>
+                        <p className="text-sm text-gray-500">{new Date(campaign.createdAt).toLocaleDateString("bs-BA")}</p>
+                      </div>
+                      <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
+                        {campaign.platform}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs text-gray-500">Spend</p>
+                        <p className="font-semibold text-gray-800">{formatPrice(campaign.spend)} KM</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Revenue</p>
+                        <p className="font-semibold text-green-600">{formatPrice(campaign.revenue)} KM</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">ROAS</p>
+                        <p className={`font-bold ${campaign.roas >= 2 ? 'text-green-600' : campaign.roas >= 1 ? 'text-yellow-600' : 'text-red-600'}`}>
+                          {campaign.roas.toFixed(2)}x
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">CPA</p>
+                        <p className="font-semibold text-gray-800">{formatPrice(campaign.cpa)} KM</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-gray-50">
+                       <div className="text-center">
+                         <p className="text-xs text-gray-500">Leadovi</p>
+                         <p className="font-semibold">{campaign.leads}</p>
+                       </div>
+                       <div className="text-center border-l border-gray-100">
+                         <p className="text-xs text-gray-500">CPL</p>
+                         <p className="font-semibold">{formatPrice(campaign.cpl)}</p>
+                       </div>
+                       <div className="text-center border-l border-gray-100">
+                         <p className="text-xs text-gray-500">Narudžbe</p>
+                         <p className="font-semibold">{campaign.orders}</p>
+                       </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
