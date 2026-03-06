@@ -57,16 +57,11 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="font-semibold text-gray-800 mb-4">Informacije</h4>
+            <h4 className="font-semibold text-gray-800 mb-4">Pravne informacije</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/dostava" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
-                  Dostava
-                </Link>
-              </li>
-              <li>
-                <Link href="/povrat" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
-                  Povrat
+                <Link href="/politika-privatnosti" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
+                  Politika privatnosti
                 </Link>
               </li>
               <li>
@@ -75,8 +70,13 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/politika-privatnosti" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
-                  Politika privatnosti
+                <Link href="/politika-dostave" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
+                  Politika dostave
+                </Link>
+              </li>
+              <li>
+                <Link href="/politika-povrata" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
+                  Politika povrata
                 </Link>
               </li>
             </ul>

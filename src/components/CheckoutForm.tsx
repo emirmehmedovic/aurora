@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Check } from "lucide-react";
+import { trackInitiateCheckout, trackPurchase, trackLead } from "@/lib/analytics";
 
 export default function CheckoutForm() {
   const [formData, setFormData] = useState({
@@ -17,16 +18,43 @@ export default function CheckoutForm() {
 
   const [submitted, setSubmitted] = useState(false);
 
+  useEffect(() => {
+    // Track checkout initiation
+    const prices: Record<string, number> = {
+      "ice-cool-pro": 172.50,
+      "ice-cool-pro-max": 199.00,
+      "ice-cool-lite": 149.00
+    };
+    trackInitiateCheckout(prices[formData.product]);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // TODO: Implement actual form submission to API
-    console.log("Form submitted:", formData);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setSubmitted(true);
-    }, 500);
+    try {
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Track purchase and lead
+        trackPurchase(data.orderId, data.value, [{ id: formData.product, name: formData.product }]);
+        trackLead(data.leadId);
+        setSubmitted(true);
+      } else {
+        console.error("Order submission failed:", data.error);
+        alert("Greška pri slanju narudžbe. Molimo pokušajte ponovo.");
+      }
+    } catch (error) {
+      console.error("Order submission error:", error);
+      alert("Greška pri slanju narudžbe. Molimo pokušajte ponovo.");
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

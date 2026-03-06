@@ -16,11 +16,30 @@ export default function KontaktPage() {
 
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement actual form submission
-    console.log("Contact form submitted:", formData);
-    setSubmitted(true);
+    
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        console.error("Contact form failed:", data.error);
+        alert("Greška pri slanju poruke. Molimo pokušajte ponovo.");
+      }
+    } catch (error) {
+      console.error("Contact form error:", error);
+      alert("Greška pri slanju poruke. Molimo pokušajte ponovo.");
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
