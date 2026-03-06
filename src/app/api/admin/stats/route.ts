@@ -19,7 +19,7 @@ export async function GET() {
       where: { status: { not: "CANCELLED" } },
       select: { totalAmount: true }
     });
-    const totalRevenue = orders.reduce((sum, order) => sum + order.totalAmount, 0);
+    const totalRevenue = orders.reduce((sum: number, order: { totalAmount: number }) => sum + order.totalAmount, 0);
 
     // Get total leads
     const totalLeads = await prisma.lead.count();
@@ -29,7 +29,7 @@ export async function GET() {
 
     // Get pending orders
     const pendingOrders = await prisma.order.count({
-      where: { status: "PENDING" }
+      where: { status: "NEW" }
     });
 
     // Get new leads (last 7 days)
