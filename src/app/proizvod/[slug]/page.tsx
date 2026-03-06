@@ -7,6 +7,14 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+type ProductData = {
+  name: string;
+  slug: string;
+  price: number;
+  compareAtPrice: number;
+  images: string[];
+};
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   

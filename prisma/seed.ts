@@ -22,28 +22,36 @@ async function main() {
 
   console.log("Created admin user:", admin.email);
 
-  // Create products
+  // Create products with specific IDs
   const products = await Promise.all([
     prisma.product.upsert({
       where: { slug: "ice-cool-pro" },
-      update: {},
+      update: {
+        id: "ice-cool-pro-1",
+        images: ["/slike/1772394091-ee63e841-44b7-4498-864d-49a0816c27b9.webp"],
+      },
       create: {
+        id: "ice-cool-pro-1",
         name: "Ice Cool PRO™",
         slug: "ice-cool-pro",
         shortDescription: "Napredna IPL tehnologija sa ugrađenim hlađenjem",
         description: "Napredna IPL tehnologija sa ugrađenim hlađenjem za ugodniji tretman",
-        price: 17250, // in cents
+        price: 17250,
         compareAtPrice: 34500,
         active: true,
-        images: ["https://placehold.co/600x600/E9D5FF/7C3AED/png?text=Ice+Cool+PRO"],
+        images: ["/slike/1772394091-ee63e841-44b7-4498-864d-49a0816c27b9.webp"],
         seoTitle: "Ice Cool PRO™ - IPL Uklanjanje Dlačica | BiH",
         seoDescription: "Bezbolno IPL uklanjanje dlačica sa ugrađenim hlađenjem. 50% popust, besplatna dostava.",
       },
     }),
     prisma.product.upsert({
       where: { slug: "ice-cool-pro-max" },
-      update: {},
+      update: {
+        id: "ice-cool-pro-max-1",
+        images: ["/slike/1772394407-81HeC9oEkKL.webp"],
+      },
       create: {
+        id: "ice-cool-pro-max-1",
         name: "Ice Cool PRO™ Max",
         slug: "ice-cool-pro-max",
         shortDescription: "Premium model sa više nivoa intenziteta",
@@ -51,15 +59,19 @@ async function main() {
         price: 19900,
         compareAtPrice: 39800,
         active: true,
-        images: ["https://placehold.co/600x600/FBCFE8/DB2777/png?text=Ice+Cool+PRO+Max"],
+        images: ["/slike/1772394407-81HeC9oEkKL.webp"],
         seoTitle: "Ice Cool PRO™ Max - Premium IPL Uređaj | BiH",
         seoDescription: "Premium IPL uređaj sa više nivoa intenziteta. Nježniji kućni IPL tretman.",
       },
     }),
     prisma.product.upsert({
       where: { slug: "ice-cool-lite" },
-      update: {},
+      update: {
+        id: "ice-cool-lite-1",
+        images: ["/slike/1772394601-Screenshot_11.webp"],
+      },
       create: {
+        id: "ice-cool-lite-1",
         name: "Ice Cool Lite™",
         slug: "ice-cool-lite",
         shortDescription: "Kompaktna verzija idealna za putovanja",
@@ -67,7 +79,7 @@ async function main() {
         price: 14900,
         compareAtPrice: 29800,
         active: true,
-        images: ["https://placehold.co/600x600/CCFBF1/14B8A6/png?text=Ice+Cool+Lite"],
+        images: ["/slike/1772394601-Screenshot_11.webp"],
         seoTitle: "Ice Cool Lite™ - Kompaktni IPL Uređaj | BiH",
         seoDescription: "Brži kućni tretmani za glatku kožu bez salona. Kompaktna verzija idealna za putovanja.",
       },
@@ -108,23 +120,22 @@ async function main() {
   console.log("Created sample lead:", lead.fullName);
 
   // Create sample order
-  const order = await prisma.order.create({
-    data: {
-      orderNumber: "TEST-001",
+  const order = await prisma.order.upsert({
+    where: { orderNumber: "ORD-2024-001" },
+    update: {},
+    create: {
+      orderNumber: "ORD-2024-001",
       customerId: customer.id,
       status: "NEW",
-      totalAmount: 17250, // in cents
-      shippingFee: 0,
-      source: "direct",
-      utmSource: "direct",
-      utmMedium: "none",
-      utmCampaign: "none",
+      totalAmount: products[0].price,
       items: {
         create: [
           {
-            productId: products[0].id,
+            product: {
+              connect: { id: products[0].id }
+            },
             quantity: 1,
-            price: 17250,
+            price: products[0].price,
           },
         ],
       },

@@ -13,12 +13,12 @@ export default function Navbar() {
       <div className="max-w-[1400px] mx-auto backdrop-blur-lg bg-white/30 border border-white/20 shadow-lg rounded-2xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center">
-            <Image 
-              src="/Black White Minimal Modern Simple Bold Business Mag Logo.png"
-              alt="Ice Cool PRO Logo"
-              width={120}
-              height={60}
-              className="object-contain"
+            <Image
+              src="/slike/Black White Minimal Modern Simple Bold Business Mag Logo.png"
+              alt="Ice Cool PRO™"
+              width={80}
+              height={80}
+              className="rounded-xl"
             />
           </Link>
 

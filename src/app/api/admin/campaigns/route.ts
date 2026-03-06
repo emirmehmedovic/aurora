@@ -12,14 +12,6 @@ export async function GET() {
     }
 
     const campaigns = await prisma.campaign.findMany({
-      include: {
-        _count: {
-          select: {
-            orders: true,
-            leads: true,
-          },
-        },
-      },
       orderBy: { createdAt: "desc" },
     });
 
@@ -36,18 +28,33 @@ export async function GET() {
           where: { utmCampaign: campaign.name },
         });
 
+        // Get ad spend for this campaign
+        const adSpend = await prisma.adSpendRow.aggregate({
+          where: { campaignName: campaign.name },
+          _sum: { spend: true },
+        });
+
         const revenue = orders.reduce((sum: number, order: any) => sum + order.totalAmount, 0);
-        const spend = campaign.totalSpend;
-        const roas = spend > 0 ? revenue / spend : 0;
-        const cpl = leads.length > 0 ? spend / leads.length : 0;
-        const cpa = orders.length > 0 ? spend / orders.length : 0;
+        const spend = (adSpend._sum.spend || 0) * 100; // Convert to cents to match revenue/int format if needed, or keep as float. 
+        // Note: revenue is likely in cents (Int), spend in AdSpendRow is Float (likely dollars/euros).
+        // Let's assume AdSpendRow.spend is in main currency unit (e.g. KM/EUR) and revenue is in cents.
+        // The original code had: spend = campaign.totalSpend (likely cents).
+        // And: spend: spend / 100
+        // So let's assume we need `spend` in cents here for consistency with previous logic.
+        const spendInCents = Math.round((adSpend._sum.spend || 0) * 100);
+        
+        const roas = spendInCents > 0 ? revenue / spendInCents : 0;
+        const cpl = leads.length > 0 ? spendInCents / leads.length : 0;
+        const cpa = orders.length > 0 ? spendInCents / orders.length : 0;
 
         return {
           id: campaign.id,
           name: campaign.name,
-          platform: campaign.platform,
-          status: campaign.status,
-          spend: spend / 100, // Convert from cents
+          // platform: campaign.platform, // 'platform' does not exist in schema
+          source: campaign.source,
+          medium: campaign.medium,
+          active: campaign.active,
+          spend: spendInCents / 100, 
           revenue: revenue / 100,
           orders: orders.length,
           leads: leads.length,

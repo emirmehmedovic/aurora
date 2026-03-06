@@ -15,7 +15,7 @@ const products = [
     slug: "ice-cool-pro",
     price: 172.50,
     compareAtPrice: 345.00,
-    images: ["/1772394091-ee63e841-44b7-4498-864d-49a0816c27b9.webp"],
+    images: ["/slike/1772394091-ee63e841-44b7-4498-864d-49a0816c27b9.webp"],
     shortDescription: "Napredna IPL tehnologija sa ugrađenim hlađenjem za ugodniji tretman"
   },
   {
@@ -24,7 +24,7 @@ const products = [
     slug: "ice-cool-pro-max",
     price: 199.00,
     compareAtPrice: 398.00,
-    images: ["/1772394407-81HeC9oEkKL.webp"],
+    images: ["/slike/1772394407-81HeC9oEkKL.webp"],
     shortDescription: "Premium model sa više nivoa intenziteta i većom površinom tretmana"
   },
   {
@@ -33,9 +33,9 @@ const products = [
     slug: "ice-cool-lite",
     price: 149.00,
     compareAtPrice: 298.00,
-    images: ["/1772394601-Screenshot_11.webp"],
+    images: ["/slike/1772394601-Screenshot_11.webp"],
     shortDescription: "Kompaktna verzija idealna za putovanja i brze tretmane"
-  },
+  }
 ];
 
 export default function ProizvodiPage() {
@@ -56,19 +56,19 @@ export default function ProizvodiPage() {
 
           {/* Trust Badges */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-4 text-center">
+            <div className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-4 text-center shadow-sm">
               <div className="text-2xl font-bold text-[#563435] mb-1">50%</div>
               <div className="text-xs text-gray-600">Popust</div>
             </div>
-            <div className="bg-gradient-to-br from-teal-50/30 via-white/40 to-cyan-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-4 text-center">
+            <div className="bg-gradient-to-br from-teal-50/30 via-white/40 to-cyan-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-4 text-center shadow-sm">
               <div className="text-sm font-bold text-[#563435] mb-1">Besplatna</div>
               <div className="text-xs text-gray-600">Dostava</div>
             </div>
-            <div className="bg-gradient-to-br from-rose-50/30 via-white/40 to-pink-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-4 text-center">
+            <div className="bg-gradient-to-br from-rose-50/30 via-white/40 to-pink-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-4 text-center shadow-sm">
               <div className="text-sm font-bold text-[#563435] mb-1">14 dana</div>
               <div className="text-xs text-gray-600">Povrat</div>
             </div>
-            <div className="bg-gradient-to-br from-amber-50/30 via-white/40 to-orange-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-4 text-center">
+            <div className="bg-gradient-to-br from-amber-50/30 via-white/40 to-orange-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-4 text-center shadow-sm">
               <div className="text-sm font-bold text-[#563435] mb-1">12 mj.</div>
               <div className="text-xs text-gray-600">Garancija</div>
             </div>
@@ -82,13 +82,13 @@ export default function ProizvodiPage() {
           </div>
 
           {/* Why Choose Us Section */}
-          <div className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-3xl p-8 md:p-12">
+          <div className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-3xl p-8 md:p-12 shadow-lg">
             <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">
               Zašto odabrati Ice Cool PRO™?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#563435] flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 rounded-full bg-[#563435] flex items-center justify-center flex-shrink-0 mt-1 shadow-md">
                   <span className="text-white font-bold">✓</span>
                 </div>
                 <div>
@@ -97,7 +97,7 @@ export default function ProizvodiPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#563435] flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 rounded-full bg-[#563435] flex items-center justify-center flex-shrink-0 mt-1 shadow-md">
                   <span className="text-white font-bold">✓</span>
                 </div>
                 <div>
@@ -106,7 +106,7 @@ export default function ProizvodiPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#563435] flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 rounded-full bg-[#563435] flex items-center justify-center flex-shrink-0 mt-1 shadow-md">
                   <span className="text-white font-bold">✓</span>
                 </div>
                 <div>
@@ -115,7 +115,7 @@ export default function ProizvodiPage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#563435] flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 rounded-full bg-[#563435] flex items-center justify-center flex-shrink-0 mt-1 shadow-md">
                   <span className="text-white font-bold">✓</span>
                 </div>
                 <div>

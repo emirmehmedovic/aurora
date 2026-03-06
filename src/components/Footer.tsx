@@ -12,12 +12,12 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center space-x-3 mb-4">
-              <Image 
-                src="/Black White Minimal Modern Simple Bold Business Mag Logo.png"
-                alt="Ice Cool PRO Logo"
-                width={40}
-                height={40}
-                className="object-contain"
+              <Image
+                src="/slike/Black White Minimal Modern Simple Bold Business Mag Logo.png"
+                alt="Ice Cool PRO™"
+                width={60}
+                height={60}
+                className="rounded-xl mb-3"
               />
               <h3 className="text-xl font-bold text-[#563435]">
                 Ice Cool PRO™

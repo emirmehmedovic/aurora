@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { Metadata } from "next";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import NextImage from "next/image";
 
 const faqs = [
   {
@@ -77,13 +78,23 @@ export default function FAQPage() {
       <Navbar />
       <main className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          {/* Header */}
+          {/* Header with Image */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-              Često postavljana pitanja
-            </h1>
+            <div className="relative h-64 rounded-3xl overflow-hidden mb-8 shadow-lg">
+              <NextImage
+                src="/slike/Gemini_Generated_Image_sbj41esbj41esbj4.png"
+                alt="FAQ"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-8">
+                <h1 className="text-4xl md:text-5xl font-bold text-white">
+                  Često postavljana pitanja
+                </h1>
+              </div>
+            </div>
             <p className="text-lg text-gray-600">
-              Pronađite odgovore na najčešća pitanja o našim IPL uređajima
+              Pronađi odgovore na najčešća pitanja o IPL tretmanu
             </p>
           </div>
 

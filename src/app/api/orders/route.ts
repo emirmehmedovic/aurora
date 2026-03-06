@@ -15,10 +15,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Get product details
-    const productMap: Record<string, { name: string; price: number }> = {
-      "ice-cool-pro": { name: "Ice Cool PRO™", price: 172.50 },
-      "ice-cool-pro-max": { name: "Ice Cool PRO™ Max", price: 199.00 },
-      "ice-cool-lite": { name: "Ice Cool Lite™", price: 149.00 }
+    const productMap: Record<string, { id: string; name: string; price: number }> = {
+      "ice-cool-pro": { id: "ice-cool-pro-1", name: "Ice Cool PRO™", price: 17250 },
+      "ice-cool-pro-max": { id: "ice-cool-pro-max-1", name: "Ice Cool PRO™ Max", price: 19900 },
+      "ice-cool-lite": { id: "ice-cool-lite-1", name: "Ice Cool Lite™", price: 14900 }
     };
 
     const productInfo = productMap[product];
@@ -63,7 +63,6 @@ export async function POST(request: NextRequest) {
         fullName,
         phone,
         email: email || null,
-        productInterest: productInfo.name,
         source: utmSource,
         status: "NEW",
         notes: notes || null,
@@ -73,14 +72,16 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    // Generate unique order number
+    const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+
     // Create order
     const order = await prisma.order.create({
       data: {
+        orderNumber,
         customerId: customer.id,
-        status: "PENDING",
+        status: "NEW",
         totalAmount: productInfo.price,
-        shippingAddress: `${address}, ${city}${zipCode ? `, ${zipCode}` : ""}`,
-        paymentMethod: "CASH_ON_DELIVERY",
         utmSource,
         utmMedium,
         utmCampaign,
@@ -88,10 +89,11 @@ export async function POST(request: NextRequest) {
         items: {
           create: [
             {
-              productName: productInfo.name,
+              product: {
+                connect: { id: productInfo.id }
+              },
               quantity: 1,
-              price: productInfo.price,
-              total: productInfo.price
+              price: productInfo.price
             }
           ]
         }

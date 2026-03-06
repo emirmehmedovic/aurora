@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
+import NextImage from "next/image";
 
 export default function KontaktPage() {
   const [formData, setFormData] = useState({
@@ -84,11 +86,21 @@ export default function KontaktPage() {
       <Navbar />
       <main className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
+          {/* Header with Image */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-              Kontaktirajte nas
-            </h1>
+            <div className="relative h-64 rounded-3xl overflow-hidden mb-8 shadow-lg max-w-4xl mx-auto">
+              <NextImage
+                src="/slike/Gemini_Generated_Image_uxjycauxjycauxjy.png"
+                alt="Kontakt"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-8">
+                <h1 className="text-4xl md:text-5xl font-bold text-white">
+                  Kontaktirajte nas
+                </h1>
+              </div>
+            </div>
             <p className="text-lg text-gray-600">
               Rado ćemo odgovoriti na sva vaša pitanja
             </p>

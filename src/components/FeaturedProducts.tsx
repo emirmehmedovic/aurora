@@ -9,7 +9,7 @@ const products = [
     slug: "ice-cool-pro",
     price: 172.50,
     compareAtPrice: 345.00,
-    images: ["/1772394091-ee63e841-44b7-4498-864d-49a0816c27b9.webp"],
+    images: ["/slike/1772394091-ee63e841-44b7-4498-864d-49a0816c27b9.webp"],
     shortDescription: "Napredna IPL tehnologija sa ugrađenim hlađenjem za ugodniji tretman"
   },
   {
@@ -18,7 +18,7 @@ const products = [
     slug: "ice-cool-pro-max",
     price: 199.00,
     compareAtPrice: 398.00,
-    images: ["/1772394407-81HeC9oEkKL.webp"],
+    images: ["/slike/1772394407-81HeC9oEkKL.webp"],
     shortDescription: "Premium model sa više nivoa intenziteta i većom površinom tretmana"
   },
   {
@@ -27,7 +27,7 @@ const products = [
     slug: "ice-cool-lite",
     price: 149.00,
     compareAtPrice: 298.00,
-    images: ["/1772394601-Screenshot_11.webp"],
+    images: ["/slike/1772394601-Screenshot_11.webp"],
     shortDescription: "Kompaktna verzija idealna za putovanja i brze tretmane"
   },
 ];
