@@ -16,7 +16,7 @@ async function main() {
       email: "admin@icecoolpro.ba",
       password: hashedPassword,
       name: "Admin",
-      role: "ADMIN",
+      role: "SUPER_ADMIN",
     },
   });
 
@@ -30,14 +30,14 @@ async function main() {
       create: {
         name: "Ice Cool PRO™",
         slug: "ice-cool-pro",
+        shortDescription: "Napredna IPL tehnologija sa ugrađenim hlađenjem",
         description: "Napredna IPL tehnologija sa ugrađenim hlađenjem za ugodniji tretman",
-        price: 172.50,
-        compareAtPrice: 345.00,
-        stock: 50,
-        isActive: true,
+        price: 17250, // in cents
+        compareAtPrice: 34500,
+        active: true,
         images: ["https://placehold.co/600x600/E9D5FF/7C3AED/png?text=Ice+Cool+PRO"],
-        metaTitle: "Ice Cool PRO™ - IPL Uklanjanje Dlačica | BiH",
-        metaDescription: "Bezbolno IPL uklanjanje dlačica sa ugrađenim hlađenjem. 50% popust, besplatna dostava.",
+        seoTitle: "Ice Cool PRO™ - IPL Uklanjanje Dlačica | BiH",
+        seoDescription: "Bezbolno IPL uklanjanje dlačica sa ugrađenim hlađenjem. 50% popust, besplatna dostava.",
       },
     }),
     prisma.product.upsert({
@@ -46,14 +46,14 @@ async function main() {
       create: {
         name: "Ice Cool PRO™ Max",
         slug: "ice-cool-pro-max",
+        shortDescription: "Premium model sa više nivoa intenziteta",
         description: "Premium model sa više nivoa intenziteta i većom površinom tretmana",
-        price: 199.00,
-        compareAtPrice: 398.00,
-        stock: 30,
-        isActive: true,
+        price: 19900,
+        compareAtPrice: 39800,
+        active: true,
         images: ["https://placehold.co/600x600/FBCFE8/DB2777/png?text=Ice+Cool+PRO+Max"],
-        metaTitle: "Ice Cool PRO™ Max - Premium IPL Uređaj | BiH",
-        metaDescription: "Premium IPL uređaj sa više nivoa intenziteta. Nježniji kućni IPL tretman.",
+        seoTitle: "Ice Cool PRO™ Max - Premium IPL Uređaj | BiH",
+        seoDescription: "Premium IPL uređaj sa više nivoa intenziteta. Nježniji kućni IPL tretman.",
       },
     }),
     prisma.product.upsert({
@@ -62,14 +62,14 @@ async function main() {
       create: {
         name: "Ice Cool Lite™",
         slug: "ice-cool-lite",
+        shortDescription: "Kompaktna verzija idealna za putovanja",
         description: "Kompaktna verzija idealna za putovanja i brze tretmane",
-        price: 149.00,
-        compareAtPrice: 298.00,
-        stock: 40,
-        isActive: true,
+        price: 14900,
+        compareAtPrice: 29800,
+        active: true,
         images: ["https://placehold.co/600x600/CCFBF1/14B8A6/png?text=Ice+Cool+Lite"],
-        metaTitle: "Ice Cool Lite™ - Kompaktni IPL Uređaj | BiH",
-        metaDescription: "Brži kućni tretmani za glatku kožu bez salona. Kompaktna verzija idealna za putovanja.",
+        seoTitle: "Ice Cool Lite™ - Kompaktni IPL Uređaj | BiH",
+        seoDescription: "Brži kućni tretmani za glatku kožu bez salona. Kompaktna verzija idealna za putovanja.",
       },
     }),
   ]);
@@ -96,7 +96,7 @@ async function main() {
       fullName: "Test Lead",
       phone: "+387 62 123 456",
       email: "lead@example.com",
-      productInterest: "Ice Cool PRO™",
+      productId: products[0].id,
       source: "direct",
       status: "NEW",
       utmSource: "direct",
@@ -110,21 +110,21 @@ async function main() {
   // Create sample order
   const order = await prisma.order.create({
     data: {
+      orderNumber: "TEST-001",
       customerId: customer.id,
-      status: "PENDING",
-      totalAmount: 172.50,
-      shippingAddress: "Testna ulica 123, Sarajevo, 71000",
-      paymentMethod: "CASH_ON_DELIVERY",
+      status: "NEW",
+      totalAmount: 17250, // in cents
+      shippingFee: 0,
+      source: "direct",
       utmSource: "direct",
       utmMedium: "none",
       utmCampaign: "none",
       items: {
         create: [
           {
-            productName: "Ice Cool PRO™",
+            productId: products[0].id,
             quantity: 1,
-            price: 172.50,
-            total: 172.50,
+            price: 17250,
           },
         ],
       },
