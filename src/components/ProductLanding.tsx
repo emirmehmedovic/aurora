@@ -176,13 +176,19 @@ const productData: Record<string, any> = {
 };
 
 interface ProductLandingProps {
-  slug: string;
+  slug?: string;
+  product?: any; // Allow passing a full product object directly for custom landing pages
 }
 
-export default function ProductLanding({ slug }: ProductLandingProps) {
+export default function ProductLanding({ slug, product: customProduct }: ProductLandingProps) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showStickyBar, setShowStickyBar] = useState(false);
-  const product = productData[slug] || productData["ice-cool-pro"];
+  
+  // Use custom product if provided, otherwise fallback to looking up by slug
+  const product = customProduct || (slug ? productData[slug] : productData["ice-cool-pro"]);
+  
+  if (!product) return null;
+
   const discount = Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100);
 
   useEffect(() => {
