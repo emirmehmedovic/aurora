@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import ProductLanding from "@/components/ProductLanding";
-import Navbar from "@/components/Navbar";
+import DirectResponseLanding from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -13,10 +12,17 @@ export const metadata: Metadata = {
 };
 
 export default function ProfesionalniIplLandingPage() {
+  const product = {
+    id: "ice-cool-pro-max",
+    name: "Ice Cool PRO™ Max",
+    price: 199.00,
+    compareAtPrice: 398.00,
+    image: "/slike/1772394407-81HeC9oEkKL.webp"
+  };
+
   return (
     <>
-      <Navbar />
-      <ProductLanding slug="ice-cool-pro-max" />
+      <DirectResponseLanding product={product} />
       <Footer />
     </>
   );

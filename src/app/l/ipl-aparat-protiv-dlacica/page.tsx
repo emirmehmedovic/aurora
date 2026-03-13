@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import ProductLanding from "@/components/ProductLanding";
-import Navbar from "@/components/Navbar";
+import DirectResponseLanding from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -13,10 +12,17 @@ export const metadata: Metadata = {
 };
 
 export default function IplAparatLandingPage() {
+  const product = {
+    id: "ice-cool-pro",
+    name: "Ice Cool PRO™",
+    price: 172.50,
+    compareAtPrice: 345.00,
+    image: "/slike/1772394091-ee63e841-44b7-4498-864d-49a0816c27b9.webp"
+  };
+
   return (
     <>
-      <Navbar />
-      <ProductLanding slug="ice-cool-pro" />
+      <DirectResponseLanding product={product} />
       <Footer />
     </>
   );

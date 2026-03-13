@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import ProductLanding from "@/components/ProductLanding";
-import Navbar from "@/components/Navbar";
+import DirectResponseLanding from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -13,10 +12,17 @@ export const metadata: Metadata = {
 };
 
 export default function KompaktniIplLandingPage() {
+  const product = {
+    id: "ice-cool-lite",
+    name: "Ice Cool Lite™",
+    price: 149.00,
+    compareAtPrice: 298.00,
+    image: "/slike/1772394601-Screenshot_11.webp"
+  };
+
   return (
     <>
-      <Navbar />
-      <ProductLanding slug="ice-cool-lite" />
+      <DirectResponseLanding product={product} />
       <Footer />
     </>
   );
