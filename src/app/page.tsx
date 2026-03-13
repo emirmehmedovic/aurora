@@ -4,9 +4,14 @@ import FeaturedProducts from "@/components/FeaturedProducts";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import Footer from "@/components/Footer";
 import ProblemSection from "@/components/ProblemSection";
+import SolutionSection from "@/components/SolutionSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import BenefitsSection from "@/components/BenefitsSection";
+import ResultsTimelineSection from "@/components/ResultsTimelineSection";
+import USPSection from "@/components/USPSection";
 import OfferSection from "@/components/OfferSection";
+import FaqSection from "@/components/FaqSection";
+import FinalCtaSection from "@/components/FinalCtaSection";
 
 export default function Home() {
   return (
@@ -17,13 +22,18 @@ export default function Home() {
           <HeroSection />
         </div>
         <ProblemSection />
-        <HowItWorksSection />
+        <SolutionSection />
         <BenefitsSection />
+        <HowItWorksSection />
+        <ResultsTimelineSection />
         <TestimonialsSection />
+        <USPSection />
         <OfferSection />
-        <div>
+        <div className="py-8">
           <FeaturedProducts />
         </div>
+        <FaqSection />
+        <FinalCtaSection />
       </main>
       <Footer />
     </>
