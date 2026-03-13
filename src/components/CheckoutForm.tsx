@@ -8,26 +8,26 @@ import { trackInitiateCheckout, trackPurchase, trackLead } from "@/lib/analytics
 const products = [
   {
     id: "ice-cool-pro",
-    name: "Ice Cool PRO™",
-    price: 172.50,
-    compareAtPrice: 345.00,
-    image: "/slike/1772394091-ee63e841-44b7-4498-864d-49a0816c27b9.webp",
+    name: "ICE COOL PRO",
+    price: 175.00,
+    compareAtPrice: 350.00,
+    image: "/slike/PRO/cover-image.png",
     features: ["Najprodavaniji model", "Napredno hlađenje", "5 nivoa jačine"]
   },
   {
     id: "ice-cool-pro-max",
-    name: "Ice Cool PRO™ Max",
-    price: 199.00,
-    compareAtPrice: 398.00,
-    image: "/slike/1772394407-81HeC9oEkKL.webp",
+    name: "ICE COOL Max",
+    price: 190.00,
+    compareAtPrice: 380.00,
+    image: "/slike/ELITE/cover.png",
     features: ["Veća površina bljeska", "Brži tretmani", "Profesionalni rezultati"]
   },
   {
     id: "ice-cool-lite",
-    name: "Ice Cool Lite™",
-    price: 149.00,
-    compareAtPrice: 298.00,
-    image: "/slike/1772394601-Screenshot_11.webp",
+    name: "ICE COOL LITE",
+    price: 165.00,
+    compareAtPrice: 330.00,
+    image: "/slike/LITE/cover.png",
     features: ["Kompaktan dizajn", "Idealno za putovanja", "Odlično za početnike"]
   }
 ];

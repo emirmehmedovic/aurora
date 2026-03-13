@@ -7,13 +7,30 @@ import { Check, Star, Truck, Shield, RotateCcw, CreditCard, ChevronDown, Chevron
 
 const productData: Record<string, any> = {
   "ice-cool-pro": {
-    name: "Ice Cool PRO™",
+    name: "ICE COOL PRO",
     tagline: "Glatka koža koja traje sedmicama",
-    price: 172.50,
-    compareAtPrice: 345.00,
-    images: ["/slike/1772394091-ee63e841-44b7-4498-864d-49a0816c27b9.webp"],
+    price: 175.00,
+    compareAtPrice: 350.00,
+    images: [
+      "/slike/PRO/cover-image.png",
+      "/slike/PRO/slika2.png",
+      "/slike/PRO/slika3.webp",
+      "/slike/PRO/slika4.png",
+      "/slike/PRO/slika5.png",
+      "/slike/PRO/slika6.webp",
+      "/slike/PRO/slika7.png"
+    ],
+    usageImages: [
+      "/slike/PRO/koristenje1.png",
+      "/slike/PRO/koristenje2.png",
+      "/slike/PRO/koristenje3.png",
+      "/slike/PRO/koristenje4.png",
+      "/slike/PRO/koristenje5.png",
+      "/slike/PRO/koristenje6.png",
+      "/slike/PRO/koristenje7.png"
+    ],
     hero: {
-      title: "Ice Cool PRO™ — glatka koža koja traje sedmicama",
+      title: "ICE COOL PRO — glatka koža koja traje sedmicama",
       subtitle: "Bezbolno IPL uklanjanje dlačica iz udobnosti doma. Salon efekat bez salona, bez voska i bez svakodnevnog brijanja."
     },
     benefits: [
@@ -78,13 +95,29 @@ const productData: Record<string, any> = {
     ]
   },
   "ice-cool-pro-max": {
-    name: "Ice Cool PRO™ Max",
+    name: "ICE COOL Max",
     tagline: "Maksimalna snaga za najbrže rezultate",
-    price: 199.00,
-    compareAtPrice: 398.00,
-    images: ["/slike/1772394407-81HeC9oEkKL.webp"],
+    price: 190.00,
+    compareAtPrice: 380.00,
+    images: [
+      "/slike/ELITE/cover.png",
+      "/slike/ELITE/slika1.png",
+      "/slike/ELITE/slika2.png",
+      "/slike/ELITE/koristenje1.png",
+      "/slike/ELITE/koristenje2.png",
+      "/slike/ELITE/koristenje3.png",
+      "/slike/ELITE/koristenje4.png",
+      "/slike/ELITE/koristenje5.png"
+    ],
+    usageImages: [
+      "/slike/ELITE/koristenje1.png",
+      "/slike/ELITE/koristenje2.png",
+      "/slike/ELITE/koristenje3.png",
+      "/slike/ELITE/koristenje4.png",
+      "/slike/ELITE/koristenje5.png"
+    ],
     hero: {
-      title: "Ice Cool PRO™ Max — Salon u vašem domu",
+      title: "ICE COOL Max — Salon u vašem domu",
       subtitle: "Naš najjači model sa većom površinom bljeska za brže tretmane cijelog tijela."
     },
     benefits: [
@@ -131,13 +164,26 @@ const productData: Record<string, any> = {
     ]
   },
   "ice-cool-lite": {
-    name: "Ice Cool Lite™",
+    name: "ICE COOL LITE",
     tagline: "Kompaktan, lagan i efikasan",
-    price: 149.00,
-    compareAtPrice: 298.00,
-    images: ["/slike/1772394601-Screenshot_11.webp"],
+    price: 165.00,
+    compareAtPrice: 330.00,
+    images: [
+      "/slike/LITE/cover.png",
+      "/slike/LITE/1.png",
+      "/slike/LITE/2.png",
+      "/slike/LITE/3.png",
+      "/slike/LITE/4.png",
+      "/slike/LITE/5.png",
+      "/slike/LITE/6.png"
+    ],
+    usageImages: [
+      "/slike/LITE/4.png",
+      "/slike/LITE/5.png",
+      "/slike/LITE/6.png"
+    ],
     hero: {
-      title: "Ice Cool Lite™ — Vaš saputnik za glatku kožu",
+      title: "ICE COOL LITE — Vaš saputnik za glatku kožu",
       subtitle: "Idealan za početnice i putovanja. Mali, lagan, ali moćan saveznik u borbi protiv dlačica."
     },
     benefits: [
@@ -183,6 +229,7 @@ interface ProductLandingProps {
 export default function ProductLanding({ slug, product: customProduct }: ProductLandingProps) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   
   // Use custom product if provided, otherwise fallback to looking up by slug
   const product = customProduct || (slug ? productData[slug] : productData["ice-cool-pro"]);
@@ -190,6 +237,13 @@ export default function ProductLanding({ slug, product: customProduct }: Product
   if (!product) return null;
 
   const discount = Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100);
+
+  // Set default usage images if none exist
+  const usageImages = product.usageImages || [
+    "/slike/PRO/koristenje1.png",
+    "/slike/PRO/koristenje2.png",
+    "/slike/PRO/koristenje3.png"
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -215,26 +269,40 @@ export default function ProductLanding({ slug, product: customProduct }: Product
           {/* Glass Card Container */}
           <div className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-xl border border-white/20 rounded-[2.5rem] shadow-2xl overflow-hidden p-6 md:p-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              {/* Product Image */}
-              <div className="relative h-[400px] lg:h-[550px] rounded-3xl overflow-hidden bg-white/30 backdrop-blur-sm border border-white/30 shadow-inner group">
-                <Image
-                  src={product.images[0]}
-                  alt={product.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                {discount > 0 && (
-                  <div className="absolute top-6 left-6 bg-[#563435] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg z-10">
-                    -{discount}% POPUST
+              {/* Product Image Gallery */}
+              <div className="flex flex-col gap-4">
+                <div className="relative h-[400px] lg:h-[500px] rounded-3xl overflow-hidden bg-white/30 backdrop-blur-sm border border-white/30 shadow-inner group">
+                  <Image
+                    src={product.images[activeImageIndex]}
+                    alt={`${product.name} - slika ${activeImageIndex + 1}`}
+                    fill
+                    className="object-cover transition-transform duration-700"
+                  />
+                  {discount > 0 && (
+                    <div className="absolute top-6 left-6 bg-[#563435] text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg z-10">
+                      -{discount}% POPUST
+                    </div>
+                  )}
+                </div>
+                
+                {/* Thumbnails Row */}
+                {product.images.length > 1 && (
+                  <div className="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
+                    {product.images.map((img: string, idx: number) => (
+                      <button
+                        key={idx}
+                        onClick={() => setActiveImageIndex(idx)}
+                        className={`relative w-20 h-20 flex-shrink-0 rounded-2xl overflow-hidden border-2 transition-all ${
+                          activeImageIndex === idx 
+                            ? "border-[#563435] shadow-md scale-105" 
+                            : "border-white/50 hover:border-[#563435]/50 opacity-70 hover:opacity-100"
+                        }`}
+                      >
+                        <Image src={img} alt="" fill className="object-cover" />
+                      </button>
+                    ))}
                   </div>
                 )}
-                
-                {/* Image Gallery Thumbnails (Placeholder for now) */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-                  {product.images.map((img: string, idx: number) => (
-                    <div key={idx} className="w-2 h-2 rounded-full bg-white shadow-md cursor-pointer hover:scale-125 transition-all" />
-                  ))}
-                </div>
               </div>
 
               {/* Product Info */}
@@ -348,7 +416,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
             <div className="group relative bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="relative h-64 w-full">
                 <Image
-                  src="/slike/Gemini_Generated_Image_3nt72c3nt72c3nt7.png"
+                  src={usageImages[0] || product.images[0]}
                   alt="Priprema kože"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -368,7 +436,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
             <div className="group relative bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="relative h-64 w-full">
                 <Image
-                  src="/slike/Gemini_Generated_Image_ct06zvct06zvct06.png"
+                  src={usageImages[1] || product.images[1] || product.images[0]}
                   alt="IPL tretman"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -388,7 +456,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
             <div className="group relative bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="relative h-64 w-full">
                 <Image
-                  src="/slike/Gemini_Generated_Image_sbj41esbj41esbj4.png"
+                  src={usageImages[2] || product.images[2] || product.images[0]}
                   alt="Rezultati tretmana"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -497,7 +565,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <div className="hidden sm:flex items-center gap-4">
              <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-gray-200">
-               <Image src={product.images[0]} alt={product.name} fill className="object-cover" />
+               <Image src={product.images[activeImageIndex] || product.images[0]} alt={product.name} fill className="object-cover" />
              </div>
              <div>
                <p className="font-bold text-gray-800">{product.name}</p>

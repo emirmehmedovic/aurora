@@ -26,7 +26,7 @@ const testimonials = [
     age: 31,
     content: "Nisam mogla vjerovati koliko je jednostavno za korištenje. Rezultati su vidljivi već nakon par tretmana. Presretna sam!",
     rating: 5,
-    image: "/slike/1772396139-pexels-foundertips-4745140.webp"
+    image: "/slike/lejla-review.png"
   },
 ];
 

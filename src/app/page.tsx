@@ -23,15 +23,15 @@ export default function Home() {
         </div>
         <ProblemSection />
         <SolutionSection />
+        <div className="py-8">
+          <FeaturedProducts />
+        </div>
         <BenefitsSection />
         <HowItWorksSection />
         <ResultsTimelineSection />
         <TestimonialsSection />
         <USPSection />
         <OfferSection />
-        <div className="py-8">
-          <FeaturedProducts />
-        </div>
         <FaqSection />
         <FinalCtaSection />
       </main>
