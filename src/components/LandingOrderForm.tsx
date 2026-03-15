@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { Check, Truck, ShieldCheck, CreditCard, ChevronRight, Clock, Gift, ArrowRight } from "lucide-react";
-import { trackInitiateCheckout, trackPurchase, trackLead } from "@/lib/analytics";
+import { trackInitiateCheckout, trackPurchase, trackLead, trackFormStart, trackFormAbandon, getUtmParams } from "@/lib/analytics";
 
 interface LandingOrderFormProps {
   product: {
@@ -30,10 +30,23 @@ export default function LandingOrderForm({ product }: LandingOrderFormProps) {
 
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [focusedCheckout, setFocusedCheckout] = useState(false);
+  const [formStarted, setFormStarted] = useState(false);
+  const lastFieldRef = useRef<string>("");
 
   const productImage = product.image || (product.images && product.images[0]) || "/slike/PRO/cover-image.png";
   const discount = Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100);
+
+  // Track form abandonment on page leave
+  const handleBeforeUnload = useCallback(() => {
+    if (formStarted && !submitted && lastFieldRef.current) {
+      trackFormAbandon('LandingOrderForm', lastFieldRef.current, product.id);
+    }
+  }, [formStarted, submitted, product.id]);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [handleBeforeUnload]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,10 +55,14 @@ export default function LandingOrderForm({ product }: LandingOrderFormProps) {
     try {
       trackInitiateCheckout(product.price);
 
+      // Append UTM params to order data
+      const utms = getUtmParams();
+      const orderData = { ...formData, ...utms };
+
       const response = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(orderData),
       });
 
       const data = await response.json();
@@ -67,7 +84,11 @@ export default function LandingOrderForm({ product }: LandingOrderFormProps) {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (!focusedCheckout) setFocusedCheckout(true);
+    if (!formStarted) {
+      setFormStarted(true);
+      trackFormStart('LandingOrderForm', product.id);
+    }
+    lastFieldRef.current = e.target.name;
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 

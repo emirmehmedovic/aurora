@@ -125,10 +125,127 @@ export const trackLead = (leadId: string) => {
   });
 };
 
+// ==========================================
+// SCROLL DEPTH TRACKING
+// ==========================================
+export const trackScrollDepth = (depth: number, page: string) => {
+  event({
+    action: 'scroll_depth',
+    category: 'engagement',
+    label: `${page} - ${depth}%`,
+    value: depth,
+  });
+
+  fbEvent('ScrollDepth', {
+    content_name: page,
+    depth_percentage: depth,
+  });
+};
+
+// ==========================================
+// CTA CLICK TRACKING
+// ==========================================
+export const trackCtaClick = (ctaName: string, ctaLocation: string, page: string) => {
+  event({
+    action: 'cta_click',
+    category: 'engagement',
+    label: `${ctaName} | ${ctaLocation} | ${page}`,
+  });
+
+  fbEvent('CtaClick', {
+    content_name: ctaName,
+    cta_location: ctaLocation,
+    page: page,
+  });
+};
+
+// ==========================================
+// FORM ABANDONMENT TRACKING
+// ==========================================
+export const trackFormStart = (formName: string, productId?: string) => {
+  event({
+    action: 'form_start',
+    category: 'engagement',
+    label: `${formName}${productId ? ` | ${productId}` : ''}`,
+  });
+
+  fbEvent('FormStart', {
+    content_name: formName,
+    content_ids: productId ? [productId] : [],
+  });
+};
+
+export const trackFormAbandon = (formName: string, lastField: string, productId?: string) => {
+  event({
+    action: 'form_abandon',
+    category: 'engagement',
+    label: `${formName} | last_field: ${lastField}${productId ? ` | ${productId}` : ''}`,
+  });
+
+  fbEvent('FormAbandon', {
+    content_name: formName,
+    last_field: lastField,
+    content_ids: productId ? [productId] : [],
+  });
+};
+
+// ==========================================
+// WHATSAPP CLICK TRACKING
+// ==========================================
+export const trackWhatsAppClick = (location: string) => {
+  event({
+    action: 'whatsapp_click',
+    category: 'engagement',
+    label: location,
+  });
+
+  fbEvent('Contact', {
+    content_name: 'WhatsApp',
+    content_category: location,
+  });
+};
+
+// ==========================================
+// UTM PARAMETER UTILITIES
+// ==========================================
+export const getUtmParams = (): Record<string, string> => {
+  if (typeof window === 'undefined') return {};
+  
+  const params = new URLSearchParams(window.location.search);
+  const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+  const utms: Record<string, string> = {};
+  
+  utmKeys.forEach(key => {
+    const val = params.get(key);
+    if (val) utms[key] = val;
+  });
+
+  // Persist to sessionStorage so they survive navigation
+  if (Object.keys(utms).length > 0) {
+    sessionStorage.setItem('utm_params', JSON.stringify(utms));
+  }
+
+  // Return stored UTMs if no fresh ones in URL
+  if (Object.keys(utms).length === 0) {
+    try {
+      const stored = sessionStorage.getItem('utm_params');
+      if (stored) return JSON.parse(stored);
+    } catch {}
+  }
+
+  return utms;
+};
+
+export const getUtmString = (): string => {
+  const utms = getUtmParams();
+  return new URLSearchParams(utms).toString();
+};
+
 // Type declarations
 declare global {
   interface Window {
     gtag: (...args: any[]) => void;
     fbq: (...args: any[]) => void;
+    clarity: (...args: any[]) => void;
   }
 }

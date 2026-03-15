@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Check, Star, Truck, Shield, RotateCcw, ArrowRight, Sparkles, Zap, ChevronDown, ChevronUp, Banknote, CreditCard } from "lucide-react";
 import LandingOrderForm from "@/components/LandingOrderForm";
+import useScrollDepth from "@/hooks/useScrollDepth";
+import { trackCtaClick } from "@/lib/analytics";
 
 export interface LandingReview {
   name: string;
@@ -83,7 +85,10 @@ export default function DirectResponseLanding({ product, content }: DirectRespon
     { name: "ICE COOL LITE", price: "165 KM", flashes: "500,000", levels: "3", cooling: "Ice Cool™", weight: "~200g", highlight: p.id === "ice-cool-lite" },
   ];
 
-  const scrollToForm = () => {
+  useScrollDepth(`landing-${p.id}`);
+
+  const scrollToForm = (ctaLocation: string) => {
+    trackCtaClick('Naruci', ctaLocation, `landing-${p.id}`);
     const el = document.getElementById('naruci-form');
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -91,7 +96,7 @@ export default function DirectResponseLanding({ product, content }: DirectRespon
   const UrgencyCTA = () => (
     <div className="flex flex-col items-center mt-8 mb-8 w-full">
       <button 
-        onClick={scrollToForm}
+        onClick={() => scrollToForm('urgency-cta')}
         className="group relative w-full py-5 px-8 bg-[#563435] hover:bg-[#6d4446] text-white text-center font-bold text-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden cursor-pointer"
       >
         <span className="relative z-10 flex items-center justify-center gap-3">
@@ -124,7 +129,7 @@ export default function DirectResponseLanding({ product, content }: DirectRespon
             />
           </Link>
           <button 
-            onClick={scrollToForm}
+            onClick={() => scrollToForm('navbar')}
             className="inline-flex items-center justify-center px-6 py-2.5 bg-[#563435] text-white font-semibold rounded-full shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 cursor-pointer"
           >
             Želim glatku kožu
