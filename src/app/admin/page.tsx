@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Package, Users, TrendingUp, DollarSign, ShoppingCart, MessageSquare, Clock, UserPlus } from "lucide-react";
+import { Package, Users, TrendingUp, DollarSign, ShoppingCart, Clock, UserPlus } from "lucide-react";
 
 interface Stats {
   totalOrders: number;
@@ -65,157 +65,129 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="p-4 md:p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 bg-gray-50/30 min-h-screen relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-purple-50/40 to-transparent pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Admin Dashboard</h1>
-          <p className="text-gray-600">Dobrodošli, {session.user?.name || session.user?.email}</p>
+        <div className="mb-8 bg-white/40 backdrop-blur-md border border-white/30 rounded-3xl p-6 shadow-sm">
+          <h1 className="text-2xl font-bold text-gray-800 mb-1">Admin Dashboard</h1>
+          <p className="text-gray-600">Dobrodošli, <span className="font-medium text-[#563435]">{session.user?.name || session.user?.email}</span></p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
           {/* Total Orders */}
-          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
-                <ShoppingCart className="w-7 h-7 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                <ShoppingCart className="w-4 h-4 text-blue-600" />
               </div>
-              <div className="text-right">
-                <p className="text-xs text-blue-600 font-semibold">TOTAL</p>
-              </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Narudžbe</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1 font-medium">Ukupno narudžbi</p>
-            <p className="text-4xl font-bold text-gray-800">{stats.totalOrders}</p>
-            <div className="mt-3 pt-3 border-t border-blue-100">
-              <p className="text-xs text-gray-500">Sve narudžbe</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-800">{stats.totalOrders}</p>
           </div>
 
           {/* Total Revenue */}
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-100 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
-                <DollarSign className="w-7 h-7 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
+                <DollarSign className="w-4 h-4 text-green-600" />
               </div>
-              <div className="text-right">
-                <p className="text-xs text-green-600 font-semibold">REVENUE</p>
-              </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Prihod</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1 font-medium">Ukupan prihod</p>
-            <p className="text-4xl font-bold text-gray-800">{(stats.totalRevenue / 100).toFixed(2)} KM</p>
-            <div className="mt-3 pt-3 border-t border-green-100">
-              <p className="text-xs text-gray-500">Svi prihodi</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-800">{(stats.totalRevenue / 100).toFixed(0)} <span className="text-sm text-gray-500 font-normal">KM</span></p>
           </div>
 
           {/* Total Leads */}
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Users className="w-7 h-7 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center flex-shrink-0">
+                <Users className="w-4 h-4 text-purple-600" />
               </div>
-              <div className="text-right">
-                <p className="text-xs text-purple-600 font-semibold">LEADS</p>
-              </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Leadovi</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1 font-medium">Ukupno leadova</p>
-            <p className="text-4xl font-bold text-gray-800">{stats.totalLeads}</p>
-            <div className="mt-3 pt-3 border-t border-purple-100">
-              <p className="text-xs text-gray-500">Svi leadovi</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-800">{stats.totalLeads}</p>
           </div>
 
           {/* Conversion Rate */}
-          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg">
-                <TrendingUp className="w-7 h-7 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0">
+                <TrendingUp className="w-4 h-4 text-orange-600" />
               </div>
-              <div className="text-right">
-                <p className="text-xs text-orange-600 font-semibold">RATE</p>
-              </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Konverzija</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1 font-medium">Conversion rate</p>
-            <p className="text-4xl font-bold text-gray-800">{stats.conversionRate.toFixed(1)}%</p>
-            <div className="mt-3 pt-3 border-t border-orange-100">
-              <p className="text-xs text-gray-500">Lead → Order</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-800">{stats.conversionRate.toFixed(1)}%</p>
           </div>
 
           {/* Pending Orders */}
-          <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-6 border border-yellow-100 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Clock className="w-7 h-7 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-yellow-50 flex items-center justify-center flex-shrink-0">
+                <Clock className="w-4 h-4 text-yellow-600" />
               </div>
-              <div className="text-right">
-                <p className="text-xs text-yellow-600 font-semibold">PENDING</p>
-              </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Na čekanju</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1 font-medium">Na čekanju</p>
-            <p className="text-4xl font-bold text-gray-800">{stats.pendingOrders}</p>
-            <div className="mt-3 pt-3 border-t border-yellow-100">
-              <p className="text-xs text-gray-500">Nove narudžbe</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-800">{stats.pendingOrders}</p>
           </div>
 
           {/* New Leads */}
-          <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-6 border border-indigo-100 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
-                <UserPlus className="w-7 h-7 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                <UserPlus className="w-4 h-4 text-indigo-600" />
               </div>
-              <div className="text-right">
-                <p className="text-xs text-indigo-600 font-semibold">NEW</p>
-              </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Novi leadovi</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1 font-medium">Novi leadovi</p>
-            <p className="text-4xl font-bold text-gray-800">{stats.newLeads}</p>
-            <div className="mt-3 pt-3 border-t border-indigo-100">
-              <p className="text-xs text-gray-500">Zadnjih 7 dana</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-800">{stats.newLeads}</p>
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+        <div className="bg-white/40 backdrop-blur-md border border-white/30 rounded-3xl p-6 md:p-8 shadow-sm">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Brze akcije</h2>
-            <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-gray-600" />
-            </div>
+            <h2 className="text-xl font-bold text-gray-800">Brze akcije</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Link
               href="/admin/orders"
-              className="group p-6 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl hover:shadow-lg transition-all border border-blue-100"
+              className="group p-5 bg-white/60 rounded-2xl hover:bg-white hover:shadow-md transition-all border border-white/50 flex items-center gap-4"
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                <ShoppingCart className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <ShoppingCart className="w-5 h-5 text-blue-600" />
               </div>
-              <h3 className="font-bold text-gray-800 mb-1">Narudžbe</h3>
-              <p className="text-sm text-gray-600">Upravljaj narudžbama</p>
+              <div>
+                <h3 className="font-bold text-gray-800 text-sm">Narudžbe</h3>
+                <p className="text-xs text-gray-500">Upravljanje narudžbama</p>
+              </div>
             </Link>
+            
             <Link
               href="/admin/leads"
-              className="group p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl hover:shadow-lg transition-all border border-purple-100"
+              className="group p-5 bg-white/60 rounded-2xl hover:bg-white hover:shadow-md transition-all border border-white/50 flex items-center gap-4"
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                <Users className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <Users className="w-5 h-5 text-purple-600" />
               </div>
-              <h3 className="font-bold text-gray-800 mb-1">Leadovi</h3>
-              <p className="text-sm text-gray-600">Upravljaj leadovima</p>
+              <div>
+                <h3 className="font-bold text-gray-800 text-sm">Leadovi</h3>
+                <p className="text-xs text-gray-500">Baza potencijalnih kupaca</p>
+              </div>
             </Link>
+            
             <Link
               href="/admin/products"
-              className="group p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl hover:shadow-lg transition-all border border-green-100"
+              className="group p-5 bg-white/60 rounded-2xl hover:bg-white hover:shadow-md transition-all border border-white/50 flex items-center gap-4"
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg">
-                <Package className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <Package className="w-5 h-5 text-green-600" />
               </div>
-              <h3 className="font-bold text-gray-800 mb-1">Proizvodi</h3>
-              <p className="text-sm text-gray-600">Upravljaj proizvodima</p>
+              <div>
+                <h3 className="font-bold text-gray-800 text-sm">Proizvodi</h3>
+                <p className="text-xs text-gray-500">Cijene i informacije</p>
+              </div>
             </Link>
           </div>
         </div>

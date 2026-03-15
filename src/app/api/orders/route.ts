@@ -16,9 +16,9 @@ export async function POST(request: NextRequest) {
 
     // Get product details
     const productMap: Record<string, { id: string; name: string; price: number }> = {
-      "ice-cool-pro": { id: "ice-cool-pro-1", name: "Ice Cool PRO™", price: 17250 },
-      "ice-cool-pro-max": { id: "ice-cool-pro-max-1", name: "Ice Cool PRO™ Max", price: 19900 },
-      "ice-cool-lite": { id: "ice-cool-lite-1", name: "Ice Cool Lite™", price: 14900 }
+      "ice-cool-pro": { id: "ice-cool-pro-1", name: "ICE COOL PRO", price: 17500 },
+      "ice-cool-pro-max": { id: "ice-cool-pro-max-1", name: "ICE COOL Max", price: 19000 },
+      "ice-cool-lite": { id: "ice-cool-lite-1", name: "ICE COOL LITE", price: 16500 }
     };
 
     const productInfo = productMap[product];
@@ -135,14 +135,41 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     // Get recent orders (for admin)
-    const orders = await prisma.order.findMany({
-      take: 10,
+    const dbOrders = await prisma.order.findMany({
+      take: 50,
       orderBy: { createdAt: "desc" },
       include: {
         customer: true,
-        items: true
+        items: {
+          include: {
+            product: true
+          }
+        }
       }
     });
+
+    // Map db response to expected frontend structure
+    const orders = dbOrders.map(order => ({
+      id: order.id,
+      orderNumber: order.orderNumber,
+      status: order.status,
+      totalAmount: order.totalAmount / 100, // Assuming stored in cents, but if not we should check. Wait, price above is 17500 so yes it's cents
+      createdAt: order.createdAt,
+      notes: order.notes,
+      customer: {
+        fullName: order.customer.fullName,
+        phone: order.customer.phone,
+        email: order.customer.email,
+      },
+      shippingAddress: order.customer.address,
+      city: order.customer.city,
+      zipCode: order.customer.zipCode,
+      items: order.items.map(item => ({
+        productName: item.product.name,
+        quantity: item.quantity,
+        price: item.price / 100
+      }))
+    }));
 
     return NextResponse.json({ orders });
   } catch (error) {
