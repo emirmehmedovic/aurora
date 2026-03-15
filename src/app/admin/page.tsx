@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Package, Users, TrendingUp, DollarSign, ShoppingCart, Clock, UserPlus } from "lucide-react";
+import { Package, Users, TrendingUp, DollarSign, ShoppingCart, Clock, UserPlus, BarChart3 } from "lucide-react";
 
 interface Stats {
   totalOrders: number;
@@ -150,7 +150,7 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-800">Brze akcije</h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <Link
               href="/admin/orders"
               className="group p-5 bg-white/60 rounded-2xl hover:bg-white hover:shadow-md transition-all border border-white/50 flex items-center gap-4"
@@ -187,6 +187,32 @@ export default function AdminDashboard() {
               <div>
                 <h3 className="font-bold text-gray-800 text-sm">Proizvodi</h3>
                 <p className="text-xs text-gray-500">Cijene i informacije</p>
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/tracking"
+              className="group p-5 bg-white/60 rounded-2xl hover:bg-white hover:shadow-md transition-all border border-white/50 flex items-center gap-4"
+            >
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <BarChart3 className="w-5 h-5 text-indigo-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-800 text-sm">Praćenje & Metrike</h3>
+                <p className="text-xs text-gray-500">UTM kampanje, funnel, izvori</p>
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/analytics"
+              className="group p-5 bg-white/60 rounded-2xl hover:bg-white hover:shadow-md transition-all border border-white/50 flex items-center gap-4"
+            >
+              <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <TrendingUp className="w-5 h-5 text-orange-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-800 text-sm">Analitika</h3>
+                <p className="text-xs text-gray-500">Prihod, proizvodi, aktivnost</p>
               </div>
             </Link>
           </div>
