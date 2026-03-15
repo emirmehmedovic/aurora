@@ -15,7 +15,7 @@ const products = [
     slug: "ice-cool-pro",
     price: 175.00,
     compareAtPrice: 350.00,
-    images: ["/slike/PRO/1.webp"],
+    images: ["/slike/PRO/cover-image.png"],
     shortDescription: "Naš najpopularniji model — bezbolno, efikasno, za cijelo tijelo"
   },
   {
@@ -24,7 +24,7 @@ const products = [
     slug: "ice-cool-pro-max",
     price: 190.00,
     compareAtPrice: 380.00,
-    images: ["/slike/ELITE/01.webp"],
+    images: ["/slike/ELITE/cover.png"],
     shortDescription: "Noge gotove za 10 min — najjači bljesak, najugodniji tretman"
   },
   {
@@ -33,7 +33,7 @@ const products = [
     slug: "ice-cool-lite",
     price: 165.00,
     compareAtPrice: 330.00,
-    images: ["/slike/LITE/1.webp"],
+    images: ["/slike/LITE/cover.png"],
     shortDescription: "Stane u torbicu — savršen za lice, bikini i putovanja"
   }
 ];
