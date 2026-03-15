@@ -33,32 +33,31 @@ export default function SolutionSection() {
             <div className="flex flex-col justify-center relative z-10">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#563435]/10 text-[#563435] text-sm font-bold w-fit mb-6">
                 <Sparkles className="w-4 h-4" />
-                <span>Konačno rješenje</span>
+                <span>Postoji bolji način</span>
               </div>
               
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-6 leading-tight">
-                Rješenje za glatku kožu bez svakodnevnog brijanja
+                Kako je kad se više nikad ne briješ?
               </h2>
               
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                Ice Cool PRO koristi naprednu IPL tehnologiju koja nježno djeluje na korijen dlačice i postepeno usporava njen rast. 
-                Zaboravite na bolne depilacije i iritacije.
+                Ustaneš ujutro, obučeš šta hoćeš, i izlaziš. Bez žurbe, bez brijanja, bez provjere. Koža ti je glatka danima, sedmicama. To je život sa Ice Cool PRO™.
               </p>
 
               <div className="space-y-4">
                 <div className="flex items-start gap-4 p-4 bg-white/40 rounded-2xl border border-white/20 shadow-sm transition-all hover:bg-white/50">
                   <CheckCircle2 className="w-6 h-6 text-[#563435] flex-shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="font-bold text-gray-800">Napredna IPL Tehnologija</h4>
-                    <p className="text-gray-600 text-sm mt-1">Svjetlosni impulsi uspavljuju folikul dlačice za dugotrajne rezultate.</p>
+                    <h4 className="font-bold text-gray-800">Rezultati već nakon 3-4 tretmana</h4>
+                    <p className="text-gray-600 text-sm mt-1">Dlačice rastu sporije, tanje su i rjeđe. Mnoge žene primijete razliku već nakon prvih par sedmica.</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start gap-4 p-4 bg-white/40 rounded-2xl border border-white/20 shadow-sm transition-all hover:bg-white/50">
                   <CheckCircle2 className="w-6 h-6 text-[#563435] flex-shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="font-bold text-gray-800">Ice Cool™ Hlađenje</h4>
-                    <p className="text-gray-600 text-sm mt-1">Ugrađeni sistem hlađenja čini tretman potpuno bezbolnim i ugodnim.</p>
+                    <h4 className="font-bold text-gray-800">Bezbolno — obećavamo</h4>
+                    <p className="text-gray-600 text-sm mt-1">Ugrađeno Ice Cool™ hlađenje štiti kožu tokom tretmana. Većina korisnica kaže da osjećaju samo blago toplinu.</p>
                   </div>
                 </div>
               </div>
@@ -75,7 +74,7 @@ export default function SolutionSection() {
                 >
                   <Image 
                     src={img} 
-                    alt={`Ice Cool Rješenje ${index + 1}`} 
+                    alt={`IPL uređaj Ice Cool PRO™ — rezultati i primjena ${index + 1}`} 
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />

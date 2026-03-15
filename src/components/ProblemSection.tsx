@@ -13,14 +13,14 @@ export default function ProblemSection() {
             <div className="relative h-[500px] w-full rounded-3xl overflow-hidden shadow-xl">
               <Image
                 src="/slike/1772396140-pexels-nuta-sorokina-8514313.webp"
-                alt="Problem brijanja"
+                alt="Problemi svakodnevnog brijanja — iritacije, urasle dlačice, crvenilo"
                 fill
                 className="object-cover"
               />
               {/* Overlay content */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-8">
                 <p className="text-white text-lg font-medium">
-                  "Uvijek ista priča - obrijem se, a sutra već bodu..."
+                  "Izbjegavam kratke suknje jer znam da ću do večeri imati bockanje..."
                 </p>
               </div>
             </div>
@@ -31,7 +31,7 @@ export default function ProblemSection() {
                 <div className="bg-red-100 p-2 rounded-full">
                   <AlertCircle className="w-5 h-5 text-red-500" />
                 </div>
-                <span className="text-gray-800 font-medium">Urasle dlačice</span>
+                <span className="text-gray-800 font-medium">Tamne tačkice na nogama</span>
               </div>
             </div>
             
@@ -40,7 +40,7 @@ export default function ProblemSection() {
                 <div className="bg-red-100 p-2 rounded-full">
                   <Clock className="w-5 h-5 text-red-500" />
                 </div>
-                <span className="text-gray-800 font-medium">Brijanje svaki 2. dan</span>
+                <span className="text-gray-800 font-medium">Svaki dan isti ritual</span>
               </div>
             </div>
           </div>
@@ -48,11 +48,11 @@ export default function ProblemSection() {
           {/* Content Side */}
           <div className="order-1 lg:order-2">
             <span className="text-[#563435] font-semibold tracking-wider uppercase text-sm">
-              Prepoznaješ li se?
+              Zvuči li ti poznato?
             </span>
             <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-              Dosta ti je brijanja <br />
-              <span className="text-[#563435]">svaki drugi dan?</span>
+              Umorna si od <br />
+              <span className="text-[#563435]">vječitog brijanja?</span>
             </h2>
             
             <div className="mt-8 space-y-6">
@@ -63,9 +63,9 @@ export default function ProblemSection() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">Urasle dlačice i iritacije</h3>
+                  <h3 className="text-xl font-bold text-gray-900">Urasle dlačice i tamne tačkice</h3>
                   <p className="mt-2 text-gray-600 leading-relaxed">
-                    Svaki potez brijačem skida sloj kože. Rezultat? Crvenilo, peckanje i urasle dlačice koje ostavljaju tamne mrlje.
+                    Isprobaš novu šuknju, pogledaš noge i vidiš tamne tačkice i urasle dlačice. Brišeš i brišeš, a koža nikad ne izgleda čisto.
                   </p>
                 </div>
               </div>
@@ -77,9 +77,9 @@ export default function ProblemSection() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">Začarani krug brijanja</h3>
+                  <h3 className="text-xl font-bold text-gray-900">Obriješ se ujutro, bode navečer</h3>
                   <p className="mt-2 text-gray-600 leading-relaxed">
-                    Obriješ noge ujutro, a navečer već osjetiš bockanje. Tvojoj koži nikad ne daš priliku da se stvarno oporavi.
+                    Provedeš 15 minuta pod tušem brijeći se, a već uveče osjetiš bockanje. Na izlasku izbjegavaš da te neko dotakne po nozi. Taj osjećaj ti je predobro poznat.
                   </p>
                 </div>
               </div>
@@ -91,9 +91,9 @@ export default function ProblemSection() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">Skupi salonski tretmani</h3>
+                  <h3 className="text-xl font-bold text-gray-900">Računi koji se gomilaju</h3>
                   <p className="mt-2 text-gray-600 leading-relaxed">
-                    Laserski tretmani u salonima koštaju bogatstvo i zahtijevaju stalne odlaske. Zašto ne bi imala iste rezultate kod kuće?
+                    Žileti svaki mjesec: 10-15 KM. Vosak u salonu: 50-80 KM. Laser: 1.500+ KM za puni ciklus. Godinama daješ novac za privremena rješenja koja te ostavljaju na početku.
                   </p>
                 </div>
               </div>

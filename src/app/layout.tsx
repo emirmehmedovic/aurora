@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Ice Cool PRO™ - IPL Uklanjanje Dlačica | BiH",
-  description: "Profesionalno IPL uklanjanje dlačica iz udobnosti vašeg doma. Besplatna dostava, plaćanje pouzećem, 14 dana povrat novca.",
+  title: "Ice Cool PRO™ — IPL Uređaji za Trajno Uklanjanje Dlačica | Dostava u BiH",
+  description: "Profesionalno IPL uklanjanje dlačica iz udobnosti vašeg doma. 3 modela za svaki tip kože. Besplatna dostava u BiH, plaćanje pouzećem, 14 dana povrat novca.",
 };
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
@@ -54,7 +55,10 @@ export default function RootLayout({
           </Script>
         )}
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <WhatsAppButton />
+      </body>
     </html>
   );
 }

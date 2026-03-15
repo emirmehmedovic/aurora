@@ -10,14 +10,14 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 py-4 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-[1400px] mx-auto backdrop-blur-lg bg-white/30 border border-white/20 shadow-lg rounded-2xl px-4 sm:px-6 lg:px-8">
+      <div className={`max-w-[1400px] mx-auto backdrop-blur-lg bg-white/30 border border-white/20 shadow-lg px-4 sm:px-6 lg:px-8 ${mobileMenuOpen ? 'rounded-t-2xl' : 'rounded-2xl'}`}>
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center">
             <Image
               src="/slike/Black White Minimal Modern Simple Bold Business Mag Logo.png"
               alt="Ice Cool PRO™"
-              width={80}
-              height={80}
+              width={104}
+              height={104}
               className="rounded-xl"
             />
           </Link>
@@ -53,7 +53,7 @@ export default function Navbar() {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden mt-2 mx-4 sm:mx-6 lg:mx-8 max-w-[1400px] lg:mx-auto bg-white/40 backdrop-blur-lg border border-white/20 rounded-2xl shadow-lg">
+        <div className="md:hidden max-w-[1400px] mx-auto bg-white/40 backdrop-blur-lg border border-white/20 border-t-0 rounded-b-2xl shadow-lg">
           <div className="px-4 py-4 space-y-3">
             <Link 
               href="/" 

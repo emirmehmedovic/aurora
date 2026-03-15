@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Metadata } from "next";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -51,7 +50,7 @@ const faqs = [
   {
     id: 9,
     question: "Kako se vrši dostava?",
-    answer: "Dostava je besplatna na cijelu BiH i vrši se kurirskom službom. Paket stiže za 2-5 radnih dana. Plaćanje je moguće pouzećem prilikom preuzimanja."
+    answer: "Dostava je besplatna na cijelu BiH i vrši se kurirskom službom. Paket stiže za 1-3 radna dana. Plaćanje je moguće pouzećem prilikom preuzimanja."
   },
   {
     id: 10,
@@ -66,7 +65,7 @@ const faqs = [
   {
     id: 12,
     question: "Koliko impulsa ima uređaj?",
-    answer: "Ice Cool PRO™ ima 300,000 impulsa, što je dovoljno za godinama upotrebe na cijelom tijelu."
+    answer: "ICE COOL PRO i Max modeli imaju 999,999 bljeskova, dok LITE model ima 500,000 — svi dovoljni za višegodišnju upotrebu na cijelom tijelu."
   }
 ];
 
@@ -83,7 +82,7 @@ export default function FAQPage() {
             <div className="relative h-64 rounded-3xl overflow-hidden mb-8 shadow-lg">
               <NextImage
                 src="/slike/Gemini_Generated_Image_sbj41esbj41esbj4.png"
-                alt="FAQ"
+                alt="Često postavljana pitanja o IPL uređajima Ice Cool PRO™"
                 fill
                 className="object-cover"
               />

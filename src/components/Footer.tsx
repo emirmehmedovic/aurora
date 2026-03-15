@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Facebook, Instagram, Mail, Phone } from "lucide-react";
+import { Facebook, Instagram, Mail, MessageCircle, CreditCard, Banknote, Truck, Phone } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -87,8 +87,12 @@ export default function Footer() {
             <h4 className="font-semibold text-gray-800 mb-4">Kontakt</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-gray-600 text-sm">
+                <MessageCircle className="w-4 h-4" />
+                <a href="https://wa.me/38761904759" className="hover:text-gray-900 transition-colors">WhatsApp kontakt</a>
+              </li>
+              <li className="flex items-center gap-2 text-gray-600 text-sm">
                 <Phone className="w-4 h-4" />
-                <span>+387 XX XXX XXX</span>
+                <a href="tel:+38761904759" className="hover:text-gray-900 transition-colors">+387 61 904 759</a>
               </li>
               <li className="flex items-center gap-2 text-gray-600 text-sm">
                 <Mail className="w-4 h-4" />
@@ -96,18 +100,33 @@ export default function Footer() {
               </li>
             </ul>
             <div className="flex gap-3 mt-4">
-              <a href="#" className="w-8 h-8 rounded-full bg-rose-100 hover:bg-rose-200 flex items-center justify-center transition-colors">
+              <a href="https://www.facebook.com/icecoolpro" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-rose-100 hover:bg-rose-200 flex items-center justify-center transition-colors" aria-label="Facebook stranica">
                 <Facebook className="w-4 h-4 text-rose-600" />
               </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-rose-100 hover:bg-rose-200 flex items-center justify-center transition-colors">
+              <a href="https://www.instagram.com/icecoolpro" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-rose-100 hover:bg-rose-200 flex items-center justify-center transition-colors" aria-label="Instagram profil">
                 <Instagram className="w-4 h-4 text-rose-600" />
               </a>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-gray-200/50 mt-8 pt-8 text-center">
-          <p className="text-gray-600 text-sm">
+        {/* Payment & Delivery Info */}
+        <div className="border-t border-gray-200/50 mt-8 pt-8">
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-6">
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <Banknote className="w-5 h-5" />
+              <span>Plaćanje pouzećem</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <CreditCard className="w-5 h-5" />
+              <span>Karticom online</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <Truck className="w-5 h-5" />
+              <span>Besplatna dostava u BiH (1-3 radna dana)</span>
+            </div>
+          </div>
+          <p className="text-gray-600 text-sm text-center">
             © {new Date().getFullYear()} Ice Cool PRO™. Sva prava zadržana.
           </p>
         </div>

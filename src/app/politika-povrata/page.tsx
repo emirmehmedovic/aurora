@@ -5,7 +5,7 @@ import { RotateCcw, Shield, CheckCircle } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Politika Povrata - Ice Cool PRO™",
-  description: "Informacije o povratu Ice Cool PRO™ proizvoda.",
+  description: "14 dana za povrat Ice Cool PRO™ IPL uređaja bez komplikacija. 100% povrat novca, jednostavan proces.",
 };
 
 export default function ReturnPolicyPage() {
@@ -124,7 +124,7 @@ export default function ReturnPolicyPage() {
                 <p className="text-gray-600 leading-relaxed">
                   Za povrat proizvoda, kontaktirajte nas na:<br />
                   Email: <a href="mailto:info@icecoolpro.ba" className="text-[#563435] hover:underline">info@icecoolpro.ba</a><br />
-                  Telefon: +387 XX XXX XXX<br />
+                  WhatsApp: <a href="https://wa.me/38761904759" className="text-[#563435] hover:underline">Pišite nam na WhatsApp</a><br />
                   <br />
                   Navedite:<br />
                   - Broj narudžbe<br />

@@ -8,24 +8,24 @@ export default function FaqSection() {
 
   const faqs = [
     {
-      question: "Da li je tretman bolan?",
-      answer: "Ne. Zahvaljujući ugrađenom Ice Cool™ sistemu hlađenja, većina korisnica osjeti samo blago zagrijavanje. Tretman je znatno ugodniji u poređenju s voskom, šećernom pastom ili klasičnim epilatorom."
+      question: "Boli li? Iskreno mi reci.",
+      answer: "Iskreno — ne. Većina korisnica kaže da osjete blago toplinu, kao kad sunce grije kožu. Ice Cool™ hlađenje radi dok uređaj radi, pa nema crvenila ni peckanja. Ako si ikad radila vosak, ovo je nebo i zemlja."
     },
     {
-      question: "Koliko često trebam koristiti uređaj?",
-      answer: "Preporučujemo korištenje 1-2 puta sedmično tokom prvih 8 do 12 sedmica. Nakon što primijetite značajno smanjenje dlačica, prelazite na tretmane održavanja (jednom mjesečno ili rjeđe, po potrebi)."
+      question: "Koliko često moram koristiti uređaj?",
+      answer: "Na početku: jednom sedmično, 10-15 minuta. To je manje vremena nego jedno brijanje. Nakon 8-12 sedmica, kad vidiš da dlačice skoro ne rastu, prelaziš na održavanje — jednom mjesečno ili rjeđe."
     },
     {
-      question: "Kada ću vidjeti prve rezultate?",
-      answer: "Većina korisnica primijeti sporiji rast i rjeđe dlačice već nakon 3 do 4 tretmana. Za optimalne i dugotrajne rezultate potrebno je proći puni ciklus od 8-12 sedmica."
+      question: "Kada ću vidjeti da zaista radi?",
+      answer: "Već nakon 3-4 tretmana primijetiš da dlačice rastu sporije i tanje. Nakon 6-8 sedmica većina žena kaže da noge brije jednom sedmično ili rjeđe. Puni rezultat vidiš nakon 12 sedmica — i onda samo održavaš."
     },
     {
-      question: "Na kojim dijelovima tijela mogu koristiti IPL?",
-      answer: "Uređaj je siguran za upotrebu na cijelom tijelu: noge, ruke, pazuh, leđa, stomak, bikini zona, te na licu (isključivo ispod jagodične kosti - nausnice, brada). Ne koristiti oko očiju."
+      question: "Mogu li ga koristiti na bikini zoni i licu?",
+      answer: "Da! Koristi ga na nogama, rukama, pazusima, stomaku, bikini zoni i licu (ispod jagodica — nausnice, brada). Jedino ga ne koristi oko očiju. Većina žena ga najviše voli baš za bikini zonu jer su rezultati brzi."
     },
     {
-      question: "Da li IPL radi na svim bojama dlačica i kože?",
-      answer: "IPL je najefikasniji na tamnim dlačicama i svijetloj do srednje tamnoj koži. Nije efikasan na jako svijetlim, sijedim ili crvenim dlačicama, kao ni na izrazito tamnoj koži."
+      question: "Hoće li raditi na mom tipu kože?",
+      answer: "IPL najbolje radi na tamnim dlačicama i svijetloj do srednje tamnoj koži — što pokriva većinu žena u BiH. Nije efikasan na sijedim, crvenim ili potpuno svijetlim dlačicama. Ako nisi sigurna, piši nam na WhatsApp — pomoći ćemo ti."
     }
   ];
 
@@ -37,10 +37,10 @@ export default function FaqSection() {
             <HelpCircle className="w-8 h-8 text-blue-600" />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Često postavljana pitanja
+            Imaš pitanja? Imamo odgovore.
           </h2>
           <p className="text-xl text-gray-600">
-            Sve što trebate znati o IPL tretmanima kod kuće.
+            Ovo su pitanja koja nam žene najčešće postavljaju prije nego što se odluče.
           </p>
         </div>
 

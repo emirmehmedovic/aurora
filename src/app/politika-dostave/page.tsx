@@ -5,7 +5,7 @@ import { Truck, Package, Clock, MapPin } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Politika Dostave - Ice Cool PRO™",
-  description: "Informacije o dostavi Ice Cool PRO™ proizvoda.",
+  description: "Besplatna dostava Ice Cool PRO™ IPL uređaja na cijelu BiH. Isporuka za 1-3 radna dana, plaćanje pouzećem.",
 };
 
 export default function ShippingPolicyPage() {
@@ -27,7 +27,7 @@ export default function ShippingPolicyPage() {
               <div className="bg-white/50 rounded-2xl p-6 border border-white/20">
                 <Clock className="w-8 h-8 text-[#563435] mb-3" />
                 <h3 className="font-semibold text-gray-800 mb-2">Rok dostave</h3>
-                <p className="text-sm text-gray-600">2-5 radnih dana</p>
+                <p className="text-sm text-gray-600">1-3 radna dana</p>
               </div>
               <div className="bg-white/50 rounded-2xl p-6 border border-white/20">
                 <Package className="w-8 h-8 text-[#563435] mb-3" />
@@ -57,7 +57,7 @@ export default function ShippingPolicyPage() {
               <section>
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">Rokovi dostave</h2>
                 <p className="text-gray-600 leading-relaxed mb-3">
-                  Standardni rok dostave je 2-5 radnih dana od dana potvrde narudžbe. Rok zavisi od lokacije:
+                  Standardni rok dostave je 1-3 radna dana od dana potvrde narudžbe. Rok zavisi od lokacije:
                 </p>
                 <ul className="list-disc list-inside text-gray-600 space-y-2">
                   <li><strong>Sarajevo i okolina:</strong> 1-2 radna dana</li>
@@ -113,7 +113,7 @@ export default function ShippingPolicyPage() {
                 <p className="text-gray-600 leading-relaxed">
                   Za pitanja o dostavi, kontaktirajte nas na:<br />
                   Email: <a href="mailto:info@icecoolpro.ba" className="text-[#563435] hover:underline">info@icecoolpro.ba</a><br />
-                  Telefon: +387 XX XXX XXX
+                  WhatsApp: <a href="https://wa.me/38761904759" className="text-[#563435] hover:underline">Pišite nam na WhatsApp</a>
                 </p>
               </section>
             </div>

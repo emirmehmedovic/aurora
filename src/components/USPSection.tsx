@@ -4,26 +4,26 @@ export default function USPSection() {
   const usps = [
     {
       icon: <Zap className="w-8 h-8 text-amber-500" />,
-      title: "IPL Tehnologija",
-      description: "Napredna tehnologija svjetlosnih impulsa koja klinički dokazano zaustavlja rast dlačica.",
+      title: "Salon rezultati kod kuće",
+      description: "Ista IPL tehnologija koju koriste saloni, ali bez zakazivanja termina i čekanja u redu.",
       bgColor: "bg-amber-100/50"
     },
     {
       icon: <Snowflake className="w-8 h-8 text-blue-500" />,
-      title: "Sistem Hlađenja",
-      description: "Ice Cool™ tehnologija hladi kožu tokom tretmana, sprječavajući crvenilo i bol.",
+      title: "Bezbolno — zaista",
+      description: "Ugrađeno hlađenje štiti kožu dok uređaj radi. Većina korisnica kaže: 'Jedva nešto osjetim'.",
       bgColor: "bg-blue-100/50"
     },
     {
       icon: <Infinity className="w-8 h-8 text-purple-500" />,
-      title: "999.999 Impulsa",
-      description: "Gotovo neograničen vijek trajanja lampe. Dovoljno za preko 10 godina redovne upotrebe.",
+      title: "Kupiš jednom, koristiš 10+ godina",
+      description: "999.999 bljeskova znači da ne trebaš kupovati zamjene, dopune ili rezervne dijelove. Nikad.",
       bgColor: "bg-purple-100/50"
     },
     {
       icon: <Sliders className="w-8 h-8 text-emerald-500" />,
-      title: "Više Nivoa Intenziteta",
-      description: "Prilagodljiva jačina bljeska za sve tipove kože, čak i za najosjetljivija područja.",
+      title: "Prilagodiš ga svom tijelu",
+      description: "5 nivoa intenziteta — blaži za lice i bikini, jači za noge. Ti kontrolišeš sve.",
       bgColor: "bg-emerald-100/50"
     }
   ];
@@ -33,8 +33,11 @@ export default function USPSection() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
-            Vrhunska tehnologija u vašim rukama
+            Zašto baš Ice Cool PRO™?
           </h2>
+          <p className="mt-4 text-lg text-gray-600">
+            Četiri razloga zašto hiljade žena u BiH biraju upravo ovaj uređaj.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

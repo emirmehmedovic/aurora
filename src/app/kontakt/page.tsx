@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
+import { Mail, MessageCircle, MapPin, Clock, Send } from "lucide-react";
 import NextImage from "next/image";
 
 export default function KontaktPage() {
@@ -91,7 +90,7 @@ export default function KontaktPage() {
             <div className="relative h-64 rounded-3xl overflow-hidden mb-8 shadow-lg max-w-4xl mx-auto">
               <NextImage
                 src="/slike/Gemini_Generated_Image_uxjycauxjycauxjy.png"
-                alt="Kontakt"
+                alt="Kontaktirajte Ice Cool PRO™ tim — WhatsApp, email, podrška"
                 fill
                 className="object-cover"
               />
@@ -109,14 +108,14 @@ export default function KontaktPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Contact Info */}
             <div className="lg:col-span-1 space-y-6">
-              {/* Phone */}
+              {/* WhatsApp */}
               <div className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-6">
-                <div className="w-12 h-12 bg-[#563435] rounded-full flex items-center justify-center mb-4">
-                  <Phone className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mb-4">
+                  <MessageCircle className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-gray-800 mb-2">Telefon</h3>
-                <p className="text-gray-600">+387 XX XXX XXX</p>
-                <p className="text-sm text-gray-500 mt-2">Pon-Pet: 9:00 - 17:00</p>
+                <h3 className="font-semibold text-gray-800 mb-2">WhatsApp</h3>
+                <a href="https://wa.me/38761904759" className="text-green-600 hover:text-green-700 font-medium transition-colors">Pišite nam na WhatsApp →</a>
+                <p className="text-sm text-gray-500 mt-2">Odgovaramo u roku par sati</p>
               </div>
 
               {/* Email */}

@@ -8,7 +8,7 @@ import { Check, Star, Truck, Shield, RotateCcw, CreditCard, ChevronDown, Chevron
 const productData: Record<string, any> = {
   "ice-cool-pro": {
     name: "ICE COOL PRO",
-    tagline: "Glatka koža koja traje sedmicama",
+    tagline: "Zaboravi na žilete. Zauvijek.",
     price: 175.00,
     compareAtPrice: 350.00,
     images: [
@@ -30,73 +30,79 @@ const productData: Record<string, any> = {
       "/slike/PRO/koristenje7.png"
     ],
     hero: {
-      title: "ICE COOL PRO — glatka koža koja traje sedmicama",
-      subtitle: "Bezbolno IPL uklanjanje dlačica iz udobnosti doma. Salon efekat bez salona, bez voska i bez svakodnevnog brijanja."
+      title: "ICE COOL PRO — zaboravi na žilete. Zauvijek.",
+      subtitle: "Zamisli da više nikad ne moraš brijati noge. Bez bola, bez salona, bez vječitog trošenja na žilete."
     },
     benefits: [
-      "Nježno i efikasno uklanjanje dlačica kod kuće",
-      "Ugrađeno hlađenje za ugodniji tretman",
-      "Dugotrajniji rezultati uz redovnu upotrebu",
-      "Pogodno za noge, ruke, pazuhe, bikini zonu i lice"
+      "Bezbolno — ugrađeno hlađenje štiti kožu dok uređaj radi",
+      "Rezultati već nakon 3-4 tretmana — dlačice rastu sporije i tanje",
+      "Kupiš jednom, koristiš 10+ godina — bez zamjena i dopuna",
+      "Noge, ruke, pazuhe, bikini, lice — jedan uređaj za sve"
     ],
     features: [
-      { title: "IPL Tehnologija", description: "Napredna IPL tehnologija djeluje na korijen dlačice" },
-      { title: "Sistem Hlađenja", description: "Ugrađeno hlađenje čini tretman mnogo ugodnijim" },
-      { title: "5 Nivoa Intenziteta", description: "Prilagodite tretman vašem tipu kože" },
-      { title: "300,000 Impulsa", description: "Dovoljan broj impulsa za godinama upotrebe" }
+      { title: "Salon rezultati kod kuće", description: "Ista IPL tehnologija koju koriste saloni — bez zakazivanja i čekanja" },
+      { title: "Bezbolno — zaista", description: "Hlađenje štiti kožu pa većina žena osjeti samo blagu toplinu" },
+      { title: "Prilagodi svom tijelu", description: "5 nivoa — blaži za lice i bikini, jači za noge" },
+      { title: "Traje 10+ godina", description: "999,999 bljeskova — nikad ne trebaš kupovati zamjene" }
     ],
     howItWorks: [
-      { step: 1, title: "Odaberi nivo intenziteta", description: "Prilagodite intenzitet vašem tipu kože" },
-      { step: 2, title: "Prisloni uređaj", description: "Postavite uređaj na područje tretmana" },
-      { step: 3, title: "Aktiviraj impuls", description: "Pritisnite dugme i nastavite tretman" },
-      { step: 4, title: "Ponavljaj redovno", description: "Pratite preporučeni raspored tretmana" }
+      { step: 1, title: "Pripremi kožu (2 min)", description: "Obrij i očisti područje. Bez voska, bez traka, bez nereda." },
+      { step: 2, title: "Tretman (5-10 min)", description: "Prisloni uređaj i pritisni tipku. Hlađenje štiti kožu — ne osjetiš ništa." },
+      { step: 3, title: "Ponovi 1x sedmično", description: "10 minuta sedmično. Nakon 8 sedmica prelaziš na održavanje jednom mjesečno." },
+      { step: 4, title: "Uživaj u rezultatima", description: "Glatka koža bez brijanja. Obučeš šta hoćeš i izlaziš." }
     ],
     faq: [
       {
-        question: "Da li je tretman bolan?",
-        answer: "Većina korisnica tretman opisuje kao blago zagrijavanje ili lagano peckanje. Zahvaljujući ugrađenom sistemu hlađenja, tretman je znatno ugodniji u poređenju s voskom ili epilatorom."
+        question: "Boli li? Iskreno.",
+        answer: "Ne. Većina korisnica kaže da osjete blagu toplinu, kao kad sunce grije kožu. Hlađenje radi dok uređaj radi pa nema crvenila ni peckanja. Ako si radila vosak — ovo je nebo i zemlja."
       },
       {
-        question: "Kada mogu očekivati rezultate?",
-        answer: "Prve promjene se često primijete nakon 3 do 4 tretmana, dok se puniji rezultati obično vide nakon 8 do 12 sedmica redovne upotrebe."
+        question: "Kada ću vidjeti da radi?",
+        answer: "Već nakon 3-4 tretmana primijetiš sporiji rast. Nakon 6-8 sedmica većina žena noge brije jednom sedmično ili rjeđe. Puni rezultat nakon 12 sedmica."
       },
       {
-        question: "Koliko dugo traju rezultati?",
-        answer: "Uz pravilnu i redovnu upotrebu, rezultati mogu trajati mjesecima, a kasnije su potrebni samo povremeni tretmani održavanja."
+        question: "Mogu li ga koristiti na bikini zoni i licu?",
+        answer: "Da! Noge, ruke, pazuhe, stomak, bikini zona i lice (ispod jagodica). Većina žena ga najviše voli baš za bikini zonu jer su rezultati brzi."
       },
       {
-        question: "Na kojim dijelovima tijela mogu koristiti uređaj?",
-        answer: "Pogodan je za noge, ruke, pazuhe, bikini zonu i lice ispod jagodične kosti, uz poštivanje uputstva proizvođača."
+        question: "Šta ako ne bude radilo za mene?",
+        answer: "Imaš 14 dana da ga probaš. Ako nisi zadovoljna, vrati ga i dobiješ novac nazad. Bez pitanja, bez komplikacija."
       },
       {
-        question: "Koliko često trebam koristiti uređaj?",
-        answer: "Na početku se preporučuje nekoliko tretmana sedmično prema uputstvu, a kasnije povremeni tretmani održavanja."
+        question: "Koliko često moram raditi tretman?",
+        answer: "Jednom sedmično, 10-15 minuta. Manje vremena nego jedno brijanje. Nakon 8-12 sedmica prelaziš na održavanje jednom mjesečno."
       }
     ],
     testimonials: [
       {
         name: "Derva",
         age: 24,
-        content: "Nakon nekoliko tretmana primijetila sam sporiji rast i puno manje iritacija. Najviše mi znači što sve mogu uraditi kod kuće, bez salona i bez stresa.",
+        location: "Sarajevo",
+        date: "Mart 2026",
+        content: "Godinama sam imala problem sa urasljim dlačicama na nogama. Nakon 5 tretmana koža mi je čista kao nikad. Prošlo ljeto sam prvi put nosila kratku suknju bez da sam se brinula.",
         rating: 5
       },
       {
         name: "Samanta",
         age: 31,
-        content: "Imam osjetljivu kožu i upravo mi je sistem hlađenja bio presudan. Tretman je mnogo ugodniji nego što sam očekivala, a rezultati su sve bolji iz sedmice u sedmicu.",
+        location: "Zenica",
+        date: "Februar 2026",
+        content: "Imam osjetljivu kožu i bojala sam se da će boljeti. Ali hlađenje je nevjerovatno — ne osjetim ništa. Već nakon mjesec dana pazuhe ne brijam uopšte, a noge jednom u 10 dana.",
         rating: 5
       },
       {
         name: "Amra",
         age: 23,
-        content: "Ranije sam trošila mnogo novca na salonske tretmane. Ovaj uređaj mi daje osjećaj kontrole, jer tretman radim kad meni odgovara.",
+        location: "Tuzla",
+        date: "Januar 2026",
+        content: "Trošila sam 60 KM mjesečno na vosak u salonu. To je 720 KM godišnje! Za 175 KM imam svoj uređaj koji će trajati godinama. Radim tretman nedjeljom uveče uz Netflix, 10 minuta za noge.",
         rating: 5
       }
     ]
   },
   "ice-cool-pro-max": {
     name: "ICE COOL Max",
-    tagline: "Maksimalna snaga za najbrže rezultate",
+    tagline: "Noge gotove za 10 minuta. Salon rezultati kod kuće.",
     price: 190.00,
     compareAtPrice: 380.00,
     images: [
@@ -117,55 +123,71 @@ const productData: Record<string, any> = {
       "/slike/ELITE/koristenje5.png"
     ],
     hero: {
-      title: "ICE COOL Max — Salon u vašem domu",
-      subtitle: "Naš najjači model sa većom površinom bljeska za brže tretmane cijelog tijela."
+      title: "ICE COOL Max — najjači model za žene koje neće čekati",
+      subtitle: "Noge gotove za 10 minuta. Najjači bljesak, najugodniji tretman. Salon rezultati — bez salona."
     },
     benefits: [
-      "Veća površina tretmana za brži rad",
-      "Pojačano hlađenje za maksimalnu ugodnost",
-      "Automatski senzor boje kože",
-      "Ergonomski dizajn za lakše rukovanje"
+      "Noge za 10 min — veća površina bljeska pokriva više kože odjednom",
+      "Najugodniji tretman — dvostruko hlađenje ne pušta ni na punoj snazi",
+      "Vidljivi rezultati za 2-3 sedmice — brže nego bilo koji drugi model",
+      "Cijelo tijelo uključujući bikini i leđa — bez ograničenja"
     ],
     features: [
-      { title: "Max Snaga", description: "Do 20% jači intenzitet od standardnog modela" },
-      { title: "Ice Cool+™", description: "Napredni sistem dvostrukog hlađenja" },
-      { title: "Brži Bljeskovi", description: "Manje čekanja između impulsa" },
-      { title: "999,999 Impulsa", description: "Praktično neograničen vijek trajanja" }
+      { title: "Brži tretman", description: "Veća površina bljeska — noge završiš za 10 minuta umjesto 20" },
+      { title: "Dvostruko hlađenje", description: "Ice Cool+™ hladi prije i poslije bljeska — čak i na punoj snazi ne boli" },
+      { title: "Brži rezultati", description: "Pojačana snaga znači da folikuli reaguju brže — razlika za 2-3 sedmice" },
+      { title: "Traje 10+ godina", description: "999,999 bljeskova — kupiš jednom, koristiš godinama" }
     ],
     howItWorks: [
-      { step: 1, title: "Pripremi kožu", description: "Obrij i očisti područje tretmana" },
-      { step: 2, title: "Odaberi Auto/Manual", description: "Koristi automatski mod za veće površine" },
-      { step: 3, title: "Tretman", description: "Klizi uređajem po koži dok bljeska" },
-      { step: 4, title: "Hidratacija", description: "Nakon tretmana nanesi losion za tijelo" }
+      { step: 1, title: "Priprema (2 min)", description: "Obrij i očisti kožu. Bez voska, bez traka, bez nereda." },
+      { step: 2, title: "Tretman (10 min za noge)", description: "Klizi uređajem po koži. Veći bljesak = brže gotovo. Hlađenje štiti kožu." },
+      { step: 3, title: "Ponovi 1x sedmično", description: "Manje od 15 minuta za cijelo tijelo. Nakon 8 sedmica — jednom mjesečno." },
+      { step: 4, title: "Rezultati za 2-3 sedmice", description: "Pojačana snaga znači brže rezultate. Brijanje postaje prošlost." }
     ],
     faq: [
       {
-        question: "Po čemu se Max razlikuje od Pro modela?",
-        answer: "Max model ima veću površinu bljeska, brže punjenje između bljeskova i napredniji sistem hlađenja, što tretmane čini bržim i ugodnijim."
+        question: "Zašto Max umjesto Pro modela?",
+        answer: "Ako želiš brže tretmane i brže rezultate. Max ima veću površinu bljeska pa noge završiš za 10 min umjesto 20, plus dvostruko hlađenje za maksimalnu ugodnost."
       },
-       {
-        question: "Da li je tretman bolan?",
-        answer: "Zahvaljujući Ice Cool+™ tehnologiji, osjećaj toplote je minimalan, čak i na višim nivoima intenziteta."
+      {
+        question: "Boli li na punoj snazi?",
+        answer: "Ne. Ice Cool+™ dvostruko hlađenje radi prije i poslije svakog bljeska. Čak i na najjačem nivou osjetiš samo blagu toplinu."
+      },
+      {
+        question: "Šta ako ne bude radilo za mene?",
+        answer: "Imaš 14 dana da ga probaš. Ako nisi zadovoljna, vrati ga i dobiješ novac nazad. Bez pitanja."
       }
     ],
     testimonials: [
       {
         name: "Emina",
         age: 29,
-        content: "Prešla sam sa običnog modela na Max i razlika je ogromna. Noge završim za 10 minuta!",
+        location: "Mostar",
+        date: "Mart 2026",
+        content: "Imam dvoje djece i posao — nemam vremena za salone. Max mi treba 10 minuta nedjeljom uveče i to je to. Već nakon trećeg tretmana pazuhe su mi bile glatke. Za 190 KM dobila sam nešto što bi me u salonu koštalo 1.500+ KM.",
         rating: 5
       },
-       {
+      {
         name: "Jasmina",
         age: 35,
-        content: "Vrijedi svake marke. Kvalitet izrade je vrhunski, a rezultati su brži nego što sam očekivala.",
+        location: "Banja Luka",
+        date: "Februar 2026",
+        content: "Išla sam na profesionalni laser 2 godine. Max daje iste rezultate — ali kod kuće, kad meni odgovara, i ne dajem 100 KM svaki mjesec. Noge ne brijam već 3 sedmice.",
+        rating: 5
+      },
+      {
+        name: "Nina",
+        age: 27,
+        location: "Sarajevo",
+        date: "Januar 2026",
+        content: "Kupila sam jeftiniji IPL prošle godine i nije uradio ništa. Max je potpuno druga priča — osjetiš da ima snage. Ali hlađenje je tako dobro da ne boli. Bikini zona mi je sada čista bez problema.",
         rating: 5
       }
     ]
   },
   "ice-cool-lite": {
     name: "ICE COOL LITE",
-    tagline: "Kompaktan, lagan i efikasan",
+    tagline: "Stane u torbicu. Radi posao kao veliki.",
     price: 165.00,
     compareAtPrice: 330.00,
     images: [
@@ -183,38 +205,64 @@ const productData: Record<string, any> = {
       "/slike/LITE/6.png"
     ],
     hero: {
-      title: "ICE COOL LITE — Vaš saputnik za glatku kožu",
-      subtitle: "Idealan za početnice i putovanja. Mali, lagan, ali moćan saveznik u borbi protiv dlačica."
+      title: "ICE COOL LITE — glatka koža za 165 KM",
+      subtitle: "Stane u torbicu, radi posao kao veliki. Savršen za lice, bikini zonu i žene u pokretu."
     },
     benefits: [
-      "Kompaktan dizajn idealan za putovanja",
-      "Jednostavan za korištenje",
-      "Precizan nastavak za lice",
-      "Pristupačna cijena uz vrhunske rezultate"
+      "Najniža cijena u liniji — a rezultati su isti kao kod većih modela",
+      "Precizan nastavak za lice, gornju usnu i bikini zonu",
+      "Lagan i kompaktan — ponesi na more, vikendicu, putovanje",
+      "Savršen ako ti je ovo prvi IPL — jednostavan za korištenje"
     ],
     features: [
-      { title: "Prijenosan", description: "Lako staje u svaku torbu" },
-      { title: "Precizan", description: "Odličan za manje površine i lice" },
-      { title: "Siguran", description: "Ugrađen senzor dodira kože" },
-      { title: "500,000 Impulsa", description: "Dugotrajan rad bez zamjene lampi" }
+      { title: "Ponesi svuda", description: "Stane u neseser — savršen za more, vikendicu, putovanje" },
+      { title: "Precizan za lice", description: "Mali nastavak tačno cilja gornju usnu, bradu i bikini zonu" },
+      { title: "Bezbolno", description: "Ugrađeno hlađenje štiti čak i najosjetljiviju kožu" },
+      { title: "Traje godinama", description: "500,000 bljeskova — dovoljan za godine redovne upotrebe" }
     ],
     howItWorks: [
-      { step: 1, title: "Priključi", description: "Spoji uređaj na napajanje" },
-      { step: 2, title: "Podesi", description: "Odaberi jedan od 5 nivoa jačine" },
-      { step: 3, title: "Tretiraj", description: "Prisloni i pritisni dugme" },
-      { step: 4, title: "Završi", description: "Isključi uređaj i spakuj ga" }
+      { step: 1, title: "Priprema (2 min)", description: "Obrij i očisti kožu. Jednostavno i brzo." },
+      { step: 2, title: "Tretman (5 min)", description: "Prisloni precizan nastavak i pritisni tipku. Hlađenje štiti kožu." },
+      { step: 3, title: "Ponovi 1x sedmično", description: "5-10 minuta. Manje nego jedno brijanje." },
+      { step: 4, title: "Rezultati za 3-4 sedmice", description: "Dlačice rastu sporije, tanje su. Sloboda od brijanja." }
     ],
     faq: [
       {
-        question: "Da li je dovoljno jak kao veći modeli?",
-        answer: "Da, Lite model koristi istu IPL tehnologiju, samo u manjem kućištu i sa nešto manjom površinom bljeska, što ga čini idealnim za precizne tretmane."
+        question: "Radi li kao veći modeli?",
+        answer: "Da! Koristi istu IPL tehnologiju. Razlika je u veličini — LITE ima manji bljesak, što ga čini savršenim za lice i bikini zonu. Za noge radi odlično, samo treba malo više vremena."
+      },
+      {
+        question: "Boli li na licu i bikini zoni?",
+        answer: "Ne. Hlađenje radi dok uređaj radi. Većina korisnica kaže da osjete samo blagu toplinu, čak i na osjetljivim područjima."
+      },
+      {
+        question: "Šta ako ne bude radilo za mene?",
+        answer: "14 dana za povrat. Probaš ga bez rizika — ako nisi zadovoljna, vratiš ga i dobiješ novac nazad."
       }
     ],
     testimonials: [
       {
         name: "Sara",
         age: 22,
-        content: "Kupila sam ga jer puno putujem. Odličan je! Stane u neseser, a radi posao savršeno.",
+        location: "Sarajevo",
+        date: "Mart 2026",
+        content: "Kupila sam LITE samo za gornju usnu — to mi je bio najveći kompleks. Već nakon 3 sedmice potpuno čista. Precizan nastavak je genijalan. Za 165 KM ovo je dar od Boga.",
+        rating: 5
+      },
+      {
+        name: "Aida",
+        age: 28,
+        location: "Tuzla",
+        date: "Februar 2026",
+        content: "Puno putujem i LITE mi je savršen jer ga nosim svuda. Koristim ga za pazuhe i bikini zonu — već nakon mjesec dana skoro da nema ništa. Prijateljice su sve pitale šta koristim.",
+        rating: 5
+      },
+      {
+        name: "Hana",
+        age: 22,
+        location: "Bihać",
+        date: "Januar 2026",
+        content: "Ovo mi je prvi IPL ikad i bila sam nervozna. Ali LITE je tako jednostavan da sam ga koristila bez uputstva. Noge brijam upola rjeđe već nakon mjesec dana.",
         rating: 5
       }
     ]
@@ -274,7 +322,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
                 <div className="relative h-[400px] lg:h-[500px] rounded-3xl overflow-hidden bg-white/30 backdrop-blur-sm border border-white/30 shadow-inner group">
                   <Image
                     src={product.images[activeImageIndex]}
-                    alt={`${product.name} - slika ${activeImageIndex + 1}`}
+                    alt={`${product.name} IPL uređaj za trajno uklanjanje dlačica — slika ${activeImageIndex + 1}`}
                     fill
                     className="object-cover transition-transform duration-700"
                   />
@@ -298,7 +346,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
                             : "border-white/50 hover:border-[#563435]/50 opacity-70 hover:opacity-100"
                         }`}
                       >
-                        <Image src={img} alt="" fill className="object-cover" />
+                        <Image src={img} alt={`${product.name} detalj ${idx + 1}`} fill className="object-cover" />
                       </button>
                     ))}
                   </div>
@@ -309,7 +357,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
               <div className="flex flex-col justify-center">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#563435]/10 text-[#563435] text-sm font-semibold w-fit mb-6">
                   <Star className="w-4 h-4 fill-[#563435]" />
-                  <span>Najprodavaniji IPL uređaj</span>
+                  <span>Hiljade zadovoljnih korisnica u BiH</span>
                 </div>
                 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6 leading-tight">
@@ -328,7 +376,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
                     )}
                   </div>
                   <p className="text-sm text-[#563435] font-medium">
-                    🔥 Ušteda {discount}% • Ograničene količine
+                    Ušteda {discount}% — besplatna dostava u BiH
                   </p>
                 </div>
 
@@ -338,7 +386,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
                     <div className="p-2 bg-green-100 rounded-lg">
                       <Truck className="w-5 h-5 text-green-700" />
                     </div>
-                    <span className="text-sm font-medium text-gray-700">Besplatna dostava</span>
+                    <span className="text-sm font-medium text-gray-700">Dostava u BiH 1-3 dana</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-100 rounded-lg">
@@ -366,13 +414,13 @@ export default function ProductLanding({ slug, product: customProduct }: Product
                   className="group relative w-full py-5 px-8 bg-[#563435] hover:bg-[#6d4446] text-white text-center font-bold text-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-3">
-                    Naruči odmah
+                    Želim glatku kožu →
                     <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 </Link>
                 <p className="text-center text-xs text-gray-500 mt-3">
-                  *Brza dostava u roku 24/48h
+                  Besplatna dostava u BiH · Isporuka za 1-3 radna dana
                 </p>
               </div>
             </div>
@@ -384,7 +432,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
-            Zašto odabrati {product.name}?
+            Zašto žene biraju {product.name}?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {product.benefits.map((benefit: string, index: number) => (
@@ -405,10 +453,10 @@ export default function ProductLanding({ slug, product: customProduct }: Product
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-[#563435] font-semibold tracking-wider uppercase text-sm">Proces</span>
             <h2 className="mt-2 text-3xl md:text-4xl font-bold text-gray-800">
-              Uključi. Prisloni. Zablistaj.
+              Lakše nego što misliš
             </h2>
             <p className="mt-4 text-xl text-gray-600">
-              Jednostavan proces u 3 koraka do savršeno glatke kože.
+              Cijeli tretman traje kraće od jedne epizode serije.
             </p>
           </div>
           
@@ -417,7 +465,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
               <div className="relative h-64 w-full">
                 <Image
                   src={usageImages[0] || product.images[0]}
-                  alt="Priprema kože"
+                  alt={`Priprema kože za ${product.name} IPL tretman`}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -437,7 +485,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
               <div className="relative h-64 w-full">
                 <Image
                   src={usageImages[1] || product.images[1] || product.images[0]}
-                  alt="IPL tretman"
+                  alt={`${product.name} IPL tretman u primjeni`}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -457,7 +505,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
               <div className="relative h-64 w-full">
                 <Image
                   src={usageImages[2] || product.images[2] || product.images[0]}
-                  alt="Rezultati tretmana"
+                  alt={`Rezultati korištenja ${product.name} IPL uređaja`}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -480,7 +528,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
-            Tehničke specifikacije
+            Šta dobiješ sa {product.name}?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {product.features.map((feature: any, index: number) => (
@@ -497,7 +545,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
-            Šta kažu naše korisnice
+            Žene iz BiH dijele svoja iskustva
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {product.testimonials.map((testimonial: any, index: number) => (
@@ -511,7 +559,8 @@ export default function ProductLanding({ slug, product: customProduct }: Product
                 <div className="flex items-center justify-between border-t border-white/20 pt-4">
                   <div>
                     <p className="font-bold text-gray-800">{testimonial.name}</p>
-                    <p className="text-sm text-gray-600">{testimonial.age} godina</p>
+                    <p className="text-sm text-gray-500">{testimonial.age} godina{testimonial.location ? ` · ${testimonial.location}` : ''}</p>
+                    {testimonial.date && <p className="text-xs text-gray-400">{testimonial.date}</p>}
                   </div>
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#563435] to-[#8b5a5c] flex items-center justify-center text-white font-bold">
                     {testimonial.name[0]}
@@ -527,7 +576,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
-            Često postavljana pitanja
+            Imaš pitanja? Imamo odgovore.
           </h2>
           <div className="space-y-4">
             {product.faq.map((item: any, index: number) => (
@@ -577,7 +626,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
             className="flex-1 sm:flex-none sm:w-auto bg-[#563435] hover:bg-[#6d4446] text-white font-bold py-3 px-8 rounded-full shadow-lg text-center flex items-center justify-center gap-2"
           >
             <ShoppingCart className="w-5 h-5" />
-            Naruči odmah
+            Želim glatku kožu
           </Link>
         </div>
       </div>

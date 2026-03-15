@@ -310,8 +310,8 @@ export default function CheckoutForm() {
               <Clock className="w-5 h-5 text-green-700" />
             </div>
             <div>
-              <p className="font-bold text-gray-800 text-sm">Brza isporuka</p>
-              <p className="text-xs text-gray-500">Dostava u roku 24-48h</p>
+              <p className="font-bold text-gray-800 text-sm">Besplatna dostava u BiH</p>
+              <p className="text-xs text-gray-500">Isporuka za 1-3 radna dana</p>
             </div>
           </div>
           <div className="bg-white/40 backdrop-blur-md border border-white/30 rounded-xl p-4 flex items-center gap-3">

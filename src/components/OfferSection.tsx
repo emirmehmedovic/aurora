@@ -8,43 +8,43 @@ const offers = [
   {
     id: "ice-cool-pro",
     name: "ICE COOL PRO",
-    description: "IPL uređaj za trajno uklanjanje dlačica",
+    description: "Naš najpopularniji model — idealan za početnice i iskusne korisnice",
     price: 175,
     compareAtPrice: 350,
     image: "/slike/PRO/cover-image.png",
     features: [
-      "999,999 bljeskova (traje godinama)",
-      "Ice Cool™ tehnologija hlađenja",
-      "5 nivoa intenziteta",
-      "Auto & Manual mod rada"
+      "Traje godinama — ne trebaš kupovati zamjene",
+      "Bezbolno: ugrađeno hlađenje štiti kožu",
+      "5 nivoa — prilagodiš osjetljivoj i normalnoj koži",
+      "Noge, ruke, pazuhe, bikini, lice — sve na jednom mjestu"
     ]
   },
   {
     id: "ice-cool-pro-max",
     name: "ICE COOL Max",
-    description: "Profesionalni IPL epilator za najbrže rezultate",
+    description: "Za žene koje žele najbreže rezultate i najugodniji tretman",
     price: 190,
     compareAtPrice: 380,
     image: "/slike/ELITE/cover.png",
     features: [
-      "Max Snaga i veća površina bljeska",
-      "Ice Cool+™ napredno hlađenje",
-      "999,999 bljeskova (traje godinama)",
-      "Brže punjenje između impulsa"
+      "Noge gotove za 10 min — veća površina bljeska",
+      "Najugodniji tretman — dvostruko hlađenje",
+      "Traje godinama bez zamjene lampi",
+      "Idealan za cijelo tijelo, uključujući bikini zonu"
     ]
   },
   {
     id: "ice-cool-lite",
     name: "ICE COOL LITE",
-    description: "Kompaktni IPL uređaj za putovanja",
+    description: "Stane u neseser, a radi posao kao veliki. Savršen za žene u pokretu.",
     price: 165,
     compareAtPrice: 330,
     image: "/slike/LITE/cover.png",
     features: [
-      "Kompaktan i lagan dizajn",
-      "Precizan nastavak za lice",
-      "500,000 bljeskova",
-      "Savršeno za manja područja"
+      "Lagan— ponesi na putovanje, vikendicu, more",
+      "Precizan nastavak za lice i gornju usnu",
+      "500,000 bljeskova — dovoljan za godine korištenja",
+      "Najniža cijena, isti rezultati"
     ]
   }
 ];
@@ -54,12 +54,12 @@ export default function OfferSection() {
     <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50/50">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <span className="text-[#563435] font-semibold tracking-wider uppercase text-sm">Super Ponuda</span>
+          <span className="text-[#563435] font-semibold tracking-wider uppercase text-sm">Koji je tvoj?</span>
           <h2 className="mt-2 text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800">
-            Odaberite svoj idealan uređaj
+            Odaberi model koji odgovara tvom životu
           </h2>
           <p className="mt-4 text-xl text-gray-600">
-            Iskoristite 50% popusta na sve modele. Količine su ograničene!
+            Sva tri modela daju iste rezultate. Razlika je u brzini tretmana i veličini uređaja. Besplatna dostava u BiH.
           </p>
         </div>
 
@@ -78,7 +78,7 @@ export default function OfferSection() {
                   <div className={`relative bg-white/20 min-h-[400px] lg:min-h-[500px] ${!isEven ? 'lg:col-start-2' : ''}`}>
                     <Image
                       src={offer.image}
-                      alt={offer.name}
+                      alt={`${offer.name} — IPL uređaj za trajno uklanjanje dlačica`}
                       fill
                       className="object-cover p-8 hover:scale-105 transition-transform duration-700"
                     />
@@ -117,14 +117,14 @@ export default function OfferSection() {
                       href={`/proizvod/${offer.id}`} 
                       className="block w-full text-center bg-[#563435] hover:bg-[#6d4446] text-white text-xl font-bold py-5 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 mb-8"
                     >
-                      Naruči {offer.name}
+                      Želim ovaj →
                     </Link>
 
                     {/* Guarantees */}
                     <div className="grid grid-cols-3 gap-4 border-t border-gray-200/60 pt-8">
                       <div className="text-center">
                         <Truck className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-                        <span className="text-xs text-gray-500 font-medium block">Besplatna dostava</span>
+                        <span className="text-xs text-gray-500 font-medium block">Dostava u BiH</span>
                       </div>
                       <div className="text-center">
                         <ShieldCheck className="w-6 h-6 text-gray-400 mx-auto mb-2" />
@@ -132,7 +132,7 @@ export default function OfferSection() {
                       </div>
                       <div className="text-center">
                         <Clock className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-                        <span className="text-xs text-gray-500 font-medium block">Brza isporuka</span>
+                        <span className="text-xs text-gray-500 font-medium block">Isporuka 1-3 dana</span>
                       </div>
                     </div>
                   </div>

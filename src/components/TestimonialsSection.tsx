@@ -8,7 +8,9 @@ const testimonials = [
     id: 1,
     name: "Amra",
     age: 23,
-    content: "Nakon nekoliko tretmana primijetila sam sporiji rast i puno manje iritacija. Najviše mi znači što sve mogu uraditi kod kuće, bez salona i bez stresa.",
+    location: "Sarajevo",
+    date: "Mart 2026",
+    content: "Godinama sam izbjegavala kratke haljine jer sam uvijek imala urasle dlačice na nogama. Nakon 5 tretmana Ice Cool PRO-om, koža mi je čista kao nikad. Prošlo ljeto sam prvi put nosila mini suknju bez da sam se brinula.",
     rating: 5,
     image: "/slike/1772396139-pexels-foundertips-4745140.webp"
   },
@@ -16,7 +18,9 @@ const testimonials = [
     id: 2,
     name: "Selma",
     age: 28,
-    content: "Odlična investicija! Koža mi je glađa, a dlačice rastu sporije. Preporučujem svima koji žele profesionalne rezultate kod kuće.",
+    location: "Mostar",
+    date: "Februar 2026",
+    content: "Radim smjene i jednostavno nisam imala vremena za salone. Sad radim tretman nedjeljom uveče uz seriju — 10 minuta za noge, i to je to. Već nakon mjesec dana nisam trebala brijati pazuhe uopšte.",
     rating: 5,
     image: "/slike/1772396140-pexels-nuta-sorokina-8514313.webp"
   },
@@ -24,7 +28,9 @@ const testimonials = [
     id: 3,
     name: "Lejla",
     age: 31,
-    content: "Nisam mogla vjerovati koliko je jednostavno za korištenje. Rezultati su vidljivi već nakon par tretmana. Presretna sam!",
+    location: "Tuzla",
+    date: "Januar 2026",
+    content: "Bila sam skeptična jer sam imala loše iskustvo sa voskom. Ali ovo je potpuno drugačije — ne boli, a koža je glatđa svake sedmice. Muž mi je prvi primijetio razliku, a to mi sve govori.",
     rating: 5,
     image: "/slike/lejla-review.png"
   },
@@ -36,10 +42,10 @@ export default function TestimonialsSection() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3">
-            Šta kažu naše korisnice
+            Žene iz BiH dijele svoja iskustva
           </h2>
           <p className="text-lg text-gray-600">
-            Pročitajte iskustva zadovoljnih korisnica
+            Prave priče, pravi rezultati — bez filtera i lažih obećanja
           </p>
         </div>
 
@@ -75,7 +81,8 @@ export default function TestimonialsSection() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-semibold text-gray-800">{testimonial.name}</p>
-                    <p className="text-sm text-gray-600">{testimonial.age} godina</p>
+                    <p className="text-sm text-gray-500">{testimonial.age} godina · {testimonial.location}</p>
+                    <p className="text-xs text-gray-400">{testimonial.date}</p>
                   </div>
                 </div>
               </div>

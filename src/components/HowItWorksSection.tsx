@@ -5,20 +5,20 @@ import { Sparkles, Zap, Check } from "lucide-react";
 
 const steps = [
   {
-    title: "Priprema",
-    description: "Obrij područje i očisti kožu prije tretmana.",
+    title: "Priprema (2 min)",
+    description: "Obrij područje i očisti kožu. To je sve što trebaš — bez voska, bez traka, bez nereda.",
     image: "/slike/Gemini_Generated_Image_3nt72c3nt72c3nt7.png",
     icon: Sparkles
   },
   {
-    title: "Tretman",
-    description: "Prisloni uređaj i pritisni tipku za bljesak.",
+    title: "Tretman (5-10 min)",
+    description: "Prisloni uređaj na kožu i pritisni tipku. Bljesak — i gotovo. Hlađenje štiti kožu pa ne osjetiš ništa.",
     image: "/slike/Gemini_Generated_Image_ct06zvct06zvct06.png",
     icon: Zap
   },
   {
-    title: "Rezultat",
-    description: "Ponovi svake sedmice za trajno glatku kožu.",
+    title: "Ponovi 1x sedmično",
+    description: "To je to. Jednom sedmično, 10 minuta. Nakon 8 sedmica prelaziš na održavanje jednom mjesečno.",
     image: "/slike/Gemini_Generated_Image_sbj41esbj41esbj4.png",
     icon: Check
   }
@@ -33,10 +33,10 @@ export default function HowItWorksSection() {
             Tehnologija
           </span>
           <h2 className="mt-4 text-3xl md:text-4xl font-bold text-gray-900">
-            Salon rezultati bez odlaska u salon
+            Lakše nego što misliš
           </h2>
           <p className="mt-4 text-xl text-gray-600">
-            IPL tehnologija (Intense Pulsed Light) djeluje direktno na korijen dlačice, uspavljujući njen rast. Sigurno, bezbolno i efikasno.
+            Cijeli tretman traje kraće od jedne epizode serije. IPL svjetlost nježno uspavljuje korijen dlačice — bez bola, bez nereda, bez salona.
           </p>
         </div>
 
@@ -46,7 +46,7 @@ export default function HowItWorksSection() {
               <div className="relative h-64 w-full">
                 <Image
                   src={step.image}
-                  alt={step.title}
+                  alt={`IPL tretman kod kuće — korak ${index + 1}: ${step.title.toLowerCase()}`}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />

@@ -33,7 +33,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="relative h-full w-full overflow-hidden rounded-xl">
             <Image
               src={product.images[0] || "/1772394091-ee63e841-44b7-4498-864d-49a0816c27b9.webp"}
-              alt={product.name}
+              alt={`${product.name} — IPL uređaj za uklanjanje dlačica`}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover will-change-transform group-hover:scale-[1.03] transition-transform duration-500 ease-in-out"

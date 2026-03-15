@@ -5,20 +5,20 @@ export default function ResultsTimelineSection() {
     {
       icon: <Calendar className="w-8 h-8 text-[#563435]" />,
       week: "Sedmica 1-2",
-      title: "Sporiji rast dlačica",
-      description: "Nakon prvih nekoliko tretmana primijetit ćete da dlačice rastu znatno sporije nego inače."
+      title: "Prvu razliku osjetiš prstima",
+      description: "Dlačice rastu sporije i tanje. Prolaziš rukom po nozi i umjesto bockanja osjetiš glatkoću koja traje duže nego ikad."
     },
     {
       icon: <TrendingDown className="w-8 h-8 text-[#563435]" />,
       week: "Sedmica 3-6",
-      title: "Manje vidljivih dlačica",
-      description: "Dlačice postaju tanje i rjeđe. Na nekim mjestima potpuno prestaju rasti."
+      title: "Počinješ 'zaboravljati' na brijanje",
+      description: "Na pazusima i rukama skoro da nema ništa. Noge briješ možda jednom sedmično. Počinješ razmišljati: 'Stvarno radi'."
     },
     {
       icon: <Sparkles className="w-8 h-8 text-[#563435]" />,
       week: "Sedmica 8+",
-      title: "Glađa koža",
-      description: "Uživate u dugotrajno glatkoj koži. Potrebni su samo povremeni tretmani održavanja."
+      title: "Sloboda — bez brijanja, bez brige",
+      description: "Obučeš šortice bez da razmisliš o nogama. Ideš na bazen bez stresa. Tretman održavanja jednom mjesečno je sve što trebaš."
     }
   ];
 
@@ -28,10 +28,10 @@ export default function ResultsTimelineSection() {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-[#563435] font-semibold tracking-wider uppercase text-sm">Vremenska Linija</span>
           <h2 className="mt-2 text-3xl md:text-4xl font-bold text-gray-800">
-            Očekivani rezultati
+            Tvoje prvih 8 sedmica
           </h2>
           <p className="mt-4 text-xl text-gray-600">
-            Dosljednost je ključ. Evo šta možete očekivati tokom vašeg IPL putovanja.
+            Evo šta ćeš primijetiti kad počneš koristiti Ice Cool PRO™. Svaka žena je drugačija, ali većina prati ovaj put.
           </p>
         </div>
 

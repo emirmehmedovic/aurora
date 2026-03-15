@@ -4,8 +4,8 @@ import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 
 export const metadata: Metadata = {
-  title: "Proizvodi - Ice Cool PRO™ | IPL Uređaji",
-  description: "Pregledajte našu kompletnu ponudu IPL uređaja za uklanjanje dlačica. Ice Cool PRO™, Max i Lite modeli sa besplatnom dostavom.",
+  title: "IPL Uređaji za Uklanjanje Dlačica | Ice Cool PRO™, Max i LITE | BiH",
+  description: "Uporedite 3 modela IPL uređaja za trajno uklanjanje dlačica: PRO, Max i LITE. Besplatna dostava u BiH, 14 dana povrat, 12 mj. garancija.",
 };
 
 const products = [
@@ -16,7 +16,7 @@ const products = [
     price: 175.00,
     compareAtPrice: 350.00,
     images: ["/slike/PRO/1.webp"],
-    shortDescription: "Napredna IPL tehnologija sa ugrađenim hlađenjem za ugodniji tretman"
+    shortDescription: "Naš najpopularniji model — bezbolno, efikasno, za cijelo tijelo"
   },
   {
     id: "2",
@@ -25,7 +25,7 @@ const products = [
     price: 190.00,
     compareAtPrice: 380.00,
     images: ["/slike/ELITE/01.webp"],
-    shortDescription: "Premium model sa više nivoa intenziteta i većom površinom tretmana"
+    shortDescription: "Noge gotove za 10 min — najjači bljesak, najugodniji tretman"
   },
   {
     id: "3",
@@ -34,7 +34,7 @@ const products = [
     price: 165.00,
     compareAtPrice: 330.00,
     images: ["/slike/LITE/1.webp"],
-    shortDescription: "Kompaktna verzija idealna za putovanja i brze tretmane"
+    shortDescription: "Stane u torbicu — savršen za lice, bikini i putovanja"
   }
 ];
 
@@ -47,10 +47,10 @@ export default function ProizvodiPage() {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-              Naši IPL Uređaji
+              Odaberi model koji odgovara tvom životu
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Odaberite IPL uređaj koji najbolje odgovara vašim potrebama. Svi modeli dolaze sa besplatnom dostavom i 14 dana garancije povrata novca.
+              Sva tri modela daju iste rezultate. Razlika je u brzini tretmana i veličini uređaja. Besplatna dostava u BiH, 14 dana za povrat.
             </p>
           </div>
 
@@ -62,7 +62,7 @@ export default function ProizvodiPage() {
             </div>
             <div className="bg-gradient-to-br from-teal-50/30 via-white/40 to-cyan-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-4 text-center shadow-sm">
               <div className="text-sm font-bold text-[#563435] mb-1">Besplatna</div>
-              <div className="text-xs text-gray-600">Dostava</div>
+              <div className="text-xs text-gray-600">Dostava u BiH</div>
             </div>
             <div className="bg-gradient-to-br from-rose-50/30 via-white/40 to-pink-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-4 text-center shadow-sm">
               <div className="text-sm font-bold text-[#563435] mb-1">14 dana</div>
@@ -84,7 +84,7 @@ export default function ProizvodiPage() {
           {/* Why Choose Us Section */}
           <div className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-3xl p-8 md:p-12 shadow-lg">
             <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">
-              Zašto odabrati Ice Cool PRO™?
+              Zašto hiljade žena u BiH biraju Ice Cool PRO™?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex items-start gap-3">
@@ -92,8 +92,8 @@ export default function ProizvodiPage() {
                   <span className="text-white font-bold">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Profesionalna IPL tehnologija</h3>
-                  <p className="text-sm text-gray-600">Ista tehnologija koja se koristi u salonima, sada dostupna kod kuće</p>
+                  <h3 className="font-semibold text-gray-800 mb-1">Salon rezultati kod kuće</h3>
+                  <p className="text-sm text-gray-600">Ista IPL tehnologija koju koriste saloni — bez zakazivanja, čekanja i velikih računa</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -101,8 +101,8 @@ export default function ProizvodiPage() {
                   <span className="text-white font-bold">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Ugrađeno hlađenje</h3>
-                  <p className="text-sm text-gray-600">Tretman je mnogo ugodniji zahvaljujući sistemu hlađenja</p>
+                  <h3 className="font-semibold text-gray-800 mb-1">Bezbolno — obećavamo</h3>
+                  <p className="text-sm text-gray-600">Ugrađeno hlađenje štiti kožu. Većina korisnica kaže da osjete samo blagu toplinu</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -110,8 +110,8 @@ export default function ProizvodiPage() {
                   <span className="text-white font-bold">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Dugotrajni rezultati</h3>
-                  <p className="text-sm text-gray-600">Uz redovnu upotrebu, rezultati mogu trajati mjesecima</p>
+                  <h3 className="font-semibold text-gray-800 mb-1">Rezultati već za 3-4 sedmice</h3>
+                  <p className="text-sm text-gray-600">Dlačice rastu sporije i tanje. Nakon 8 sedmica — sloboda od brijanja</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -119,8 +119,8 @@ export default function ProizvodiPage() {
                   <span className="text-white font-bold">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Besplatna dostava i povrat</h3>
-                  <p className="text-sm text-gray-600">Dostava na cijelu BiH i 14 dana za povrat novca</p>
+                  <h3 className="font-semibold text-gray-800 mb-1">Probaš bez rizika</h3>
+                  <p className="text-sm text-gray-600">14 dana za povrat ako nisi zadovoljna. Besplatna dostava u cijeloj BiH</p>
                 </div>
               </div>
             </div>

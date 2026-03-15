@@ -48,7 +48,7 @@ export default function TermsPage() {
               <section>
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">5. Dostava</h2>
                 <p className="text-gray-600 leading-relaxed">
-                  Dostava je besplatna na teritoriji cijele BiH. Rok dostave je 2-5 radnih dana. Nismo odgovorni za kašnjenja uzrokovana kurirskom službom ili višom silom.
+                  Dostava je besplatna na teritoriji cijele BiH. Rok dostave je 1-3 radna dana. Nismo odgovorni za kašnjenja uzrokovana kurirskom službom ili višom silom.
                 </p>
               </section>
 
