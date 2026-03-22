@@ -34,12 +34,13 @@ const waitForFbq = (callback: () => void, maxAttempts = 50) => {
   let attempts = 0;
   const checkFbq = () => {
     if (typeof window.fbq !== 'undefined') {
+      console.log('[Meta Pixel] fbq is ready, firing event');
       callback();
     } else if (attempts < maxAttempts) {
       attempts++;
       setTimeout(checkFbq, 100); // Check every 100ms
     } else {
-      console.warn('Meta Pixel (fbq) not loaded after 5 seconds');
+      console.warn('[Meta Pixel] fbq not loaded after 5 seconds');
     }
   };
 
@@ -53,7 +54,9 @@ export const fbPageView = () => {
 };
 
 export const fbEvent = (name: string, options = {}) => {
+  console.log(`[Meta Pixel] Attempting to track event: ${name}`, options);
   waitForFbq(() => {
+    console.log(`[Meta Pixel] Firing event: ${name}`, options);
     window.fbq('track', name, options);
   });
 };
