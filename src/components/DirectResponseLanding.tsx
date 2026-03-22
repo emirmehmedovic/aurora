@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Check, Star, Truck, Shield, RotateCcw, ArrowRight, Sparkles, Zap, ChevronDown, ChevronUp, Banknote, CreditCard } from "lucide-react";
 import LandingOrderForm from "@/components/LandingOrderForm";
 import useScrollDepth from "@/hooks/useScrollDepth";
-import { trackCtaClick } from "@/lib/analytics";
+import { trackCtaClick, trackViewContent, trackAddToCart } from "@/lib/analytics";
 
 export interface LandingReview {
   name: string;
@@ -85,10 +85,20 @@ export default function DirectResponseLanding({ product, content }: DirectRespon
     { name: "ICE COOL LITE", price: "165 KM", flashes: "500,000", levels: "3", cooling: "Ice Cool™", weight: "~200g", highlight: p.id === "ice-cool-lite" },
   ];
 
+  // Track ViewContent when page loads
+  useEffect(() => {
+    trackViewContent({
+      id: p.id,
+      name: p.name,
+      price: p.price
+    });
+  }, [p.id, p.name, p.price]);
+
   useScrollDepth(`landing-${p.id}`);
 
   const scrollToForm = (ctaLocation: string) => {
     trackCtaClick('Naruci', ctaLocation, `landing-${p.id}`);
+    trackAddToCart({ id: p.id, name: p.name, price: p.price });
     const el = document.getElementById('naruci-form');
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
