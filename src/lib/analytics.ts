@@ -27,16 +27,35 @@ export const event = ({ action, category, label, value }: {
 // Meta Pixel
 export const FB_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
+// Helper: Wait for fbq to be available before firing events
+const waitForFbq = (callback: () => void, maxAttempts = 50) => {
+  if (typeof window === 'undefined') return;
+
+  let attempts = 0;
+  const checkFbq = () => {
+    if (typeof window.fbq !== 'undefined') {
+      callback();
+    } else if (attempts < maxAttempts) {
+      attempts++;
+      setTimeout(checkFbq, 100); // Check every 100ms
+    } else {
+      console.warn('Meta Pixel (fbq) not loaded after 5 seconds');
+    }
+  };
+
+  checkFbq();
+};
+
 export const fbPageView = () => {
-  if (typeof window !== 'undefined' && window.fbq) {
+  waitForFbq(() => {
     window.fbq('track', 'PageView');
-  }
+  });
 };
 
 export const fbEvent = (name: string, options = {}) => {
-  if (typeof window !== 'undefined' && window.fbq) {
+  waitForFbq(() => {
     window.fbq('track', name, options);
-  }
+  });
 };
 
 // Tracking events
