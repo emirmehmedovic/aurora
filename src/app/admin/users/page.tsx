@@ -91,10 +91,10 @@ export default function UsersPage() {
     const method = editingUser ? "PUT" : "POST";
 
     // If editing and password is empty, don't send it
-    const dataToSend = { ...formData };
-    if (editingUser && !dataToSend.password) {
-      delete dataToSend.password;
-    }
+    const { password, ...restData } = formData;
+    const dataToSend = editingUser && !password
+      ? restData
+      : formData;
 
     try {
       const response = await fetch(url, {
