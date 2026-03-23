@@ -54,6 +54,7 @@ export async function sendOrderNotification(order: OrderNotification): Promise<v
     const cityInfo = order.zipCode ? `${order.city} ${order.zipCode}` : order.city;
 
     const message = `
+━━━━━━━━━━━━━━━━━━━━━━
 🛍️ <b>NOVA NARUDŽBA #${order.orderNumber}</b>
 
 👤 <b>Kupac:</b> ${order.customerName}
@@ -71,6 +72,7 @@ ${order.utmSource ? `📊 <b>UTM Source:</b> ${order.utmSource}` : ''}
 ${order.utmCampaign ? `🎯 <b>Kampanja:</b> ${order.utmCampaign}` : ''}
 
 ⏰ ${new Date().toLocaleString('bs-BA', { timeZone: 'Europe/Sarajevo' })}
+━━━━━━━━━━━━━━━━━━━━━━
 `.trim();
 
     await bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
@@ -103,6 +105,7 @@ export async function sendDailySummary(summary: DailySummary): Promise<void> {
     ).join('\n');
 
     const message = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📊 <b>DNEVNI IZVJEŠTAJ - ${summary.date}</b>
 
 ━━━━━━━━━━━━━━━━━━━━━━
@@ -124,6 +127,7 @@ ${ordersBySource || '  Nema podataka'}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 ⏰ Generisano: ${new Date().toLocaleString('bs-BA', { timeZone: 'Europe/Sarajevo' })}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 `.trim();
 
     await bot.sendMessage(chatId, message, { parse_mode: 'HTML' });
@@ -160,6 +164,7 @@ export async function sendOrderStatusUpdate(data: {
     const cityInfo = data.zipCode ? `${data.city} ${data.zipCode}` : data.city;
 
     let message = `
+━━━━━━━━━━━━━━━━━━━━━━
 ${statusEmoji} <b>PROMJENA STATUSA</b>
 
 📋 <b>Narudžba:</b> #${data.orderNumber}
@@ -177,6 +182,7 @@ ${statusEmoji} <b>PROMJENA STATUSA</b>
     }
 
     message += `\n\n⏰ ${new Date().toLocaleString('bs-BA', { timeZone: 'Europe/Sarajevo' })}`;
+    message += `\n━━━━━━━━━━━━━━━━━━━━━━`;
 
     await bot.sendMessage(chatId, message.trim(), { parse_mode: 'HTML' });
     console.log('✅ Order status update sent to Telegram');
@@ -198,11 +204,13 @@ export async function testTelegramBot(): Promise<{ success: boolean; message: st
 
   try {
     const testMessage = `
+━━━━━━━━━━━━━━━━━━━━━━
 ✅ <b>TEST PORUKA</b>
 
 Telegram bot je uspješno povezan!
 
 ⏰ ${new Date().toLocaleString('bs-BA', { timeZone: 'Europe/Sarajevo' })}
+━━━━━━━━━━━━━━━━━━━━━━
 `.trim();
 
     await bot.sendMessage(chatId, testMessage, { parse_mode: 'HTML' });
