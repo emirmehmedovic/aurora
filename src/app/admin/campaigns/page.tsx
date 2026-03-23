@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { TrendingUp, DollarSign, Target, Upload, Plus } from "lucide-react";
+import AttributionChart from "@/components/admin/AttributionChart";
+import CampaignFunnel from "@/components/admin/CampaignFunnel";
 
 interface Campaign {
   id: string;
@@ -158,6 +160,12 @@ export default function CampaignsPage() {
               <p className="text-xs text-gray-500">Cost per acquisition</p>
             </div>
           </div>
+        </div>
+
+        {/* Advanced Analytics */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <AttributionChart />
+          <CampaignFunnel />
         </div>
 
         {/* CSV Upload Section */}

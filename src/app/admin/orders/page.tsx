@@ -4,9 +4,12 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw, Filter, Search, X as XIcon } from "lucide-react";
+import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw, Filter, Search, X as XIcon, Download, Edit, Trash2 } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import BulkActionBar from "@/components/admin/BulkActionBar";
+import { exportToExcel, formatOrdersForExport } from "@/lib/excel";
+import CommentSection from "@/components/admin/CommentSection";
 
 interface Order {
   id: string;
@@ -42,6 +45,9 @@ export default function OrdersPage() {
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
   const [showFilters, setShowFilters] = useState<boolean>(false);
+
+  // Bulk operations
+  const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -82,6 +88,83 @@ export default function OrdersPage() {
       }
     } catch (error) {
       console.error("Failed to update order:", error);
+    }
+  };
+
+  // Bulk operations handlers
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedOrders(filteredOrders.map(o => o.id));
+    } else {
+      setSelectedOrders([]);
+    }
+  };
+
+  const toggleOrderSelection = (orderId: string) => {
+    if (selectedOrders.includes(orderId)) {
+      setSelectedOrders(selectedOrders.filter(id => id !== orderId));
+    } else {
+      setSelectedOrders([...selectedOrders, orderId]);
+    }
+  };
+
+  const handleBulkStatusUpdate = async () => {
+    const newStatus = prompt("Novi status (CONFIRMED/SHIPPED/DELIVERED/CANCELLED):");
+    if (!newStatus) return;
+
+    try {
+      const response = await fetch("/api/admin/orders/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "updateStatus",
+          orderIds: selectedOrders,
+          status: newStatus.toUpperCase(),
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(result.message);
+        fetchOrders();
+        setSelectedOrders([]);
+      }
+    } catch (error) {
+      console.error("Bulk status update failed:", error);
+      alert("Greška pri ažuriranju narudžbi");
+    }
+  };
+
+  const handleBulkExport = () => {
+    const ordersToExport = orders.filter(o => selectedOrders.includes(o.id));
+    const formatted = formatOrdersForExport(ordersToExport);
+    exportToExcel(formatted, `narudzbe-${new Date().toISOString().split('T')[0]}`);
+  };
+
+  const handleBulkDelete = async () => {
+    if (!confirm(`Da li ste sigurni da želite obrisati ${selectedOrders.length} narudžbi?`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/admin/orders/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "delete",
+          orderIds: selectedOrders,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(result.message);
+        fetchOrders();
+        setSelectedOrders([]);
+      }
+    } catch (error) {
+      console.error("Bulk delete failed:", error);
+      alert("Greška pri brisanju narudžbi");
     }
   };
 
@@ -484,6 +567,14 @@ export default function OrdersPage() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-50/50 border-b border-gray-200/60">
+                    <th className="px-4 py-4 w-12">
+                      <input
+                        type="checkbox"
+                        checked={selectedOrders.length === filteredOrders.length && filteredOrders.length > 0}
+                        onChange={(e) => handleSelectAll(e.target.checked)}
+                        className="w-4 h-4 rounded border-gray-300 text-[#563435] focus:ring-[#563435]"
+                      />
+                    </th>
                     <th className="px-6 py-4 font-semibold text-gray-600 text-sm">ID Narudžbe</th>
                     <th className="px-6 py-4 font-semibold text-gray-600 text-sm">Datum</th>
                     <th className="px-6 py-4 font-semibold text-gray-600 text-sm">Kupac</th>
@@ -500,26 +591,33 @@ export default function OrdersPage() {
                     return (
                       <React.Fragment key={order.id}>
                         {/* Main Row */}
-                        <tr 
-                          className={`hover:bg-white/50 transition-colors cursor-pointer ${isExpanded ? 'bg-white/80' : ''}`}
-                          onClick={() => toggleOrderDetails(order.id)}
+                        <tr
+                          className={`hover:bg-white/50 transition-colors ${isExpanded ? 'bg-white/80' : ''}`}
                         >
-                          <td className="px-6 py-4 text-sm font-medium text-gray-800">
+                          <td className="px-4 py-4" onClick={(e) => e.stopPropagation()}>
+                            <input
+                              type="checkbox"
+                              checked={selectedOrders.includes(order.id)}
+                              onChange={() => toggleOrderSelection(order.id)}
+                              className="w-4 h-4 rounded border-gray-300 text-[#563435] focus:ring-[#563435]"
+                            />
+                          </td>
+                          <td className="px-6 py-4 text-sm font-medium text-gray-800 cursor-pointer" onClick={() => toggleOrderDetails(order.id)}>
                             #{order.id.slice(0, 8)}
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-600">
+                          <td className="px-6 py-4 text-sm text-gray-600 cursor-pointer" onClick={() => toggleOrderDetails(order.id)}>
                             {new Date(order.createdAt).toLocaleDateString("bs-BA", {
                               day: "2-digit", month: "short", year: "numeric"
                             })}
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-6 py-4 cursor-pointer" onClick={() => toggleOrderDetails(order.id)}>
                             <p className="text-sm font-medium text-gray-800">{order.customer.fullName}</p>
                             <p className="text-xs text-gray-500">{order.customer.phone}</p>
                           </td>
-                          <td className="px-6 py-4 text-sm font-bold text-[#563435]">
+                          <td className="px-6 py-4 text-sm font-bold text-[#563435] cursor-pointer" onClick={() => toggleOrderDetails(order.id)}>
                             {order.totalAmount.toFixed(2)} KM
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-6 py-4 cursor-pointer" onClick={() => toggleOrderDetails(order.id)}>
                             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${statusConfig[order.status]?.color}`}>
                               <StatusIcon className="w-3.5 h-3.5" />
                               {statusConfig[order.status]?.label}
@@ -538,7 +636,7 @@ export default function OrdersPage() {
                         {/* Expanded Details Row */}
                         {isExpanded && (
                           <tr className="bg-white/80 border-b-2 border-gray-200/60">
-                            <td colSpan={6} className="px-6 py-6">
+                            <td colSpan={7} className="px-6 py-6">
                               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                                 {/* Details Col 1: Customer */}
                                 <div className="space-y-4">
@@ -677,6 +775,11 @@ export default function OrdersPage() {
                                   </div>
                                 </div>
                               </div>
+
+                              {/* Comments Section */}
+                              <div className="mt-6">
+                                <CommentSection orderId={order.id} />
+                              </div>
                             </td>
                           </tr>
                         )}
@@ -688,6 +791,30 @@ export default function OrdersPage() {
             </div>
           )}
         </div>
+
+        {/* Bulk Action Bar */}
+        <BulkActionBar
+          selectedCount={selectedOrders.length}
+          onCancel={() => setSelectedOrders([])}
+          actions={[
+            {
+              label: "Promijeni status",
+              onClick: handleBulkStatusUpdate,
+              icon: <Edit className="w-4 h-4" />,
+            },
+            {
+              label: "Izvezi Excel",
+              onClick: handleBulkExport,
+              icon: <Download className="w-4 h-4" />,
+            },
+            {
+              label: "Obriši",
+              onClick: handleBulkDelete,
+              icon: <Trash2 className="w-4 h-4" />,
+              className: "bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl font-medium transition-colors flex items-center gap-2",
+            },
+          ]}
+        />
       </div>
     </div>
   );

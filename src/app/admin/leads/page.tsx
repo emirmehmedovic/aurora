@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Users, Phone, Mail, Filter, Search, X } from "lucide-react";
+import { ArrowLeft, Users, Phone, Mail, Filter, Search, X, Download, Edit, Trash2, UserPlus } from "lucide-react";
+import BulkActionBar from "@/components/admin/BulkActionBar";
+import { exportToExcel, formatLeadsForExport } from "@/lib/excel";
+import CommentSection from "@/components/admin/CommentSection";
 
 interface Lead {
   id: string;
@@ -34,6 +37,9 @@ export default function LeadsPage() {
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
   const [showFilters, setShowFilters] = useState<boolean>(false);
+
+  // Bulk operations
+  const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -74,6 +80,83 @@ export default function LeadsPage() {
       }
     } catch (error) {
       console.error("Failed to update lead:", error);
+    }
+  };
+
+  // Bulk operations handlers
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedLeads(filteredLeads.map(l => l.id));
+    } else {
+      setSelectedLeads([]);
+    }
+  };
+
+  const toggleLeadSelection = (leadId: string) => {
+    if (selectedLeads.includes(leadId)) {
+      setSelectedLeads(selectedLeads.filter(id => id !== leadId));
+    } else {
+      setSelectedLeads([...selectedLeads, leadId]);
+    }
+  };
+
+  const handleBulkStatusUpdate = async () => {
+    const newStatus = prompt("Novi status (NEW/CALLED/CONFIRMED/CANCELLED/NO_ANSWER/FOLLOW_UP):");
+    if (!newStatus) return;
+
+    try {
+      const response = await fetch("/api/admin/leads/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "updateStatus",
+          leadIds: selectedLeads,
+          status: newStatus.toUpperCase(),
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(result.message);
+        fetchLeads();
+        setSelectedLeads([]);
+      }
+    } catch (error) {
+      console.error("Bulk status update failed:", error);
+      alert("Greška pri ažuriranju leadova");
+    }
+  };
+
+  const handleBulkExport = () => {
+    const leadsToExport = leads.filter(l => selectedLeads.includes(l.id));
+    const formatted = formatLeadsForExport(leadsToExport);
+    exportToExcel(formatted, `leadovi-${new Date().toISOString().split('T')[0]}`);
+  };
+
+  const handleBulkDelete = async () => {
+    if (!confirm(`Da li ste sigurni da želite obrisati ${selectedLeads.length} leadova?`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/admin/leads/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "delete",
+          leadIds: selectedLeads,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(result.message);
+        fetchLeads();
+        setSelectedLeads([]);
+      }
+    } catch (error) {
+      console.error("Bulk delete failed:", error);
+      alert("Greška pri brisanju leadova");
     }
   };
 
@@ -285,6 +368,23 @@ export default function LeadsPage() {
           </div>
         )}
 
+        {/* Select All checkbox */}
+        {filteredLeads.length > 0 && (
+          <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 mb-4">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={selectedLeads.length === filteredLeads.length && filteredLeads.length > 0}
+                onChange={(e) => handleSelectAll(e.target.checked)}
+                className="w-4 h-4 rounded border-gray-300 text-[#563435] focus:ring-[#563435]"
+              />
+              <span className="text-sm font-medium text-gray-700">
+                Odaberi sve ({filteredLeads.length})
+              </span>
+            </label>
+          </div>
+        )}
+
         {/* Leads List */}
         <div className="space-y-4">
           {filteredLeads.length === 0 ? (
@@ -305,13 +405,21 @@ export default function LeadsPage() {
           ) : (
             filteredLeads.map((lead) => (
               <div key={lead.id} className="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-100">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold text-gray-800">{lead.fullName}</h3>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[lead.status]}`}>
-                        {statusLabels[lead.status]}
-                      </span>
+                <div className="flex items-start gap-4 mb-4">
+                  <input
+                    type="checkbox"
+                    checked={selectedLeads.includes(lead.id)}
+                    onChange={() => toggleLeadSelection(lead.id)}
+                    className="w-4 h-4 mt-1 rounded border-gray-300 text-[#563435] focus:ring-[#563435]"
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-3">
+                        <h3 className="font-semibold text-gray-800">{lead.fullName}</h3>
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[lead.status]}`}>
+                          {statusLabels[lead.status]}
+                        </span>
+                      </div>
                     </div>
                     <p className="text-sm text-gray-600">
                       {new Date(lead.createdAt).toLocaleDateString("bs-BA", {
@@ -368,7 +476,7 @@ export default function LeadsPage() {
                 </div>
 
                 {/* Status Actions */}
-                <div className="flex gap-2 flex-wrap">
+                <div className="flex gap-2 flex-wrap mb-4">
                   {lead.status === "NEW" && (
                     <>
                       <button
@@ -402,10 +510,37 @@ export default function LeadsPage() {
                     </>
                   )}
                 </div>
+
+                {/* Comments Section */}
+                <CommentSection leadId={lead.id} />
               </div>
             ))
           )}
         </div>
+
+        {/* Bulk Action Bar */}
+        <BulkActionBar
+          selectedCount={selectedLeads.length}
+          onCancel={() => setSelectedLeads([])}
+          actions={[
+            {
+              label: "Promijeni status",
+              onClick: handleBulkStatusUpdate,
+              icon: <Edit className="w-4 h-4" />,
+            },
+            {
+              label: "Izvezi Excel",
+              onClick: handleBulkExport,
+              icon: <Download className="w-4 h-4" />,
+            },
+            {
+              label: "Obriši",
+              onClick: handleBulkDelete,
+              icon: <Trash2 className="w-4 h-4" />,
+              className: "bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl font-medium transition-colors flex items-center gap-2",
+            },
+          ]}
+        />
       </div>
     </div>
   );

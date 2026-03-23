@@ -20,6 +20,7 @@ model User {
   orders        Order[]
   leads         Lead[]
   uploadedMedia Media[]
+  comments      Comment[]
 
   @@map("users")
 }
@@ -59,46 +60,56 @@ model Product {
 }
 
 model Customer {
-  id        String   @id @default(cuid())
-  fullName  String
-  phone     String
-  email     String?
-  address   String?
-  city      String?
-  zipCode   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String    @id @default(cuid())
+  fullName    String
+  phone       String
+  email       String?
+  address     String?
+  city        String?
+  zipCode     String?
+  tags        String[]  @default([])
+  notes       String?
+  totalSpent  Int       @default(0)
+  orderCount  Int       @default(0)
+  lastOrderAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  orders Order[]
-  leads  Lead[]
+  orders  Order[]
+  leads   Lead[]
+  returns Return[]
 
   @@map("customers")
 }
 
 model Order {
-  id            String      @id @default(cuid())
-  orderNumber   String      @unique
-  customerId    String
-  customer      Customer    @relation(fields: [customerId], references: [id])
-  status        OrderStatus @default(NEW)
-  totalAmount   Int
-  shippingFee   Int         @default(0)
-  codAmount     Int?
-  source        String?
-  utmSource     String?
-  utmMedium     String?
-  utmCampaign   String?
-  utmContent    String?
-  utmTerm       String?
-  fbclid        String?
-  trackingNumber String?
-  notes         String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id                 String      @id @default(cuid())
+  orderNumber        String      @unique
+  customerId         String
+  customer           Customer    @relation(fields: [customerId], references: [id])
+  status             OrderStatus @default(NEW)
+  totalAmount        Int
+  shippingFee        Int         @default(0)
+  codAmount          Int?
+  source             String?
+  utmSource          String?
+  utmMedium          String?
+  utmCampaign        String?
+  utmContent         String?
+  utmTerm            String?
+  fbclid             String?
+  attributedCampaign String?
+  adCost             Int?
+  trackingNumber     String?
+  notes              String?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
 
-  items OrderItem[]
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id])
+  items    OrderItem[]
+  returns  Return[]
+  comments Comment[]
+  userId   String?
+  user     User?        @relation(fields: [userId], references: [id])
 
   @@map("orders")
 }
@@ -141,6 +152,9 @@ model Lead {
   utmContent   String?
   utmTerm      String?
   fbclid       String?
+  firstTouch   String?
+  lastTouch    String?
+  touchPoints  Json?
   assignedToId String?
   assignedTo   User?      @relation(fields: [assignedToId], references: [id])
   customerId   String?
@@ -148,6 +162,8 @@ model Lead {
   notes        String?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
+
+  comments Comment[]
 
   @@map("leads")
 }
@@ -168,6 +184,8 @@ model Campaign {
   medium      String?
   description String?
   active      Boolean  @default(true)
+  cpaTarget   Int?
+  pixelEvents Json?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -304,4 +322,55 @@ model ProductUsageImage {
   createdAt DateTime @default(now())
 
   @@map("product_usage_images")
+}
+
+enum ReturnStatus {
+  REQUESTED
+  APPROVED
+  REJECTED
+  RECEIVED
+  REFUNDED
+}
+
+enum RefundMethod {
+  ORIGINAL_PAYMENT
+  BANK_TRANSFER
+  STORE_CREDIT
+}
+
+model Return {
+  id            String       @id @default(cuid())
+  rmaNumber     String       @unique
+  orderId       String
+  order         Order        @relation(fields: [orderId], references: [id])
+  customerId    String
+  customer      Customer     @relation(fields: [customerId], references: [id])
+  reason        String
+  reasonDetails String?
+  status        ReturnStatus @default(REQUESTED)
+  itemsToReturn Json
+  refundAmount  Int?
+  refundMethod  RefundMethod?
+  refundedAt    DateTime?
+  notes         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@map("returns")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  orderId   String?
+  order     Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  leadId    String?
+  lead      Lead?    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  mentions  String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("comments")
 }

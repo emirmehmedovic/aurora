@@ -5,18 +5,20 @@ import { SessionProvider } from "next-auth/react";
 import AdminSidebar from "@/components/AdminSidebar";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
+import QuickActionsPanel from "@/components/QuickActionsPanel";
+import { Toaster } from "sonner";
+import { useGlobalShortcuts } from "@/hooks/useKeyboardShortcuts";
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function AdminContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isLoginPage = pathname === "/admin/login";
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Enable global keyboard shortcuts
+  useGlobalShortcuts();
+
   return (
-    <SessionProvider>
+    <>
       {isLoginPage ? (
         children
       ) : (
@@ -43,8 +45,26 @@ export default function AdminLayout({
               {children}
             </main>
           </div>
+
+          {/* Quick Actions Panel */}
+          <QuickActionsPanel />
         </div>
       )}
+
+      {/* Toast Notifications */}
+      <Toaster position="top-right" richColors closeButton />
+    </>
+  );
+}
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <SessionProvider>
+      <AdminContent>{children}</AdminContent>
     </SessionProvider>
   );
 }

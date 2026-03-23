@@ -5,6 +5,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Package, Users, TrendingUp, DollarSign, ShoppingCart, Clock, UserPlus, BarChart3 } from "lucide-react";
+import SalesTrendChart from "@/components/admin/SalesTrendChart";
+import TopProductsGrid from "@/components/admin/TopProductsGrid";
+import ConversionFunnel from "@/components/admin/ConversionFunnel";
+import PeakHoursChart from "@/components/admin/PeakHoursChart";
+import LiveActivityFeed from "@/components/admin/LiveActivityFeed";
 
 interface Stats {
   totalOrders: number;
@@ -145,6 +150,26 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Sales Trend - Full Width */}
+          <div className="lg:col-span-2">
+            <SalesTrendChart />
+          </div>
+
+          {/* Top Products */}
+          <TopProductsGrid />
+
+          {/* Conversion Funnel */}
+          <ConversionFunnel />
+
+          {/* Peak Hours */}
+          <PeakHoursChart />
+
+          {/* Live Activity */}
+          <LiveActivityFeed />
+        </div>
+
         {/* Quick Actions */}
         <div className="bg-white/40 backdrop-blur-md border border-white/30 rounded-3xl p-6 md:p-8 shadow-sm">
           <div className="flex items-center justify-between mb-6">
@@ -163,7 +188,7 @@ export default function AdminDashboard() {
                 <p className="text-xs text-gray-500">Upravljanje narudžbama</p>
               </div>
             </Link>
-            
+
             <Link
               href="/admin/leads"
               className="group p-5 bg-white/60 rounded-2xl hover:bg-white hover:shadow-md transition-all border border-white/50 flex items-center gap-4"
@@ -176,7 +201,7 @@ export default function AdminDashboard() {
                 <p className="text-xs text-gray-500">Baza potencijalnih kupaca</p>
               </div>
             </Link>
-            
+
             <Link
               href="/admin/products"
               className="group p-5 bg-white/60 rounded-2xl hover:bg-white hover:shadow-md transition-all border border-white/50 flex items-center gap-4"
