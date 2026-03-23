@@ -111,8 +111,8 @@ export async function POST(request: NextRequest) {
         orderNumber: order.orderNumber,
         customerName: customer.fullName,
         phone: customer.phone,
-        address: customer.address,
-        city: customer.city,
+        address: customer.address || 'Nije uneseno',
+        city: customer.city || 'Nije uneseno',
         zipCode: customer.zipCode || undefined,
         totalAmount: order.totalAmount,
         products: [
