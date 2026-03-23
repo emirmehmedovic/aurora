@@ -13,11 +13,25 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Step 1: Check environment
-echo -e "\n${YELLOW}Step 1: Checking environment...${NC}"
+# Step 1: Load .env file and check environment
+echo -e "\n${YELLOW}Step 1: Loading environment variables...${NC}"
+
+# Check if .env file exists
+if [ -f .env ]; then
+    echo "Loading .env file..."
+    # Export all variables from .env
+    set -a
+    source .env
+    set +a
+    echo -e "${GREEN}✓ .env file loaded${NC}"
+else
+    echo -e "${YELLOW}⚠ No .env file found, using system environment variables${NC}"
+fi
+
+# Check if DATABASE_URL is set
 if [ -z "$DATABASE_URL" ]; then
     echo -e "${RED}ERROR: DATABASE_URL is not set!${NC}"
-    echo "Please set your production database URL:"
+    echo "Please create a .env file with DATABASE_URL or set it as environment variable:"
     echo "export DATABASE_URL='your-production-database-url'"
     exit 1
 fi
