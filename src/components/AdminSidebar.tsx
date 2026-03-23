@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { LayoutDashboard, ShoppingCart, Users, Package, TrendingUp, LogOut, X, UserCog } from "lucide-react";
+import { LayoutDashboard, ShoppingCart, Users, Package, TrendingUp, LogOut, X, UserCog, Image as ImageIcon, Sparkles } from "lucide-react";
 
 interface AdminSidebarProps {
   isOpen?: boolean;
@@ -19,6 +19,8 @@ export default function AdminSidebar({ isOpen = false, onClose }: AdminSidebarPr
     { href: "/admin/leads", icon: Users, label: "Leadovi" },
     { href: "/admin/campaigns", icon: TrendingUp, label: "Kampanje" },
     { href: "/admin/products", icon: Package, label: "Proizvodi" },
+    { href: "/admin/media", icon: ImageIcon, label: "Media Library" },
+    { href: "/admin/hero", icon: Sparkles, label: "Hero Sekcija" },
     { href: "/admin/analytics", icon: TrendingUp, label: "Analitika" },
     { href: "/admin/users", icon: UserCog, label: "Korisnici" },
   ];

@@ -4,12 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:migrate": "tsx scripts/migrate-media.ts",
+    "postinstall": "prisma generate",
+    "deploy:full": "bash scripts/deploy-production.sh"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -29,6 +32,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.2",
+    "sharp": "^0.34.5",
     "zod": "^4.3.6"
   },
   "devDependencies": {

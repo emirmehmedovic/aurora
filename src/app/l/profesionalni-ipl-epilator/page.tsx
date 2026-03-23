@@ -3,6 +3,7 @@ import Script from "next/script";
 import DirectResponseLanding from "@/components/DirectResponseLanding";
 import type { LandingContent } from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
+import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "ICE COOL Max™ | Profesionalni IPL Epilator — Salon Rezultati Kod Kuće | BiH",
@@ -60,8 +61,51 @@ const maxContent: LandingContent = {
   closingText: "Svaka seansa u salonu je novac koji više ne moraš davati. Max se isplati već nakon prvog mjeseca. 14 dana za povrat ako nisi zadovoljna. Besplatna dostava u BiH.",
 };
 
-export default function ProfesionalniIplLandingPage() {
-  const product = {
+export default async function ProfesionalniIplLandingPage() {
+  // Fetch product with images from database
+  let dbProduct = null;
+  try {
+    dbProduct = await prisma.product.findUnique({
+      where: { slug: "ice-cool-pro-max" },
+      include: {
+        galleryImages: {
+          include: { media: true },
+          orderBy: { order: 'asc' }
+        },
+        usageImages: {
+          include: { media: true },
+          orderBy: { order: 'asc' }
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching product:', error);
+  }
+
+  // Map database product to component props with fallback
+  const product = dbProduct ? {
+    id: dbProduct.slug,
+    name: dbProduct.name,
+    price: dbProduct.price / 100,
+    compareAtPrice: dbProduct.compareAtPrice ? dbProduct.compareAtPrice / 100 : dbProduct.price / 100,
+    images: dbProduct.galleryImages.length > 0
+      ? dbProduct.galleryImages.map(gi => gi.media.url)
+      : [
+          "/slike/ELITE/cover.png",
+          "/slike/ELITE/slika1.png",
+          "/slike/ELITE/slika2.png",
+        ],
+    usageImages: dbProduct.usageImages.length > 0
+      ? dbProduct.usageImages.map(ui => ui.media.url)
+      : [
+          "/slike/ELITE/koristenje1.png",
+          "/slike/ELITE/koristenje2.png",
+          "/slike/ELITE/koristenje3.png",
+          "/slike/ELITE/koristenje4.png",
+          "/slike/ELITE/koristenje5.png"
+        ],
+    image: dbProduct.galleryImages[0]?.media.url || "/slike/ELITE/cover.png"
+  } : {
     id: "ice-cool-pro-max",
     name: "ICE COOL Max",
     price: 190.00,
@@ -87,13 +131,49 @@ export default function ProfesionalniIplLandingPage() {
     "name": "ICE COOL Max",
     "description": "Profesionalni IPL epilator s najvećom površinom bljeska za najbrže rezultate",
     "brand": { "@type": "Brand", "name": "Ice Cool PRO™" },
-    "image": "https://icecoolpro.ba/slike/ELITE/cover.png",
+    "image": "https://aurorashop.ba/slike/ELITE/cover.png",
     "offers": {
       "@type": "Offer",
       "price": "190.00",
       "priceCurrency": "BAM",
       "availability": "https://schema.org/InStock",
-      "url": "https://icecoolpro.ba/l/profesionalni-ipl-epilator"
+      "url": "https://aurorashop.ba/l/profesionalni-ipl-epilator",
+      "priceValidUntil": "2026-12-31",
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "0",
+          "currency": "BAM"
+        },
+        "shippingDestination": {
+          "@type": "DefinedRegion",
+          "addressCountry": "BA"
+        },
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 0,
+            "maxValue": 1,
+            "unitCode": "DAY"
+          },
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 1,
+            "maxValue": 3,
+            "unitCode": "DAY"
+          }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "BA",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 14,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn"
+      }
     },
     "aggregateRating": {
       "@type": "AggregateRating",
