@@ -60,6 +60,10 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    // Separate cancelled orders from confirmed/shipped ones
+    const cancelledOrders = orders.filter(o => o.status === 'CANCELLED');
+    const validOrders = orders.filter(o => ['CONFIRMED', 'PREPARING', 'SHIPPED', 'DELIVERED'].includes(o.status));
+
     // Fetch leads for the day
     const leads = await prisma.lead.findMany({
       where: {
@@ -70,14 +74,16 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // Calculate statistics
-    const totalOrders = orders.length;
-    const totalRevenue = orders.reduce((sum, order) => sum + order.totalAmount, 0);
+    // Calculate statistics (only count confirmed/shipped orders for revenue)
+    const totalOrders = orders.length; // All orders
+    const confirmedOrders = validOrders.length; // Orders that count towards revenue
+    const totalRevenue = validOrders.reduce((sum, order) => sum + order.totalAmount, 0); // Only valid orders
+    const cancelledCount = cancelledOrders.length;
     const newLeads = leads.length;
 
-    // Calculate top products
+    // Calculate top products (from valid orders only)
     const productCounts: { [key: string]: { name: string; count: number } } = {};
-    orders.forEach(order => {
+    validOrders.forEach(order => {
       order.items.forEach(item => {
         const key = item.product.name;
         if (!productCounts[key]) {
@@ -90,7 +96,7 @@ export async function POST(request: NextRequest) {
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
 
-    // Calculate orders by status
+    // Calculate orders by status (all orders)
     const statusCounts: { [key: string]: number } = {};
     orders.forEach(order => {
       statusCounts[order.status] = (statusCounts[order.status] || 0) + 1;
@@ -100,9 +106,9 @@ export async function POST(request: NextRequest) {
       count
     }));
 
-    // Calculate orders by source
+    // Calculate orders by source (only valid orders)
     const sourceCounts: { [key: string]: number } = {};
-    orders.forEach(order => {
+    validOrders.forEach(order => {
       const source = order.source || 'Direktno';
       sourceCounts[source] = (sourceCounts[source] || 0) + 1;
     });
@@ -122,6 +128,8 @@ export async function POST(request: NextRequest) {
     await sendDailySummary({
       date: dateStr,
       totalOrders,
+      confirmedOrders,
+      cancelledOrders: cancelledCount,
       totalRevenue,
       newLeads,
       topProducts,
@@ -135,6 +143,8 @@ export async function POST(request: NextRequest) {
       stats: {
         date: dateStr,
         totalOrders,
+        confirmedOrders,
+        cancelledOrders: cancelledCount,
         totalRevenue: totalRevenue / 100,
         newLeads,
         topProducts,

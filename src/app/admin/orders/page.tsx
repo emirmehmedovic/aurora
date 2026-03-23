@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock } from "lucide-react";
+import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -169,11 +169,14 @@ export default function OrdersPage() {
   }
 
   const statusConfig: Record<string, { color: string, label: string, icon: any }> = {
+    NEW: { color: "bg-gray-100 text-gray-800 border-gray-200", label: "Nova", icon: ShoppingBag },
     PENDING: { color: "bg-yellow-100 text-yellow-800 border-yellow-200", label: "Na čekanju", icon: Clock },
     CONFIRMED: { color: "bg-blue-100 text-blue-800 border-blue-200", label: "Potvrđeno", icon: CheckCircle },
+    PREPARING: { color: "bg-indigo-100 text-indigo-800 border-indigo-200", label: "U pripremi", icon: Package },
     SHIPPED: { color: "bg-purple-100 text-purple-800 border-purple-200", label: "Poslano", icon: Truck },
     DELIVERED: { color: "bg-green-100 text-green-800 border-green-200", label: "Dostavljeno", icon: Package },
     CANCELLED: { color: "bg-red-100 text-red-800 border-red-200", label: "Otkazano", icon: XCircle },
+    RETURNED: { color: "bg-orange-100 text-orange-800 border-orange-200", label: "Vraćeno", icon: RotateCcw },
   };
 
   return (
@@ -323,7 +326,7 @@ export default function OrdersPage() {
                                   <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Upravljanje statusom</h4>
                                   <div className="bg-gray-50/50 rounded-xl p-4 flex flex-col gap-3">
                                     
-                                    {order.status === "PENDING" && (
+                                    {(order.status === "NEW" || order.status === "PENDING") && (
                                       <button
                                         onClick={() => updateOrderStatus(order.id, "CONFIRMED")}
                                         className="w-full flex items-center justify-center gap-2 py-2.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors shadow-sm"
@@ -331,8 +334,17 @@ export default function OrdersPage() {
                                         <CheckCircle className="w-4 h-4" /> Potvrdi narudžbu
                                       </button>
                                     )}
-                                    
-                                    {(order.status === "PENDING" || order.status === "CONFIRMED") && (
+
+                                    {order.status === "CONFIRMED" && (
+                                      <button
+                                        onClick={() => updateOrderStatus(order.id, "PREPARING")}
+                                        className="w-full flex items-center justify-center gap-2 py-2.5 bg-indigo-500 text-white text-sm font-semibold rounded-lg hover:bg-indigo-600 transition-colors shadow-sm"
+                                      >
+                                        <Package className="w-4 h-4" /> U pripremi
+                                      </button>
+                                    )}
+
+                                    {(order.status === "PREPARING" || order.status === "CONFIRMED") && (
                                       <button
                                         onClick={() => updateOrderStatus(order.id, "SHIPPED")}
                                         className="w-full flex items-center justify-center gap-2 py-2.5 bg-purple-500 text-white text-sm font-semibold rounded-lg hover:bg-purple-600 transition-colors shadow-sm"
@@ -342,15 +354,27 @@ export default function OrdersPage() {
                                     )}
                                     
                                     {order.status === "SHIPPED" && (
-                                      <button
-                                        onClick={() => updateOrderStatus(order.id, "DELIVERED")}
-                                        className="w-full flex items-center justify-center gap-2 py-2.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600 transition-colors shadow-sm"
-                                      >
-                                        <Package className="w-4 h-4" /> Označi kao DOSTAVLJENO
-                                      </button>
+                                      <>
+                                        <button
+                                          onClick={() => updateOrderStatus(order.id, "DELIVERED")}
+                                          className="w-full flex items-center justify-center gap-2 py-2.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600 transition-colors shadow-sm"
+                                        >
+                                          <Package className="w-4 h-4" /> Označi kao DOSTAVLJENO
+                                        </button>
+                                        <button
+                                          onClick={() => {
+                                            if(confirm("Da li je pošiljka vraćena nazad?")) {
+                                              updateOrderStatus(order.id, "RETURNED");
+                                            }
+                                          }}
+                                          className="w-full flex items-center justify-center gap-2 py-2.5 bg-orange-500 text-white text-sm font-semibold rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
+                                        >
+                                          <RotateCcw className="w-4 h-4" /> Vraćeno
+                                        </button>
+                                      </>
                                     )}
-                                    
-                                    {order.status !== "CANCELLED" && order.status !== "DELIVERED" && (
+
+                                    {order.status !== "CANCELLED" && order.status !== "DELIVERED" && order.status !== "RETURNED" && (
                                       <button
                                         onClick={() => {
                                           if(confirm("Da li ste sigurni da želite otkazati ovu narudžbu?")) {

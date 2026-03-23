@@ -24,6 +24,8 @@ interface OrderNotification {
 interface DailySummary {
   date: string;
   totalOrders: number;
+  confirmedOrders: number;
+  cancelledOrders: number;
   totalRevenue: number;
   newLeads: number;
   topProducts: { name: string; count: number }[];
@@ -97,8 +99,10 @@ export async function sendDailySummary(summary: DailySummary): Promise<void> {
 📊 <b>DNEVNI IZVJEŠTAJ - ${summary.date}</b>
 
 ━━━━━━━━━━━━━━━━━━━━━━
-📦 <b>NARUDŽBE:</b> ${summary.totalOrders}
-💰 <b>PRIHOD:</b> ${(summary.totalRevenue / 100).toFixed(2)} KM
+📦 <b>UKUPNO NARUDŽBI:</b> ${summary.totalOrders}
+✅ <b>Potvrđene/Poslane:</b> ${summary.confirmedOrders}
+${summary.cancelledOrders > 0 ? `❌ <b>Otkazane:</b> ${summary.cancelledOrders}` : ''}
+💰 <b>PRIHOD:</b> ${(summary.totalRevenue / 100).toFixed(2)} KM ${summary.cancelledOrders > 0 ? '<i>(bez otkazanih)</i>' : ''}
 📝 <b>NOVI LEADOVI:</b> ${summary.newLeads}
 ━━━━━━━━━━━━━━━━━━━━━━
 
@@ -119,6 +123,52 @@ ${ordersBySource || '  Nema podataka'}
     console.log('✅ Daily summary sent to Telegram');
   } catch (error) {
     console.error('❌ Failed to send daily summary:', error);
+  }
+}
+
+/**
+ * Send order status change notification to Telegram group
+ */
+export async function sendOrderStatusUpdate(data: {
+  orderNumber: string;
+  customerName: string;
+  phone: string;
+  oldStatus: string;
+  newStatus: string;
+  totalAmount: number;
+  notes?: string;
+}): Promise<void> {
+  if (!bot || !chatId) {
+    console.log('Telegram bot not configured, skipping status notification');
+    return;
+  }
+
+  try {
+    const oldStatusText = translateStatus(data.oldStatus);
+    const newStatusText = translateStatus(data.newStatus);
+    const statusEmoji = getStatusEmoji(data.newStatus);
+
+    let message = `
+${statusEmoji} <b>PROMJENA STATUSA</b>
+
+📋 <b>Narudžba:</b> #${data.orderNumber}
+👤 <b>Kupac:</b> ${data.customerName}
+📱 <b>Telefon:</b> ${data.phone}
+
+📊 <b>Status:</b> ${oldStatusText} → <b>${newStatusText}</b>
+💰 <b>Iznos:</b> ${(data.totalAmount / 100).toFixed(2)} KM
+`;
+
+    if (data.notes) {
+      message += `\n📝 <b>Napomena:</b> ${data.notes}`;
+    }
+
+    message += `\n\n⏰ ${new Date().toLocaleString('bs-BA', { timeZone: 'Europe/Sarajevo' })}`;
+
+    await bot.sendMessage(chatId, message.trim(), { parse_mode: 'HTML' });
+    console.log('✅ Order status update sent to Telegram');
+  } catch (error) {
+    console.error('❌ Failed to send Telegram status notification:', error);
   }
 }
 
