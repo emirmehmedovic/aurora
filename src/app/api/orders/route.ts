@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendOrderNotification } from "@/lib/telegram";
 
 export async function POST(request: NextRequest) {
   try {
@@ -103,6 +104,29 @@ export async function POST(request: NextRequest) {
         customer: true
       }
     });
+
+    // Send Telegram notification
+    try {
+      await sendOrderNotification({
+        orderNumber: order.orderNumber,
+        customerName: customer.fullName,
+        phone: customer.phone,
+        totalAmount: order.totalAmount,
+        products: [
+          {
+            name: productInfo.name,
+            quantity: 1,
+            price: productInfo.price
+          }
+        ],
+        source: utmSource,
+        utmSource: utmSource !== 'direct' ? utmSource : undefined,
+        utmCampaign: utmCampaign !== 'none' ? utmCampaign : undefined
+      });
+    } catch (error) {
+      // Log error but don't fail the order
+      console.error('Failed to send Telegram notification:', error);
+    }
 
     // TODO: Send email notification
     // TODO: Send SMS notification
