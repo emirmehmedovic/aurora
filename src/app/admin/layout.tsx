@@ -20,14 +20,15 @@ export default function AdminLayout({
       {isLoginPage ? (
         children
       ) : (
-        <div className="flex min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50">
           <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-          
-          <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
+
+          {/* Main content wrapper with left margin for desktop sidebar */}
+          <div className="lg:ml-64 min-h-screen flex flex-col">
             {/* Mobile Header */}
             <div className="lg:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between sticky top-0 z-30">
               <div className="flex items-center gap-3">
-                <button 
+                <button
                   onClick={() => setSidebarOpen(true)}
                   className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-lg"
                 >
@@ -37,7 +38,8 @@ export default function AdminLayout({
               </div>
             </div>
 
-            <main className="flex-1 overflow-auto">
+            {/* Main content with max-width constraint */}
+            <main className="flex-1 w-full">
               {children}
             </main>
           </div>

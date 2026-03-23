@@ -125,14 +125,15 @@ export default function HeroEditorPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="min-h-screen bg-gray-50/30 flex items-center justify-center">
         <div className="text-center">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gray-50/30">
+      <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Hero Section Editor</h1>
         <p className="text-gray-600 mt-1">
@@ -221,6 +222,7 @@ export default function HeroEditorPage() {
         >
           {saving ? 'Saving...' : 'Save Hero Section'}
         </button>
+      </div>
       </div>
     </div>
   );

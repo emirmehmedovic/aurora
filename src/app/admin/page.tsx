@@ -65,11 +65,11 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="p-4 md:p-6 bg-gray-50/30 min-h-screen relative overflow-hidden">
+    <div className="min-h-screen bg-gray-50/30 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-purple-50/40 to-transparent pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 relative z-10">
         {/* Header */}
         <div className="mb-8 bg-white/40 backdrop-blur-md border border-white/30 rounded-3xl p-6 shadow-sm">
           <h1 className="text-2xl font-bold text-gray-800 mb-1">Admin Dashboard</h1>

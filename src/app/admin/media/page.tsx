@@ -13,7 +13,8 @@ export default function MediaPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gray-50/30">
+      <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold">Media Library</h1>
@@ -36,6 +37,7 @@ export default function MediaPage() {
         onClose={() => setUploadModalOpen(false)}
         onUploadComplete={handleUploadComplete}
       />
+      </div>
     </div>
   );
 }

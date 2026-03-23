@@ -351,8 +351,8 @@ export default function OrdersPage() {
   };
 
   return (
-    <div className="p-4 md:p-6 bg-gray-50/30 min-h-screen">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-50/30">
+      <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
         {/* Header */}
         <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>

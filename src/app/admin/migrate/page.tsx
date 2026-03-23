@@ -36,8 +36,8 @@ export default function MigratePage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gray-50/30">
+      <div className="max-w-2xl mx-auto p-4 md:p-6 lg:p-8">
         <h1 className="text-3xl font-bold mb-4">Media Migration</h1>
 
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
