@@ -85,71 +85,185 @@ export default function OrdersPage() {
     }
   };
 
+  // Helper function to handle UTF-8 characters for PDF
+  const sanitizeForPDF = (text: string): string => {
+    if (!text) return '';
+    return text
+      .replace(/č/g, 'c').replace(/Č/g, 'C')
+      .replace(/ć/g, 'c').replace(/Ć/g, 'C')
+      .replace(/đ/g, 'dj').replace(/Đ/g, 'Dj')
+      .replace(/š/g, 's').replace(/Š/g, 'S')
+      .replace(/ž/g, 'z').replace(/Ž/g, 'Z');
+  };
+
   const generatePDF = (order: Order) => {
-    const doc = new jsPDF();
-    
-    // Header
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    // Border around entire page (shipping label style)
+    doc.setLineWidth(1);
+    doc.rect(5, 5, pageWidth - 10, pageHeight - 10);
+
+    // ============= HEADER SECTION =============
+    doc.setFillColor(86, 52, 53); // #563435
+    doc.rect(5, 5, pageWidth - 10, 35, 'F');
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(28);
+    doc.setFont("helvetica", "bold");
+    doc.text("ICE COOL PRO", pageWidth / 2, 20, { align: 'center' });
+
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text("DOSTAVNICA / SHIPPING LABEL", pageWidth / 2, 30, { align: 'center' });
+
+    // Reset text color
+    doc.setTextColor(0, 0, 0);
+
+    // ============= BARCODE/ORDER ID SECTION =============
+    doc.setFillColor(240, 240, 240);
+    doc.rect(10, 45, pageWidth - 20, 20, 'F');
+    doc.setLineWidth(0.5);
+    doc.rect(10, 45, pageWidth - 20, 20);
+
+    doc.setFontSize(20);
+    doc.setFont("courier", "bold");
+    doc.text(`#${order.id.slice(0, 12).toUpperCase()}`, pageWidth / 2, 58, { align: 'center' });
+
+    // ============= DELIVERY INFO BOX (MAIN SECTION) =============
+    let yPos = 75;
+
+    // "DOSTAVITI NA:" label with background
+    doc.setFillColor(86, 52, 53);
+    doc.rect(10, yPos, pageWidth - 20, 12, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text("DOSTAVITI NA:", 15, yPos + 8);
+
+    yPos += 18;
+    doc.setTextColor(0, 0, 0);
+
+    // Customer name - LARGE
     doc.setFontSize(22);
     doc.setFont("helvetica", "bold");
-    doc.text("ICE COOL PRO", 14, 20);
-    
+    doc.text(sanitizeForPDF(order.customer.fullName), 15, yPos);
+
+    yPos += 12;
+
+    // Address - LARGE
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "normal");
+    doc.text(sanitizeForPDF(order.shippingAddress || "Nije uneseno"), 15, yPos);
+
+    yPos += 10;
+
+    // City + Zip - LARGE
+    const cityText = `${sanitizeForPDF(order.city || "")} ${order.zipCode || ""}`.trim();
+    doc.text(cityText, 15, yPos);
+
+    yPos += 15;
+
+    // Phone - LARGE with icon
+    doc.setFontSize(20);
+    doc.setFont("helvetica", "bold");
+    doc.text(`TEL: ${order.customer.phone}`, 15, yPos);
+
+    // Box around delivery info
+    doc.setLineWidth(0.8);
+    doc.rect(10, 75, pageWidth - 20, yPos - 75 + 5);
+
+    yPos += 15;
+
+    // ============= PAYMENT SECTION =============
+    doc.setFillColor(255, 235, 59); // Yellow for cash on delivery
+    doc.rect(10, yPos, pageWidth - 20, 25, 'F');
+    doc.setLineWidth(0.8);
+    doc.rect(10, yPos, pageWidth - 20, 25);
+
     doc.setFontSize(14);
-    doc.setFont("helvetica", "normal");
-    doc.text("Dostavnica / Shipping Slip", 14, 30);
-    
-    // Line separator
-    doc.setLineWidth(0.5);
-    doc.line(14, 35, 196, 35);
-    
-    // Order Info
-    doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
-    doc.text("Podaci o narudžbi:", 14, 45);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    doc.text(`ID narudžbe: #${order.id.slice(0, 8)}`, 14, 52);
-    doc.text(`Datum: ${new Date(order.createdAt).toLocaleDateString("bs-BA")}`, 14, 59);
-    doc.text(`Iznos za naplatu (Pouzećem): ${order.totalAmount.toFixed(2)} KM`, 14, 66);
-    
-    // Customer Info
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.text("Podaci o kupcu (Dostaviti na):", 110, 45);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    doc.text(`Ime i prezime: ${order.customer.fullName}`, 110, 52);
-    doc.text(`Telefon: ${order.customer.phone}`, 110, 59);
-    doc.text(`Adresa: ${order.shippingAddress || "Nije uneseno"}`, 110, 66);
-    doc.text(`Grad: ${order.city || ""} ${order.zipCode || ""}`, 110, 73);
-    
-    if (order.notes) {
-      doc.setFont("helvetica", "italic");
-      doc.text(`Napomena za kurira: ${order.notes}`, 110, 80);
-    }
+    doc.text("NACIN PLACANJA:", 15, yPos + 8);
 
-    // Line separator
-    doc.setLineWidth(0.2);
-    doc.line(14, 90, 196, 90);
+    doc.setFontSize(24);
+    doc.text("POUZECE", 15, yPos + 20);
 
-    // Items table
-    doc.setFontSize(12);
+    doc.setFontSize(28);
     doc.setFont("helvetica", "bold");
-    doc.text("Stavke narudžbe:", 14, 100);
-    
+    doc.text(`${order.totalAmount.toFixed(2)} KM`, pageWidth - 15, yPos + 20, { align: 'right' });
+
+    yPos += 35;
+
+    // ============= PRODUCTS TABLE =============
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("SADRZAJ POSILJKE:", 15, yPos);
+
+    yPos += 5;
+
     const tableData = order.items.map(item => [
-      item.quantity.toString(),
-      item.productName,
-      `${item.price.toFixed(2)} KM`,
-      `${(item.quantity * item.price).toFixed(2)} KM`
+      item.quantity + 'x',
+      sanitizeForPDF(item.productName),
+      `${item.price.toFixed(2)} KM`
     ]);
 
     autoTable(doc, {
-      startY: 105,
-      head: [['Količina', 'Proizvod', 'Jedinična cijena', 'Ukupno']],
+      startY: yPos,
+      head: [['Kol.', 'Proizvod', 'Cijena']],
       body: tableData,
       theme: 'grid',
-      headStyles: { fillColor: [86, 52, 53] },
+      styles: {
+        fontSize: 12,
+        cellPadding: 4,
+      },
+      headStyles: {
+        fillColor: [86, 52, 53],
+        textColor: [255, 255, 255],
+        fontStyle: 'bold',
+        fontSize: 12
+      },
+      columnStyles: {
+        0: { cellWidth: 20 },
+        1: { cellWidth: 120 },
+        2: { cellWidth: 50, halign: 'right' }
+      },
+      margin: { left: 10, right: 10 }
     });
+
+    // ============= NOTES SECTION (if exists) =============
+    if (order.notes) {
+      const finalY = (doc as any).lastAutoTable.finalY || yPos;
+      doc.setFillColor(255, 243, 224);
+      doc.rect(10, finalY + 10, pageWidth - 20, 20, 'F');
+      doc.rect(10, finalY + 10, pageWidth - 20, 20);
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.text("NAPOMENA ZA KURIRA:", 15, finalY + 17);
+      doc.setFont("helvetica", "normal");
+      doc.text(sanitizeForPDF(order.notes), 15, finalY + 24);
+    }
+
+    // ============= FOOTER =============
+    const footerY = pageHeight - 20;
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100, 100, 100);
+    const date = new Date(order.createdAt).toLocaleDateString("bs-BA", {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    doc.text(`Datum: ${sanitizeForPDF(date)}`, 15, footerY);
+    doc.text("www.aurorashop.ba", pageWidth - 15, footerY, { align: 'right' });
 
     // Save PDF
     doc.save(`Dostavnica_${order.id.slice(0, 8)}.pdf`);
