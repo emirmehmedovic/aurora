@@ -27,7 +27,7 @@ export default function AdminSidebar({ isOpen = false, onClose }: AdminSidebarPr
   ];
 
   const sidebarClasses = `
-    fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:h-screen flex flex-col
+    fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out lg:translate-x-0 flex flex-col
     ${isOpen ? "translate-x-0" : "-translate-x-full"}
   `;
 
