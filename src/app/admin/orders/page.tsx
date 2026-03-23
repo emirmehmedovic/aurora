@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw } from "lucide-react";
+import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw, Filter, Search, X as XIcon } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -35,6 +35,13 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
+
+  // Filters
+  const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [dateFrom, setDateFrom] = useState<string>("");
+  const [dateTo, setDateTo] = useState<string>("");
+  const [showFilters, setShowFilters] = useState<boolean>(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -156,6 +163,56 @@ export default function OrdersPage() {
     }
   };
 
+  // Filter and search logic
+  const filteredOrders = orders.filter(order => {
+    // Status filter
+    if (statusFilter !== "ALL" && order.status !== statusFilter) {
+      return false;
+    }
+
+    // Search filter (by customer name, phone, or order ID)
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      const matchesCustomer = order.customer.fullName.toLowerCase().includes(query);
+      const matchesPhone = order.customer.phone.includes(query);
+      const matchesOrderId = order.id.toLowerCase().includes(query);
+
+      if (!matchesCustomer && !matchesPhone && !matchesOrderId) {
+        return false;
+      }
+    }
+
+    // Date range filter
+    if (dateFrom) {
+      const orderDate = new Date(order.createdAt);
+      const fromDate = new Date(dateFrom);
+      fromDate.setHours(0, 0, 0, 0);
+      if (orderDate < fromDate) {
+        return false;
+      }
+    }
+
+    if (dateTo) {
+      const orderDate = new Date(order.createdAt);
+      const toDate = new Date(dateTo);
+      toDate.setHours(23, 59, 59, 999);
+      if (orderDate > toDate) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  const clearFilters = () => {
+    setStatusFilter("ALL");
+    setSearchQuery("");
+    setDateFrom("");
+    setDateTo("");
+  };
+
+  const hasActiveFilters = statusFilter !== "ALL" || searchQuery !== "" || dateFrom !== "" || dateTo !== "";
+
   if (status === "loading" || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50/30">
@@ -183,7 +240,7 @@ export default function OrdersPage() {
     <div className="p-4 md:p-6 bg-gray-50/30 min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <Link href="/admin" className="p-2 hover:bg-white rounded-full transition-colors">
@@ -193,14 +250,120 @@ export default function OrdersPage() {
             </div>
             <p className="text-gray-600 ml-10">Upravljanje i obrada svih narudžbi</p>
           </div>
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+              hasActiveFilters
+                ? "bg-[#563435] text-white"
+                : "bg-white text-gray-700 hover:bg-gray-50"
+            } border border-gray-200`}
+          >
+            <Filter className="w-4 h-4" />
+            Filteri {hasActiveFilters && `(${filteredOrders.length})`}
+          </button>
         </div>
+
+        {/* Filters Panel */}
+        {showFilters && (
+          <div className="mb-6 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/40 p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Search */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Pretraga
+                </label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Ime, telefon, ID..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              {/* Status Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Status
+                </label>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                >
+                  <option value="ALL">Svi statusi</option>
+                  <option value="NEW">Nova</option>
+                  <option value="PENDING">Na čekanju</option>
+                  <option value="CONFIRMED">Potvrđeno</option>
+                  <option value="PREPARING">U pripremi</option>
+                  <option value="SHIPPED">Poslano</option>
+                  <option value="DELIVERED">Dostavljeno</option>
+                  <option value="CANCELLED">Otkazano</option>
+                  <option value="RETURNED">Vraćeno</option>
+                </select>
+              </div>
+
+              {/* Date From */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Datum od
+                </label>
+                <input
+                  type="date"
+                  value={dateFrom}
+                  onChange={(e) => setDateFrom(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                />
+              </div>
+
+              {/* Date To */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Datum do
+                </label>
+                <input
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => setDateTo(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* Clear Filters */}
+            {hasActiveFilters && (
+              <div className="mt-4 flex justify-end">
+                <button
+                  onClick={clearFilters}
+                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <XIcon className="w-4 h-4" />
+                  Očisti filtere
+                </button>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Orders Table */}
         <div className="bg-white/60 backdrop-blur-md rounded-3xl shadow-sm border border-white/40 overflow-hidden">
-          {orders.length === 0 ? (
+          {filteredOrders.length === 0 ? (
             <div className="p-12 text-center">
               <ShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-600 text-lg">Trenutno nema narudžbi.</p>
+              <p className="text-gray-600 text-lg">
+                {hasActiveFilters ? "Nema rezultata pretrage." : "Trenutno nema narudžbi."}
+              </p>
+              {hasActiveFilters && (
+                <button
+                  onClick={clearFilters}
+                  className="mt-4 text-[#563435] hover:underline"
+                >
+                  Očisti filtere
+                </button>
+              )}
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -216,7 +379,7 @@ export default function OrdersPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {orders.map((order) => {
+                  {filteredOrders.map((order) => {
                     const StatusIcon = statusConfig[order.status]?.icon || Clock;
                     const isExpanded = expandedOrderId === order.id;
 
