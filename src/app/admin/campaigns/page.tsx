@@ -1,17 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { TrendingUp, DollarSign, Target, Upload, Plus } from "lucide-react";
+import { TrendingUp, DollarSign, Target, Upload, Plus, X } from "lucide-react";
+import { toast } from "sonner";
 import AttributionChart from "@/components/admin/AttributionChart";
 import CampaignFunnel from "@/components/admin/CampaignFunnel";
 
 interface Campaign {
   id: string;
   name: string;
-  platform: string;
-  status: string;
+  source: string;
+  medium?: string;
+  active: boolean;
   spend: number;
   revenue: number;
   orders: number;
@@ -28,6 +30,15 @@ export default function CampaignsPage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [showUpload, setShowUpload] = useState(false);
+  const [showNewCampaign, setShowNewCampaign] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // New campaign form
+  const [newCampaignName, setNewCampaignName] = useState("");
+  const [newCampaignSource, setNewCampaignSource] = useState("facebook");
+  const [newCampaignMedium, setNewCampaignMedium] = useState("cpc");
+  const [newCampaignDescription, setNewCampaignDescription] = useState("");
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -52,6 +63,81 @@ export default function CampaignsPage() {
       console.error("Failed to fetch campaigns:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/admin/campaigns/import", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success(`Uspješno importovano ${data.importedCount} redova!`);
+        if (data.errors && data.errors.length > 0) {
+          toast.warning(`${data.errors.length} grešaka pri importu`, {
+            description: data.errors.slice(0, 3).join("\n"),
+          });
+        }
+        fetchCampaigns();
+        setShowUpload(false);
+      } else {
+        toast.error(data.error || "Greška pri importu CSV-a");
+      }
+    } catch (error) {
+      toast.error("Greška pri upload-u fajla");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const handleCreateCampaign = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!newCampaignName.trim()) {
+      toast.error("Naziv kampanje je obavezan");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/admin/campaigns", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newCampaignName,
+          source: newCampaignSource,
+          medium: newCampaignMedium,
+          description: newCampaignDescription,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success("Kampanja kreirana!");
+        fetchCampaigns();
+        setShowNewCampaign(false);
+        setNewCampaignName("");
+        setNewCampaignSource("facebook");
+        setNewCampaignMedium("cpc");
+        setNewCampaignDescription("");
+      } else {
+        const data = await response.json();
+        toast.error(data.error || "Greška pri kreiranju kampanje");
+      }
+    } catch (error) {
+      toast.error("Greška pri kreiranju kampanje");
     }
   };
 
@@ -96,7 +182,10 @@ export default function CampaignsPage() {
               <Upload className="w-5 h-5" />
               Import CSV
             </button>
-            <button className="px-4 py-2 bg-[#563435] text-white rounded-lg hover:bg-[#6d4446] flex items-center justify-center gap-2">
+            <button
+              onClick={() => setShowNewCampaign(true)}
+              className="px-4 py-2 bg-[#563435] text-white rounded-lg hover:bg-[#6d4446] flex items-center justify-center gap-2"
+            >
               <Plus className="w-5 h-5" />
               Nova kampanja
             </button>
@@ -171,15 +260,131 @@ export default function CampaignsPage() {
         {/* CSV Upload Section */}
         {showUpload && (
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Import Ad Spend CSV</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-gray-800">Import Ad Spend CSV</h2>
+              <button
+                onClick={() => setShowUpload(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
             <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
               <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-600 mb-2">Prevuci CSV fajl ili klikni za upload</p>
-              <p className="text-sm text-gray-500">Format: Date, Campaign, Spend, Platform</p>
-              <input type="file" accept=".csv" className="hidden" />
-              <button className="mt-4 px-6 py-2 bg-[#563435] text-white rounded-lg hover:bg-[#6d4446]">
-                Izaberi fajl
+              <p className="text-sm text-gray-500 mb-4">
+                Format: Date, Campaign, Spend, Impressions (optional), Clicks (optional)
+              </p>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".csv"
+                onChange={handleFileSelect}
+                className="hidden"
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="mt-4 px-6 py-2 bg-[#563435] text-white rounded-lg hover:bg-[#6d4446] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {uploading ? "Uploaduje se..." : "Izaberi fajl"}
               </button>
+            </div>
+          </div>
+        )}
+
+        {/* New Campaign Modal */}
+        {showNewCampaign && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-gray-800">Nova kampanja</h2>
+                <button
+                  onClick={() => setShowNewCampaign(false)}
+                  className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleCreateCampaign} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Naziv kampanje *
+                  </label>
+                  <input
+                    type="text"
+                    value={newCampaignName}
+                    onChange={(e) => setNewCampaignName(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    placeholder="npr. Summer Sale 2026"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Izvor *
+                  </label>
+                  <select
+                    value={newCampaignSource}
+                    onChange={(e) => setNewCampaignSource(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                  >
+                    <option value="facebook">Facebook</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="google">Google Ads</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="organic">Organic</option>
+                    <option value="other">Ostalo</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Medium
+                  </label>
+                  <select
+                    value={newCampaignMedium}
+                    onChange={(e) => setNewCampaignMedium(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                  >
+                    <option value="cpc">CPC</option>
+                    <option value="cpm">CPM</option>
+                    <option value="cpa">CPA</option>
+                    <option value="organic">Organic</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Opis
+                  </label>
+                  <textarea
+                    value={newCampaignDescription}
+                    onChange={(e) => setNewCampaignDescription(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    rows={3}
+                    placeholder="Dodatne informacije o kampanji..."
+                  />
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowNewCampaign(false)}
+                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                  >
+                    Otkaži
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 px-4 py-2 bg-[#563435] text-white rounded-lg hover:bg-[#6d4446]"
+                  >
+                    Kreiraj
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
@@ -226,7 +431,7 @@ export default function CampaignsPage() {
                       </td>
                       <td className="py-4 px-6">
                         <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
-                          {campaign.platform}
+                          {campaign.source}
                         </span>
                       </td>
                       <td className="py-4 px-6 text-right font-semibold text-gray-800">
@@ -267,7 +472,7 @@ export default function CampaignsPage() {
                         <p className="text-sm text-gray-500">{new Date(campaign.createdAt).toLocaleDateString("bs-BA")}</p>
                       </div>
                       <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
-                        {campaign.platform}
+                        {campaign.source}
                       </span>
                     </div>
 

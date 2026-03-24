@@ -76,3 +76,42 @@ export async function GET() {
     );
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { name, source, medium, description, active = true, cpaTarget } = body;
+
+    if (!name || !source) {
+      return NextResponse.json(
+        { error: "Name and source are required" },
+        { status: 400 }
+      );
+    }
+
+    const campaign = await prisma.campaign.create({
+      data: {
+        name,
+        source,
+        medium,
+        description,
+        active,
+        cpaTarget,
+      },
+    });
+
+    return NextResponse.json(campaign);
+  } catch (error) {
+    console.error("Create campaign error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
