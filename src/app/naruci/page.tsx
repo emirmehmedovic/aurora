@@ -8,7 +8,16 @@ export const metadata: Metadata = {
   description: "Završite narudžbu za Ice Cool PRO™ IPL uređaj. Besplatna dostava, plaćanje pouzećem."
 };
 
-export default function CheckoutPage() {
+type CheckoutPageProps = {
+  searchParams?: Promise<{
+    product?: string;
+  }>;
+};
+
+export default async function CheckoutPage({ searchParams }: CheckoutPageProps) {
+  const resolvedSearchParams = await searchParams;
+  const initialProduct = resolvedSearchParams?.product;
+
   return (
     <>
       <Navbar />
@@ -22,7 +31,7 @@ export default function CheckoutPage() {
               Popunite formu ispod i naš tim će vas kontaktirati u najkraćem roku
             </p>
           </div>
-          <CheckoutForm />
+          <CheckoutForm initialProduct={initialProduct} />
         </div>
       </main>
       <Footer />

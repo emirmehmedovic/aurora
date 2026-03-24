@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import { Check, Truck, ShieldCheck, Clock, CreditCard, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { trackInitiateCheckout, trackPurchase, trackLead } from "@/lib/analytics";
@@ -35,10 +34,13 @@ const products = [
   }
 ];
 
-export default function CheckoutForm() {
-  const searchParams = useSearchParams();
-  const requestedProduct = searchParams.get("product");
-  const lockedProduct = products.find((product) => product.id === requestedProduct) ?? null;
+type CheckoutFormProps = {
+  initialProduct?: string;
+};
+
+export default function CheckoutForm({ initialProduct }: CheckoutFormProps) {
+  const lockedProduct =
+    products.find((product) => product.id === initialProduct) ?? null;
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
