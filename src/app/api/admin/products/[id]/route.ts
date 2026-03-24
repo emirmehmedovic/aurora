@@ -16,11 +16,37 @@ export async function PATCH(
 
     const { id } = await params;
     const body = await request.json();
-    const { active } = body;
+    const data: {
+      active?: boolean;
+      name?: string;
+      slug?: string;
+      price?: number;
+      compareAtPrice?: number | null;
+    } = {};
+
+    if (typeof body.active === "boolean") {
+      data.active = body.active;
+    }
+
+    if (typeof body.name === "string") {
+      data.name = body.name.trim();
+    }
+
+    if (typeof body.slug === "string") {
+      data.slug = body.slug.trim();
+    }
+
+    if (typeof body.price === "number") {
+      data.price = body.price;
+    }
+
+    if (body.compareAtPrice === null || typeof body.compareAtPrice === "number") {
+      data.compareAtPrice = body.compareAtPrice;
+    }
 
     const product = await prisma.product.update({
       where: { id },
-      data: { active },
+      data,
     });
 
     return NextResponse.json({ product });

@@ -1,38 +1,9 @@
-"use client";
-
 import ProductCard from "./ProductCard";
+import { getStorefrontProducts } from "@/lib/storefront-products";
 
-const products = [
-  {
-    id: "1",
-    name: "ICE COOL PRO",
-    slug: "ice-cool-pro",
-    price: 175.00,
-    compareAtPrice: 350.00,
-    images: ["/slike/PRO/cover-image.png"],
-    shortDescription: "Napredna IPL tehnologija sa ugrađenim hlađenjem za ugodniji tretman"
-  },
-  {
-    id: "2",
-    name: "ICE COOL Max",
-    slug: "ice-cool-pro-max",
-    price: 190.00,
-    compareAtPrice: 380.00,
-    images: ["/slike/ELITE/cover.png"],
-    shortDescription: "Premium model sa više nivoa intenziteta i većom površinom tretmana"
-  },
-  {
-    id: "3",
-    name: "ICE COOL LITE",
-    slug: "ice-cool-lite",
-    price: 165.00,
-    compareAtPrice: 330.00,
-    images: ["/slike/LITE/cover.png"],
-    shortDescription: "Kompaktna verzija idealna za putovanja i brze tretmane"
-  },
-];
+export default async function FeaturedProducts() {
+  const products = await getStorefrontProducts();
 
-export default function FeaturedProducts() {
   return (
     <section className="py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">

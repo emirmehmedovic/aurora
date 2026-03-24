@@ -5,6 +5,7 @@ import { normalizePhone } from '@/lib/phoneUtils';
 import { normalizeNameForMatching } from '@/lib/textUtils';
 import { findDuplicateCustomers } from '@/lib/customerDeduplication';
 import { updateCustomerStats } from '@/lib/customerStats';
+import { getStorefrontProductBySlug } from "@/lib/storefront-products";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,14 +20,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get product details
-    const productMap: Record<string, { id: string; name: string; price: number }> = {
-      "ice-cool-pro": { id: "ice-cool-pro-1", name: "ICE COOL PRO", price: 17500 },
-      "ice-cool-pro-max": { id: "ice-cool-pro-max-1", name: "ICE COOL Max", price: 19000 },
-      "ice-cool-lite": { id: "ice-cool-lite-1", name: "ICE COOL LITE", price: 16500 }
-    };
-
-    const productInfo = productMap[product];
+    const productInfo = await getStorefrontProductBySlug(product);
     if (!productInfo) {
       return NextResponse.json(
         { error: "Invalid product" },
@@ -110,7 +104,7 @@ export async function POST(request: NextRequest) {
         orderNumber,
         customerId: customer.id,
         status: "NEW",
-        totalAmount: productInfo.price,
+        totalAmount: Math.round(productInfo.price * 100),
         utmSource,
         utmMedium,
         utmCampaign,
@@ -122,7 +116,7 @@ export async function POST(request: NextRequest) {
                 connect: { id: productInfo.id }
               },
               quantity: 1,
-              price: productInfo.price
+              price: Math.round(productInfo.price * 100)
             }
           ]
         }
@@ -147,7 +141,7 @@ export async function POST(request: NextRequest) {
           {
             name: productInfo.name,
             quantity: 1,
-            price: productInfo.price
+            price: Math.round(productInfo.price * 100)
           }
         ],
         source: utmSource,
@@ -169,7 +163,7 @@ export async function POST(request: NextRequest) {
     console.log("Order created:", {
       orderId: order.id,
       leadId: lead.id,
-      value: productInfo.price,
+      value: Math.round(productInfo.price * 100),
       product: productInfo.name
     });
 
@@ -177,7 +171,7 @@ export async function POST(request: NextRequest) {
       success: true,
       orderId: order.id,
       leadId: lead.id,
-      value: productInfo.price,
+      value: Math.round(productInfo.price * 100),
       message: "Narudžba uspješno kreirana"
     });
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Package, Plus, Edit, Trash2 } from "lucide-react";
+import { Package, Plus, Edit, Trash2, X } from "lucide-react";
 
 interface Product {
   id: string;
@@ -21,6 +21,14 @@ export default function ProductsPage() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    slug: "",
+    price: "",
+    compareAtPrice: "",
+  });
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -61,6 +69,63 @@ export default function ProductsPage() {
       }
     } catch (error) {
       console.error("Failed to update product:", error);
+    }
+  };
+
+  const openEditModal = (product: Product) => {
+    setEditingProduct(product);
+    setEditForm({
+      name: product.name,
+      slug: product.slug,
+      price: (product.price / 100).toFixed(2),
+      compareAtPrice: product.compareAtPrice
+        ? (product.compareAtPrice / 100).toFixed(2)
+        : "",
+    });
+  };
+
+  const closeEditModal = () => {
+    if (isSaving) return;
+    setEditingProduct(null);
+    setEditForm({
+      name: "",
+      slug: "",
+      price: "",
+      compareAtPrice: "",
+    });
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingProduct) return;
+
+    setIsSaving(true);
+
+    try {
+      const response = await fetch(`/api/admin/products/${editingProduct.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: editForm.name.trim(),
+          slug: editForm.slug.trim(),
+          price: Math.round(Number(editForm.price) * 100),
+          compareAtPrice: editForm.compareAtPrice.trim()
+            ? Math.round(Number(editForm.compareAtPrice) * 100)
+            : null,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update product");
+      }
+
+      await fetchProducts();
+      closeEditModal();
+    } catch (error) {
+      console.error("Failed to update product:", error);
+      alert("Greška pri spremanju proizvoda.");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -154,7 +219,10 @@ export default function ProductsPage() {
                   >
                     {product.active ? "Deaktiviraj" : "Aktiviraj"}
                   </button>
-                  <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                  <button
+                    onClick={() => openEditModal(product)}
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                  >
                     <Edit className="w-4 h-4" />
                   </button>
                   <button className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200">
@@ -166,6 +234,112 @@ export default function ProductsPage() {
           )}
         </div>
       </div>
+
+      {editingProduct && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-gray-200">
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <div>
+                <h2 className="text-xl font-bold text-gray-800">Uredi proizvod</h2>
+                <p className="text-sm text-gray-500">{editingProduct.name}</p>
+              </div>
+              <button
+                onClick={closeEditModal}
+                className="p-2 rounded-lg text-gray-500 hover:bg-gray-100"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleEditSubmit} className="p-6 space-y-5">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Naziv
+                </label>
+                <input
+                  type="text"
+                  value={editForm.name}
+                  onChange={(e) =>
+                    setEditForm((current) => ({ ...current, name: e.target.value }))
+                  }
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] outline-none"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Slug
+                </label>
+                <input
+                  type="text"
+                  value={editForm.slug}
+                  onChange={(e) =>
+                    setEditForm((current) => ({ ...current, slug: e.target.value }))
+                  }
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] outline-none"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    Cijena
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={editForm.price}
+                    onChange={(e) =>
+                      setEditForm((current) => ({ ...current, price: e.target.value }))
+                    }
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] outline-none"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    Stara cijena
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={editForm.compareAtPrice}
+                    onChange={(e) =>
+                      setEditForm((current) => ({
+                        ...current,
+                        compareAtPrice: e.target.value,
+                      }))
+                    }
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={closeEditModal}
+                  className="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-50"
+                >
+                  Otkaži
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="px-4 py-2.5 rounded-xl bg-[#563435] text-white font-semibold hover:bg-[#6d4446] disabled:opacity-60"
+                >
+                  {isSaving ? "Spremam..." : "Spremi izmjene"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

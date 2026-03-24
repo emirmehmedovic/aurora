@@ -27,9 +27,17 @@ interface HeroProductData {
 
 interface HeroSectionClientProps {
   heroProducts: HeroProductData[];
+  fallbackProducts: {
+    id: string;
+    name: string;
+    price: number;
+    compareAtPrice: number;
+    image: string;
+    subtitle: string;
+  }[];
 }
 
-export default function HeroSectionClient({ heroProducts }: HeroSectionClientProps) {
+export default function HeroSectionClient({ heroProducts, fallbackProducts }: HeroSectionClientProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Fallback to hardcoded data if no hero products in DB
@@ -40,32 +48,7 @@ export default function HeroSectionClient({ heroProducts }: HeroSectionClientPro
     compareAtPrice: hp.product.compareAtPrice ? hp.product.compareAtPrice / 100 : hp.product.price / 100,
     image: hp.image.url,
     subtitle: hp.subtitle || ""
-  })) : [
-    {
-      id: "ice-cool-pro",
-      name: "ICE COOL PRO",
-      price: 175.00,
-      compareAtPrice: 350.00,
-      image: "/slike/PRO/cover-image.png",
-      subtitle: "Zamisli da probudiš ruku po nozi i osjetiš samo svilenkastu kožu. Bez žileta, bez crvenila, bez jutrošnjeg stresa."
-    },
-    {
-      id: "ice-cool-pro-max",
-      name: "ICE COOL Max",
-      price: 190.00,
-      compareAtPrice: 380.00,
-      image: "/slike/ELITE/cover.png",
-      subtitle: "Za žene koje nemaju vremena čekati. Veća površina bljeska znači brže tretmane — noge gotove za 10 minuta."
-    },
-    {
-      id: "ice-cool-lite",
-      name: "ICE COOL LITE",
-      price: 165.00,
-      compareAtPrice: 330.00,
-      image: "/slike/LITE/cover.png",
-      subtitle: "Stane u torbicu, radi posao kao veliki. Idealan za lice, bikini zonu i kad putuješ — glatka koža svuda."
-    }
-  ];
+  })) : fallbackProducts;
 
   // Auto-slide every 5 seconds
   useEffect(() => {

@@ -1,17 +1,12 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { Check, ShieldCheck, Truck, Clock } from "lucide-react";
+import { getStorefrontProducts } from "@/lib/storefront-products";
 
-const offers = [
+const offerContent = [
   {
-    id: "ice-cool-pro",
-    name: "ICE COOL PRO",
+    slug: "ice-cool-pro",
     description: "Naš najpopularniji model — idealan za početnice i iskusne korisnice",
-    price: 175,
-    compareAtPrice: 350,
-    image: "/slike/PRO/cover-image.png",
     features: [
       "Traje godinama — ne trebaš kupovati zamjene",
       "Bezbolno: ugrađeno hlađenje štiti kožu",
@@ -20,12 +15,8 @@ const offers = [
     ]
   },
   {
-    id: "ice-cool-pro-max",
-    name: "ICE COOL Max",
+    slug: "ice-cool-pro-max",
     description: "Za žene koje žele najbreže rezultate i najugodniji tretman",
-    price: 190,
-    compareAtPrice: 380,
-    image: "/slike/ELITE/cover.png",
     features: [
       "Noge gotove za 10 min — veća površina bljeska",
       "Najugodniji tretman — dvostruko hlađenje",
@@ -34,12 +25,8 @@ const offers = [
     ]
   },
   {
-    id: "ice-cool-lite",
-    name: "ICE COOL LITE",
+    slug: "ice-cool-lite",
     description: "Stane u neseser, a radi posao kao veliki. Savršen za žene u pokretu.",
-    price: 165,
-    compareAtPrice: 330,
-    image: "/slike/LITE/cover.png",
     features: [
       "Lagan— ponesi na putovanje, vikendicu, more",
       "Precizan nastavak za lice i gornju usnu",
@@ -49,7 +36,33 @@ const offers = [
   }
 ];
 
-export default function OfferSection() {
+export default async function OfferSection() {
+  const products = await getStorefrontProducts();
+  const offers = offerContent.map((offer) => {
+    const product = products.find((item) => item.slug === offer.slug);
+    if (!product) return null;
+
+    return {
+      id: product.slug,
+      slug: product.slug,
+      name: product.name,
+      price: product.price,
+      compareAtPrice: product.compareAtPrice,
+      image: product.images[0],
+      description: offer.description,
+      features: offer.features,
+    };
+  }).filter(Boolean) as Array<{
+    id: string;
+    slug: string;
+    name: string;
+    price: number;
+    compareAtPrice: number;
+    image: string;
+    description: string;
+    features: string[];
+  }>;
+
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50/50">
       <div className="max-w-7xl mx-auto">
@@ -114,7 +127,7 @@ export default function OfferSection() {
 
                     {/* CTA Button */}
                     <Link 
-                      href={`/proizvod/${offer.id}`} 
+                      href={`/proizvod/${offer.slug}`} 
                       className="block w-full text-center bg-[#563435] hover:bg-[#6d4446] text-white text-xl font-bold py-5 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 mb-8"
                     >
                       Želim ovaj →

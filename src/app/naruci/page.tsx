@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CheckoutForm from "@/components/CheckoutForm";
 import { Metadata } from "next";
+import { getStorefrontProducts } from "@/lib/storefront-products";
 
 export const metadata: Metadata = {
   title: "Naruči Ice Cool PRO™ | Checkout",
@@ -17,6 +18,7 @@ type CheckoutPageProps = {
 export default async function CheckoutPage({ searchParams }: CheckoutPageProps) {
   const resolvedSearchParams = await searchParams;
   const initialProduct = resolvedSearchParams?.product;
+  const products = await getStorefrontProducts();
 
   return (
     <>
@@ -31,7 +33,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
               Popunite formu ispod i naš tim će vas kontaktirati u najkraćem roku
             </p>
           </div>
-          <CheckoutForm initialProduct={initialProduct} />
+          <CheckoutForm initialProduct={initialProduct} products={products} />
         </div>
       </main>
       <Footer />

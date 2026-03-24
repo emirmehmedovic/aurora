@@ -7,40 +7,30 @@ import { trackInitiateCheckout, trackPurchase, trackLead } from "@/lib/analytics
 import { DeliveryTruck } from "@/components/admin/DeliveryTruck";
 import { DeliveredPackage } from "@/components/admin/DeliveredPackage";
 
-const products = [
-  {
-    id: "ice-cool-pro",
-    name: "ICE COOL PRO",
-    price: 175.00,
-    compareAtPrice: 350.00,
-    image: "/slike/PRO/cover-image.png",
-    features: ["Najprodavaniji model", "Napredno hlađenje", "5 nivoa jačine"]
-  },
-  {
-    id: "ice-cool-pro-max",
-    name: "ICE COOL Max",
-    price: 190.00,
-    compareAtPrice: 380.00,
-    image: "/slike/ELITE/cover.png",
-    features: ["Veća površina bljeska", "Brži tretmani", "Profesionalni rezultati"]
-  },
-  {
-    id: "ice-cool-lite",
-    name: "ICE COOL LITE",
-    price: 165.00,
-    compareAtPrice: 330.00,
-    image: "/slike/LITE/cover.png",
-    features: ["Kompaktan dizajn", "Idealno za putovanja", "Odlično za početnike"]
-  }
-];
+type CheckoutProduct = {
+  id: string;
+  name: string;
+  slug: string;
+  price: number;
+  compareAtPrice: number;
+  images: string[];
+  shortDescription: string;
+};
+
+const productFeatures: Record<string, string[]> = {
+  "ice-cool-pro": ["Najprodavaniji model", "Napredno hlađenje", "5 nivoa jačine"],
+  "ice-cool-pro-max": ["Veća površina bljeska", "Brži tretmani", "Profesionalni rezultati"],
+  "ice-cool-lite": ["Kompaktan dizajn", "Idealno za putovanja", "Odlično za početnike"],
+};
 
 type CheckoutFormProps = {
   initialProduct?: string;
+  products: CheckoutProduct[];
 };
 
-export default function CheckoutForm({ initialProduct }: CheckoutFormProps) {
+export default function CheckoutForm({ initialProduct, products }: CheckoutFormProps) {
   const lockedProduct =
-    products.find((product) => product.id === initialProduct) ?? null;
+    products.find((product) => product.slug === initialProduct) ?? null;
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -48,7 +38,7 @@ export default function CheckoutForm({ initialProduct }: CheckoutFormProps) {
     address: "",
     city: "",
     zipCode: "",
-    product: "ice-cool-pro",
+    product: products[0]?.slug || "ice-cool-pro",
     notes: ""
   });
 
@@ -59,14 +49,14 @@ export default function CheckoutForm({ initialProduct }: CheckoutFormProps) {
     if (!lockedProduct) return;
 
     setFormData((current) =>
-      current.product === lockedProduct.id
+      current.product === lockedProduct.slug
         ? current
-        : { ...current, product: lockedProduct.id }
+        : { ...current, product: lockedProduct.slug }
     );
   }, [lockedProduct]);
 
   useEffect(() => {
-    const product = products.find(p => p.id === formData.product);
+    const product = products.find(p => p.slug === formData.product);
     if (product) {
       setSelectedProduct(product);
       trackInitiateCheckout(product.price);
@@ -202,24 +192,26 @@ export default function CheckoutForm({ initialProduct }: CheckoutFormProps) {
                 key={p.id}
                 onClick={() => {
                   if (lockedProduct) return;
-                  handleProductSelect(p.id);
+                  handleProductSelect(p.slug);
                 }}
                 className={`relative flex items-center p-4 rounded-2xl border-2 transition-all duration-200 ${
-                  formData.product === p.id 
+                  formData.product === p.slug 
                     ? "border-[#563435] bg-white shadow-md" 
                     : "border-transparent bg-white/50 hover:bg-white hover:border-gray-200"
-                } ${lockedProduct && formData.product !== p.id ? "opacity-45 blur-[1px] saturate-50" : ""} ${
+                } ${lockedProduct && formData.product !== p.slug ? "opacity-45 blur-[1px] saturate-50" : ""} ${
                   lockedProduct ? "cursor-default" : "cursor-pointer"
                 }`}
               >
                 <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
-                  <Image src={p.image} alt={p.name} fill className="object-cover" />
+                  <Image src={p.images[0]} alt={p.name} fill className="object-cover" />
                 </div>
                 <div className="ml-4 flex-1">
                   <div className="flex justify-between items-start">
                     <div>
                       <h4 className="font-bold text-gray-800">{p.name}</h4>
-                      <p className="text-xs text-gray-500 mt-1">{p.features[0]}</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {productFeatures[p.slug]?.[0] || p.shortDescription}
+                      </p>
                     </div>
                     <div className="text-right">
                       <span className="block font-bold text-[#563435] text-lg">{p.price.toFixed(2)} KM</span>
@@ -227,7 +219,7 @@ export default function CheckoutForm({ initialProduct }: CheckoutFormProps) {
                     </div>
                   </div>
                 </div>
-                {formData.product === p.id && (
+                {formData.product === p.slug && (
                   <div className="absolute -top-3 -right-3 bg-[#563435] text-white p-1.5 rounded-full shadow-lg">
                     <Check className="w-4 h-4" />
                   </div>
@@ -337,7 +329,7 @@ export default function CheckoutForm({ initialProduct }: CheckoutFormProps) {
           
           <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-200/60">
             <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
-              <Image src={selectedProduct.image} alt={selectedProduct.name} fill className="object-cover" />
+              <Image src={selectedProduct.images[0]} alt={selectedProduct.name} fill className="object-cover" />
             </div>
             <div>
               <h4 className="font-bold text-gray-800">{selectedProduct.name}</h4>

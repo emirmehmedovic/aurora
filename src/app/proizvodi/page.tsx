@@ -2,43 +2,16 @@ import { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
+import { getStorefrontProducts } from "@/lib/storefront-products";
 
 export const metadata: Metadata = {
   title: "IPL Uređaji za Uklanjanje Dlačica | Ice Cool PRO™, Max i LITE | BiH",
   description: "Uporedite 3 modela IPL uređaja za trajno uklanjanje dlačica: PRO, Max i LITE. Besplatna dostava u BiH, 14 dana povrat, 12 mj. garancija.",
 };
 
-const products = [
-  {
-    id: "1",
-    name: "Ice Cool PRO™",
-    slug: "ice-cool-pro",
-    price: 175.00,
-    compareAtPrice: 350.00,
-    images: ["/slike/PRO/cover-image.png"],
-    shortDescription: "Naš najpopularniji model — bezbolno, efikasno, za cijelo tijelo"
-  },
-  {
-    id: "2",
-    name: "Ice Cool Max",
-    slug: "ice-cool-pro-max",
-    price: 190.00,
-    compareAtPrice: 380.00,
-    images: ["/slike/ELITE/cover.png"],
-    shortDescription: "Noge gotove za 10 min — najjači bljesak, najugodniji tretman"
-  },
-  {
-    id: "3",
-    name: "Ice Cool LITE",
-    slug: "ice-cool-lite",
-    price: 165.00,
-    compareAtPrice: 330.00,
-    images: ["/slike/LITE/cover.png"],
-    shortDescription: "Stane u torbicu — savršen za lice, bikini i putovanja"
-  }
-];
+export default async function ProizvodiPage() {
+  const products = await getStorefrontProducts();
 
-export default function ProizvodiPage() {
   return (
     <>
       <Navbar />
