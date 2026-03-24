@@ -84,7 +84,8 @@ export default function HeroSectionClient({ heroProducts }: HeroSectionClientPro
   return (
     <div className="relative mb-8 w-full px-4 sm:px-6 lg:px-8">
       {/* Main Hero with Product Image */}
-      <div className="relative mb-6 bg-gradient-to-br from-violet-50/30 via-white to-purple-50/20 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 border border-violet-100/30 backdrop-blur-sm overflow-hidden min-h-[600px] lg:min-h-0">
+      <div className="max-w-7xl mx-auto">
+        <div className="relative mb-6 bg-gradient-to-br from-violet-50/30 via-white to-purple-50/20 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 border border-violet-100/30 backdrop-blur-sm overflow-hidden min-h-[600px] lg:min-h-0">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 lg:p-12 h-full">
           {/* Left - Text Content */}
@@ -182,6 +183,7 @@ export default function HeroSectionClient({ heroProducts }: HeroSectionClientPro
               aria-label={`Prikaži slajd ${index + 1}`}
             />
           ))}
+        </div>
         </div>
       </div>
     </div>
