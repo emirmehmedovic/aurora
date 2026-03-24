@@ -5,6 +5,8 @@ import type { LandingContent } from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "ICE COOL Max™ | Profesionalni IPL Epilator — Salon Rezultati Kod Kuće | BiH",
   description: "ICE COOL Max – profesionalni IPL epilator s najvećom površinom bljeska i naprednim hlađenjem. Salon rezultati kod kuće. Besplatna dostava u BiH →",

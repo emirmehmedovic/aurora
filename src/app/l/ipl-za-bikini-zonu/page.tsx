@@ -5,6 +5,8 @@ import type { LandingContent } from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "IPL Depilacija Bikini Zone Kod Kuće | Aurora ICE COOL",
   description: "Trajno ukloni dlačice u bikini zoni — kod kuće, u svom tempu. ICE COOL epilator: precizan, nježan, bez salona i bez neugode.",

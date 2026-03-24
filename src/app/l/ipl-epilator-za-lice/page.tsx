@@ -5,6 +5,8 @@ import type { LandingContent } from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "IPL Epilator za Lice | Aurora ICE COOL LITE (50 znakova)",
   description: "Trajno ukloni dlačice s lica kod kuće. ICE COOL LITE je mali, precizan i nježan — idealan za gornju usnu, bradu i zalistke.",

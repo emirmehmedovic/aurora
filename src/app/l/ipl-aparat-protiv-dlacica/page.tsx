@@ -5,6 +5,8 @@ import type { LandingContent } from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "ICE COOL PRO™ | IPL Aparat za Trajno Uklanjanje Dlačica | BiH",
   description: "ICE COOL PRO – IPL aparat za trajno uklanjanje dlačica kod kuće. 5 nivoa intenziteta, Ice Cool™ hlađenje, 999k bljeskova. Besplatna dostava u BiH. Naruči danas →",

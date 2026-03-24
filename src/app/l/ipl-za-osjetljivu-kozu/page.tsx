@@ -5,6 +5,8 @@ import type { LandingContent } from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "IPL Depilacija za Osjetljivu Kožu | Aurora ICE COOL",
   description: "Crveniš se nakon brijanja? Iritacija od voska? ICE COOL hlađenje štiti osjetljivu kožu — depilacija bez reakcije, napokon.",

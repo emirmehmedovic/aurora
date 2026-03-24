@@ -5,6 +5,8 @@ import type { LandingContent } from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Trajna Depilacija Nogu Kod Kuće | Aurora IPL",
   description: "Prestani brijati noge svaka 3 dana. ICE COOL PRO epilator — 8 sedmica tretmana i godinama bez brijanja. Dostava u BiH danas.",

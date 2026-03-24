@@ -5,6 +5,8 @@ import type { LandingContent } from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "ICE COOL LITE™ | Kompaktni IPL Uređaj za Putovanja i Lice | BiH",
   description: "ICE COOL LITE – kompaktni IPL uređaj idealan za putovanja i tretmane lica. Lagan, prenosiv, 500k bljeskova. Besplatna dostava u BiH. Naruči danas →",
