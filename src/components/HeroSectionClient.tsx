@@ -142,13 +142,19 @@ export default function HeroSectionClient({ heroProducts, fallbackProducts }: He
                   index === activeIndex ? "opacity-100 z-10" : "opacity-0 z-0"
                 }`}
               >
-                <NextImage
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                  priority={index === 0}
-                />
+                <Link
+                  href={`/proizvod/${product.id}`}
+                  className="block w-full h-full"
+                  aria-label={`Pogledaj ${product.name}`}
+                >
+                  <NextImage
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover cursor-pointer hover:opacity-90 transition-opacity duration-200"
+                    priority={index === 0}
+                  />
+                </Link>
               </div>
             ))}
           </div>
