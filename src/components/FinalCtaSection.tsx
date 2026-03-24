@@ -19,7 +19,7 @@ export default function FinalCtaSection() {
             </h2>
             
             <p className="text-lg md:text-xl text-white/80 mb-4 max-w-2xl mx-auto">
-              Svaki dan koji odgađaš je još jedno jutro sa brijačem u ruci. Počni danas — budi spremna za ljeto.
+              Svaki dan koji odgađaš je još jedno jutro sa brijačem u ruci. Počni danas — rezultati za 8 sedmica.
             </p>
             <p className="text-sm text-white/60 mb-10 max-w-xl mx-auto">
               Ako ne budeš zadovoljna, vrati uređaj u roku 14 dana i dobiješ novac nazad. Bez pitanja, bez komplikacija.

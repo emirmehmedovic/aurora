@@ -116,7 +116,7 @@ export default function DirectResponseLanding({ product, content }: DirectRespon
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
       </button>
       <div className="mt-4 text-center bg-white/40 backdrop-blur-md text-[#563435] px-6 py-2.5 rounded-xl font-medium text-sm w-full border border-white/30 shadow-sm flex items-center justify-center gap-2">
-        <Truck className="w-4 h-4" /> Besplatna dostava u BiH · Plaćanje pouzećem · Isporuka 1-3 dana
+        <Truck className="w-4 h-4" /> Naruči do 15h — šalje se danas · Plaćanje pouzećem · 14 dana povrat
       </div>
     </div>
   );

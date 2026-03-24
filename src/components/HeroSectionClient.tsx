@@ -90,7 +90,7 @@ export default function HeroSectionClient({ heroProducts }: HeroSectionClientPro
           {/* Left - Text Content */}
           <div className="flex flex-col justify-center relative z-10 order-2 lg:order-1">
             <div className="inline-block px-4 py-2 bg-gradient-to-r from-[#563435] to-[#8b5a5c] text-white rounded-full text-sm font-semibold mb-4 w-fit">
-              Ljeto dolazi — budi spremna na vrijeme
+              Prestani trošiti na salone — počni od danas
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4 leading-tight transition-opacity duration-500">
               <span className="block text-2xl md:text-3xl lg:text-4xl text-[#563435] mb-2">{activeProduct.name}</span>

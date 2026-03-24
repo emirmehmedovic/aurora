@@ -18,9 +18,9 @@ const proContent: LandingContent = {
   badge: "Najtraženiji model u BiH",
   heroSubtitle: "Zamisli da više nikad ne moraš brijati noge. Bez bola, bez salona, bez vječitog trošenja.",
   benefits: [
+    "Kupiš jednom, koristiš 10+ godina — bez zamjena, bez dopuna, bez računa",
     "Bezbolno — ugrađeno hlađenje štiti kožu dok uređaj radi",
     "Rezultati već nakon 3-4 tretmana — dlačice rastu sporije i tanje",
-    "Kupiš jednom, koristiš 10+ godina — bez zamjena i dopuna",
     "Noge, ruke, pazuhe, bikini, lice — jedan uređaj za cijelo tijelo",
   ],
   empathyTitle: "Umorna si od vječitog brijanja?",
@@ -42,7 +42,7 @@ const proContent: LandingContent = {
   reviews: [
     { name: "Merjem", age: 26, text: "Najviše me je brinulo da li će boljeti jer imam jako osjetljivu kožu. Ali — ništa. Osjetim laganu toplinu i to je sve. Sada sam na drugom mjesecu i pazuhe više uopšte ne brijam. Noge brijam jednom u 10 dana. Ovo je najboljih 175 KM koje sam ikad potrošila.", date: "Februar 2026", location: "Sarajevo" },
     { name: "Lamija", age: 31, text: "Godinama sam trošila na vosak u salonu. 60 KM svaki put, jednom mjesečno. To je 720 KM godišnje! Ovaj uređaj je došao za manje od 200 KM i nakon 6 sedmica razlika je nevjerovatna. Muž mi kaže da mi je koža ljepša nego ikad.", date: "Januar 2026", location: "Tuzla" },
-    { name: "Adna", age: 23, text: "Bila sam skeptična — mislila sam da ove stvari sa interneta ne rade. Ali drugarica mi je pokazala svoje noge nakon 2 mjeseca korištenja i odmah sam naručila. Sada razumijem zašto je toliko oduševljena. Radim tretman nedjeljom uveče uz Netflix, 10 minuta za noge.", date: "Mart 2026", location: "Zenica" },
+    { name: "Adna", age: 23, text: "Bila sam skeptična prema kućnoj IPL depilaciji dok mi drugarica nije pokazala svoje noge nakon 2 mjeseca korištenja. Odmah sam naručila. Sada razumijem zašto je toliko oduševljena. Radim tretman nedjeljom uveče uz Netflix, 10 minuta za noge — i koža mi je bolja nego ikad.", date: "Mart 2026", location: "Zenica" },
   ],
   specs: [
     { label: "Napajanje", value: "Žičano (adapter uključen)" },
@@ -55,8 +55,8 @@ const proContent: LandingContent = {
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, korisnički priručnik" },
     { label: "Garancija", value: "12 mjeseci" },
   ],
-  closingTitle: "Za 8 sedmica možeš zaboraviti da žileti postoje.",
-  closingText: "Svaki dan koji odgađaš je još jedno jutro sa brijačem u ruci. 14 dana za povrat ako nisi zadovoljna — bez pitanja. Besplatna dostava u cijeloj BiH.",
+  closingTitle: "Jednom kupiš. 10 godina ne briješ.",
+  closingText: "Svaki dan koji odgađaš je još jedno jutro sa brijačem u ruci. Besplatna dostava u BiH · Plaćanje pouzećem · 14 dana povrat bez pitanja.",
 };
 
 export default async function IplAparatLandingPage() {

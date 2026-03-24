@@ -15,22 +15,22 @@ export const metadata: Metadata = {
 };
 
 const liteContent: LandingContent = {
-  badge: "Najniža cijena, isti rezultati",
-  heroSubtitle: "Stane u torbicu, radi posao kao veliki. Glatka koža za 165 KM — bez kompromisa.",
+  badge: "Savršen prvi korak u IPL depilaciji",
+  heroSubtitle: "Manji od telefona. Radi isti posao. Idealan za lice, bikini zonu i sve putnice.",
   benefits: [
-    "Najniža cijena u liniji — a rezultati su isti kao kod većih modela",
     "Precizan nastavak za lice, gornju usnu i bikini — baš gdje ti treba",
-    "Lagan i kompaktan — ponesi na more, vikendicu, putovanje",
+    "Lagan i kompaktan — stane u torbicu, ponesi na more, vikendicu, putovanje",
     "Jednostavan za korištenje — savršen ako ti je ovo prvi IPL",
+    "500.000 bljeskova = 10+ godina tretmana lica i manjih zona",
   ],
   empathyTitle: "Hoćeš probati IPL, ali ne znaš odakle početi?",
   empathySubtitle: "LITE je napravljen baš za tebe.",
-  empathyParagraph1: "Možda ti se čini da je IPL kompliciran ili skup. Ili se pitaš: 'Hoće li uopšte raditi za mene?' LITE je odgovor na sva ta pitanja — jednostavan za korištenje, pristupačna cijena, a rezultati su isti kao kod skupljih modela.",
+  empathyParagraph1: "Možda ti se čini da je IPL kompliciran ili skup. Ili se pitaš: 'Hoće li uopšte raditi za mene?' LITE je savršen odgovor — jednostavan za korištenje, precizan za lice i bikini zonu, a dovoljno kompaktan da ga poneseš svuda.",
   empathyParagraph2: "Sa preciznim nastavkom za lice i bikini zonu, LITE je idealan za područja koja zahtijevaju pažljiviji pristup. A ako putuješ — stane u neseser. Nema više brijanja u hotelskim sobama niti panike prije plaže.",
   empathyHighlight: "165 KM za uređaj koji će ti trajati godinama. Manje od 3 posjeta salonu za vosak. Radi računicu.",
   story: {
     title: "'Nisam bila sigurna da li IPL radi. LITE me potpuno uvjerio.'",
-    text: "Dugo sam razmišljala o IPL-u, ali nisam htjela dati puno novca ako neće raditi za mene. LITE mi je bio savršen — najniža cijena, a imam sve što treba. Najviše ga koristim za gornju usnu i bikini zonu jer ima precizan nastavak baš za to. Iskreno, već nakon trećeg tretmana gornja usna mi je bila potpuno čista. Sada ga nosim i kad idem na more — stane u torbicu, lakši je od šminke. Za 165 KM ovo je apsolutno najbolji poklon koji sam sebi kupila.",
+    text: "Dugo sam razmišljala o IPL-u, ali nisam bila sigurna je li to za mene. LITE mi je bio savršen prvi korak — precizan nastavak za gornju usnu i bikini zonu, i dovoljno mali da ga nosim svuda. Već nakon trećeg tretmana gornja usna mi je bila potpuno čista. Sada ga nosim i kad idem na more — stane u torbicu, lakši je od šminke. Za 165 KM ovo je apsolutno najbolji poklon koji sam sebi kupila.",
     authorName: "Dina M.",
     authorSubtitle: "25 god. · Sarajevo · koristi LITE 3 mjeseca",
   },

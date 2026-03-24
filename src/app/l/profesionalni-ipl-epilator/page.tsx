@@ -16,12 +16,12 @@ export const metadata: Metadata = {
 
 const maxContent: LandingContent = {
   badge: "Za žene kojima je vrijeme najvažnije",
-  heroSubtitle: "Noge gotove za 10 minuta. Najjači bljesak, najugodniji tretman. Za žene koje neće čekati.",
+  heroSubtitle: "Noge gotove za 10 minuta. Dvostruko hlađenje. Brži rezultati. Za žene koje neće čekati.",
   benefits: [
-    "Noge za 10 min — veća površina bljeska pokriva više kože odjednom",
-    "Najugodniji tretman — dvostruko hlađenje ne pusta ni na punoj snazi",
-    "Vidljivi rezultati za 2-3 sedmice — brže nego bilo koji drugi model",
-    "Cijelo tijelo uključujući bikini i leđa — bez ograničenja",
+    "Noge za 10 min — veća površina bljeska pokriva više kože svakim impulsom",
+    "Dvostruko hlađenje (Ice Cool+™) — čak na punoj snazi osjetiš samo blagu toplinu",
+    "Vidljivi rezultati za 2-3 sedmice — brže nego standardni modeli",
+    "Cijelo tijelo bez iznimke — noge, ruke, pazuhe, bikini, lice i leđa",
   ],
   empathyTitle: "Nemaš vremena za salone?",
   empathySubtitle: "Max je napravljen za tvoj tempo života.",
@@ -57,8 +57,8 @@ const maxContent: LandingContent = {
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, nastavci, korisnički priručnik" },
     { label: "Garancija", value: "12 mjeseci" },
   ],
-  closingTitle: "Prestani trošiti na salone. Počni živjeti bez brijanja.",
-  closingText: "Svaka seansa u salonu je novac koji više ne moraš davati. Max se isplati već nakon prvog mjeseca. 14 dana za povrat ako nisi zadovoljna. Besplatna dostava u BiH.",
+  closingTitle: "Salon u džepu. 190 KM jednom — zauvijek.",
+  closingText: "Svaka seansa u salonu je novac koji više ne moraš davati. Max se isplati već nakon drugog tretmana. Besplatna dostava u BiH · Plaćanje pouzećem · 14 dana povrat bez pitanja.",
 };
 
 export default async function ProfesionalniIplLandingPage() {

@@ -116,7 +116,7 @@ export default function LandingOrderForm({ product }: LandingOrderFormProps) {
             <p className="flex justify-between pt-2 border-t border-gray-200"><span className="font-bold">Ukupno:</span> <span className="font-bold text-lg">{product.price.toFixed(2)} KM</span></p>
           </div>
         </div>
-        <p className="text-sm text-gray-500 mt-6">Isporuka za 1-3 radna dana · Plaćanje pouzećem</p>
+        <p className="text-sm text-gray-500 mt-6">Naruči do 15h — šalje se danas · Isporuka 1-3 dana · Plaćanje pouzećem</p>
       </div>
     );
   }
