@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -44,13 +43,9 @@ export default function AdminLoginPage() {
         <div className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-3xl p-8 shadow-xl">
           {/* Logo */}
           <div className="flex justify-center mb-8">
-            <Image 
-              src="/Black White Minimal Modern Simple Bold Business Mag Logo.png"
-              alt="Ice Cool PRO Logo"
-              width={80}
-              height={80}
-              className="object-contain"
-            />
+            <div className="w-20 h-20 bg-gradient-to-br from-[#563435] to-[#6d4446] rounded-2xl flex items-center justify-center shadow-lg">
+              <span className="text-white font-bold text-2xl">IC</span>
+            </div>
           </div>
 
           <h1 className="text-3xl font-bold text-gray-800 text-center mb-2">

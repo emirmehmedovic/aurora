@@ -193,61 +193,49 @@ export default function CampaignsPage() {
         </div>
 
         {/* Overall Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {/* Total Spend */}
-          <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-6 border border-red-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-                <DollarSign className="w-6 h-6 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0">
+                <DollarSign className="w-5 h-5 text-red-600" />
               </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Spend</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1 font-medium">Ukupan spend</p>
-            <p className="text-3xl font-bold text-gray-800">{formatPrice(totalSpend)} KM</p>
-            <div className="mt-3 pt-3 border-t border-red-100">
-              <p className="text-xs text-gray-500">Svi oglasi</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-800">{formatPrice(totalSpend)} <span className="text-sm text-gray-500 font-normal">KM</span></p>
           </div>
 
           {/* ROAS */}
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
-                <TrendingUp className="w-6 h-6 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
+                <TrendingUp className="w-5 h-5 text-green-600" />
               </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">ROAS</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1 font-medium">ROAS</p>
-            <p className="text-3xl font-bold text-gray-800">{overallROAS.toFixed(2)}x</p>
-            <div className="mt-3 pt-3 border-t border-green-100">
-              <p className="text-xs text-gray-500">Return on ad spend</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-800">{overallROAS.toFixed(2)}<span className="text-sm text-gray-500 font-normal">x</span></p>
           </div>
 
           {/* CPL */}
-          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Target className="w-6 h-6 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                <Target className="w-5 h-5 text-blue-600" />
               </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">CPL</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1 font-medium">CPL</p>
-            <p className="text-3xl font-bold text-gray-800">{formatPrice(overallCPL)} KM</p>
-            <div className="mt-3 pt-3 border-t border-blue-100">
-              <p className="text-xs text-gray-500">Cost per lead</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-800">{formatPrice(overallCPL)} <span className="text-sm text-gray-500 font-normal">KM</span></p>
           </div>
 
           {/* CPA */}
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
-                <DollarSign className="w-6 h-6 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center flex-shrink-0">
+                <DollarSign className="w-5 h-5 text-purple-600" />
               </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">CPA</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1 font-medium">CPA</p>
-            <p className="text-3xl font-bold text-gray-800">{formatPrice(overallCPA)} KM</p>
-            <div className="mt-3 pt-3 border-t border-purple-100">
-              <p className="text-xs text-gray-500">Cost per acquisition</p>
-            </div>
+            <p className="text-2xl font-bold text-gray-800">{formatPrice(overallCPA)} <span className="text-sm text-gray-500 font-normal">KM</span></p>
           </div>
         </div>
 

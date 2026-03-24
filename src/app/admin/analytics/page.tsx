@@ -83,71 +83,71 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
           {/* Total Revenue */}
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
+                <DollarSign className="w-4 h-4 text-green-600" />
               </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Prihod</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1">Ukupan prihod</p>
-            <p className="text-3xl font-bold text-gray-800">{formatPrice(analytics.totalRevenue)} KM</p>
+            <p className="text-2xl font-bold text-gray-800">{formatPrice(analytics.totalRevenue)} <span className="text-sm text-gray-500 font-normal">KM</span></p>
           </div>
 
           {/* Average Order Value */}
-          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
-                <ShoppingCart className="w-6 h-6 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                <ShoppingCart className="w-4 h-4 text-blue-600" />
               </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">AOV</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1">Prosječna narudžba</p>
-            <p className="text-3xl font-bold text-gray-800">{formatPrice(analytics.averageOrderValue)} KM</p>
+            <p className="text-2xl font-bold text-gray-800">{formatPrice(analytics.averageOrderValue)} <span className="text-sm text-gray-500 font-normal">KM</span></p>
           </div>
 
           {/* Conversion Rate */}
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
-                <Target className="w-6 h-6 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center flex-shrink-0">
+                <Target className="w-4 h-4 text-purple-600" />
               </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Konverzija</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1">Conversion rate</p>
-            <p className="text-3xl font-bold text-gray-800">{analytics.conversionRate.toFixed(1)}%</p>
+            <p className="text-2xl font-bold text-gray-800">{analytics.conversionRate.toFixed(1)}<span className="text-lg text-gray-500">%</span></p>
           </div>
 
           {/* Total Orders */}
-          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 border border-orange-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
-                <ShoppingCart className="w-6 h-6 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0">
+                <ShoppingCart className="w-4 h-4 text-orange-600" />
               </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Narudžbe</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1">Ukupno narudžbi</p>
-            <p className="text-3xl font-bold text-gray-800">{analytics.totalOrders}</p>
+            <p className="text-2xl font-bold text-gray-800">{analytics.totalOrders}</p>
           </div>
 
           {/* Total Leads */}
-          <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-6 border border-indigo-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center">
-                <Users className="w-6 h-6 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                <Users className="w-4 h-4 text-indigo-600" />
               </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Leadovi</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1">Ukupno leadova</p>
-            <p className="text-3xl font-bold text-gray-800">{analytics.totalLeads}</p>
+            <p className="text-2xl font-bold text-gray-800">{analytics.totalLeads}</p>
           </div>
 
           {/* Lead to Order Rate */}
-          <div className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-2xl p-6 border border-rose-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-rose-500 rounded-xl flex items-center justify-center">
-                <Percent className="w-6 h-6 text-white" />
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-full bg-rose-50 flex items-center justify-center flex-shrink-0">
+                <Percent className="w-4 h-4 text-rose-600" />
               </div>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">L→O Rate</p>
             </div>
-            <p className="text-sm text-gray-600 mb-1">Lead → Order rate</p>
-            <p className="text-3xl font-bold text-gray-800">{analytics.leadsToOrdersRate.toFixed(1)}%</p>
+            <p className="text-2xl font-bold text-gray-800">{analytics.leadsToOrdersRate.toFixed(1)}<span className="text-lg text-gray-500">%</span></p>
           </div>
         </div>
 
