@@ -4,12 +4,18 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw, Filter, Search, X as XIcon, Download, Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw, Filter, Search, X as XIcon, Download, Edit, Trash2, User, ExternalLink } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import BulkActionBar from "@/components/admin/BulkActionBar";
 import { exportToExcel, formatOrdersForExport } from "@/lib/excel";
 import CommentSection from "@/components/admin/CommentSection";
+import BulkStatusModal from "@/components/admin/BulkStatusModal";
+import LiveOrderProcessor from "@/components/admin/LiveOrderProcessor";
+import { DeliveryTruck } from "@/components/admin/DeliveryTruck";
+import { DeliveredPackage } from "@/components/admin/DeliveredPackage";
+import { OrderProcessingAgent } from "@/components/admin/OrderProcessingAgent";
+import { toast } from "sonner";
 
 interface Order {
   id: string;
@@ -17,6 +23,7 @@ interface Order {
   totalAmount: number;
   createdAt: string;
   customer: {
+    id: string;
     fullName: string;
     phone: string;
     email: string | null;
@@ -44,10 +51,19 @@ export default function OrdersPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
-  const [showFilters, setShowFilters] = useState<boolean>(false);
 
   // Bulk operations
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+
+  // Live processing
+  const [showLiveProcessor, setShowLiveProcessor] = useState(false);
+
+  // Shipping animation
+  const [showShippingAnimation, setShowShippingAnimation] = useState(false);
+
+  // Delivered animation
+  const [showDeliveredAnimation, setShowDeliveredAnimation] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -77,6 +93,24 @@ export default function OrdersPage() {
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
+      // Show shipping animation for SHIPPED status
+      if (newStatus === "SHIPPED") {
+        setShowShippingAnimation(true);
+        // Auto-close after 4 seconds
+        setTimeout(() => {
+          setShowShippingAnimation(false);
+        }, 4000);
+      }
+
+      // Show delivered animation for DELIVERED status
+      if (newStatus === "DELIVERED") {
+        setShowDeliveredAnimation(true);
+        // Auto-close after 4 seconds
+        setTimeout(() => {
+          setShowDeliveredAnimation(false);
+        }, 4000);
+      }
+
       const response = await fetch(`/api/admin/orders/${orderId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -84,10 +118,22 @@ export default function OrdersPage() {
       });
 
       if (response.ok) {
+        const statusMessages: Record<string, string> = {
+          CONFIRMED: "potvrđena",
+          CANCELLED: "otkazana",
+          SHIPPED: "poslana",
+          PREPARING: "u pripremi",
+          DELIVERED: "dostavljena",
+          RETURNED: "vraćena",
+        };
+        toast.success(`Narudžba ${statusMessages[newStatus] || "ažurirana"}!`);
         fetchOrders();
+      } else {
+        toast.error("Greška pri ažuriranju statusa");
       }
     } catch (error) {
       console.error("Failed to update order:", error);
+      toast.error("Greška pri ažuriranju statusa");
     }
   };
 
@@ -108,10 +154,7 @@ export default function OrdersPage() {
     }
   };
 
-  const handleBulkStatusUpdate = async () => {
-    const newStatus = prompt("Novi status (CONFIRMED/SHIPPED/DELIVERED/CANCELLED):");
-    if (!newStatus) return;
-
+  const handleBulkStatusUpdate = async (newStatus: string) => {
     try {
       const response = await fetch("/api/admin/orders/bulk", {
         method: "POST",
@@ -119,19 +162,21 @@ export default function OrdersPage() {
         body: JSON.stringify({
           action: "updateStatus",
           orderIds: selectedOrders,
-          status: newStatus.toUpperCase(),
+          status: newStatus,
         }),
       });
 
       if (response.ok) {
-        const result = await response.json();
-        alert(result.message);
+        toast.success("Status ažuriran!");
         fetchOrders();
         setSelectedOrders([]);
+        setShowStatusModal(false);
+      } else {
+        toast.error("Greška pri ažuriranju narudžbi");
       }
     } catch (error) {
       console.error("Bulk status update failed:", error);
-      alert("Greška pri ažuriranju narudžbi");
+      toast.error("Greška pri ažuriranju narudžbi");
     }
   };
 
@@ -279,7 +324,7 @@ export default function OrdersPage() {
 
     doc.setFontSize(28);
     doc.setFont("helvetica", "bold");
-    doc.text(`${order.totalAmount.toFixed(2)} KM`, pageWidth - 15, yPos + 20, { align: 'right' });
+    doc.text(`${(order.totalAmount / 100).toFixed(2)} KM`, pageWidth - 15, yPos + 20, { align: 'right' });
 
     yPos += 35;
 
@@ -438,112 +483,191 @@ export default function OrdersPage() {
       <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
         {/* Header */}
         <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <Link href="/admin" className="p-2 hover:bg-white rounded-full transition-colors">
-                <ArrowLeft className="w-5 h-5 text-gray-600" />
-              </Link>
-              <h1 className="text-3xl font-bold text-gray-800">Narudžbe</h1>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <Link href="/admin" className="p-2 hover:bg-white rounded-full transition-colors">
+                  <ArrowLeft className="w-5 h-5 text-gray-600" />
+                </Link>
+                <h1 className="text-3xl font-bold text-gray-800">Narudžbe</h1>
+              </div>
+              <p className="text-gray-600 ml-10">Upravljanje i obrada svih narudžbi</p>
             </div>
-            <p className="text-gray-600 ml-10">Upravljanje i obrada svih narudžbi</p>
-          </div>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              hasActiveFilters
-                ? "bg-[#563435] text-white"
-                : "bg-white text-gray-700 hover:bg-gray-50"
-            } border border-gray-200`}
-          >
-            <Filter className="w-4 h-4" />
-            Filteri {hasActiveFilters && `(${filteredOrders.length})`}
-          </button>
-        </div>
-
-        {/* Filters Panel */}
-        {showFilters && (
-          <div className="mb-6 bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/40 p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* Search */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Pretraga
-                </label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Ime, telefon, ID..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
-                  />
-                </div>
-              </div>
-
-              {/* Status Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Status
-                </label>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
-                >
-                  <option value="ALL">Svi statusi</option>
-                  <option value="NEW">Nova</option>
-                  <option value="PENDING">Na čekanju</option>
-                  <option value="CONFIRMED">Potvrđeno</option>
-                  <option value="PREPARING">U pripremi</option>
-                  <option value="SHIPPED">Poslano</option>
-                  <option value="DELIVERED">Dostavljeno</option>
-                  <option value="CANCELLED">Otkazano</option>
-                  <option value="RETURNED">Vraćeno</option>
-                </select>
-              </div>
-
-              {/* Date From */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Datum od
-                </label>
-                <input
-                  type="date"
-                  value={dateFrom}
-                  onChange={(e) => setDateFrom(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
-                />
-              </div>
-
-              {/* Date To */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Datum do
-                </label>
-                <input
-                  type="date"
-                  value={dateTo}
-                  onChange={(e) => setDateTo(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
-                />
-              </div>
-            </div>
-
-            {/* Clear Filters */}
             {hasActiveFilters && (
-              <div className="mt-4 flex justify-end">
-                <button
-                  onClick={clearFilters}
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  <XIcon className="w-4 h-4" />
-                  Očisti filtere
-                </button>
+              <div className="px-4 py-2 bg-amber-100 border border-amber-300 rounded-xl">
+                <p className="text-sm font-medium text-amber-800">
+                  <Filter className="w-4 h-4 inline mr-1" />
+                  Prikazano: {filteredOrders.length} narudžbi
+                </p>
               </div>
             )}
           </div>
-        )}
+        </div>
+
+        {/* Bento Grid Hero Section - Live Order Processing */}
+        <div className="mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left: Animated Agent */}
+          <div className="lg:col-span-2 bg-gradient-to-br from-[#563435]/5 via-amber-50/30 to-transparent backdrop-blur-md rounded-3xl shadow-sm border border-white/40 p-8 flex items-center justify-center overflow-hidden">
+            <OrderProcessingAgent size={320} />
+          </div>
+
+          {/* Right: Action Button + Stats */}
+          <div className="flex flex-col gap-4">
+            {/* Live Processing Button */}
+            <button
+              onClick={() => {
+                const newOrders = orders.filter(o => o.status === "NEW");
+                if (newOrders.length === 0) {
+                  toast.info("Nema novih narudžbi za obradu");
+                } else {
+                  setShowLiveProcessor(true);
+                }
+              }}
+              className="group relative overflow-hidden bg-gradient-to-r from-[#563435] to-[#563435]/80 text-white rounded-2xl p-8 hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-4">
+                  <Package className="w-10 h-10" />
+                  <span className="px-4 py-2 bg-white/20 rounded-xl font-bold text-2xl">
+                    {orders.filter(o => o.status === "NEW").length}
+                  </span>
+                </div>
+                <h3 className="text-2xl font-bold mb-2">Live Rješavanje</h3>
+                <p className="text-white/80 text-sm">Obradi narudžbe brzo i efikasno</p>
+              </div>
+            </button>
+
+            {/* Stats Card */}
+            <div className="bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-white/40 p-6">
+              <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">Pregled danas</h4>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-amber-500"></div>
+                    <span className="text-sm text-gray-600">Nove</span>
+                  </div>
+                  <span className="font-bold text-gray-800">
+                    {orders.filter(o => o.status === "NEW").length}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-[#563435]"></div>
+                    <span className="text-sm text-gray-600">Potvrđene</span>
+                  </div>
+                  <span className="font-bold text-gray-800">
+                    {orders.filter(o => o.status === "CONFIRMED").length}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                    <span className="text-sm text-gray-600">Dostavljene</span>
+                  </div>
+                  <span className="font-bold text-gray-800">
+                    {orders.filter(o => o.status === "DELIVERED").length}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Filters Panel - Always Visible */}
+        <div className="mb-6 bg-gradient-to-br from-white/70 via-white/60 to-white/50 backdrop-blur-md rounded-3xl shadow-sm border border-white/40 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#563435] flex items-center justify-center">
+                <Filter className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-gray-800">Filteri</h3>
+                <p className="text-xs text-gray-500">Filtriraj i pretraži narudžbe</p>
+              </div>
+            </div>
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-all font-medium text-sm border border-red-200"
+              >
+                <XIcon className="w-4 h-4" />
+                Očisti filtere
+              </button>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Search */}
+            <div>
+              <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
+                <Search className="w-3 h-3 inline mr-1" />
+                Pretraga
+              </label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Ime, telefon, ID..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-white/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#563435] focus:border-transparent transition-all shadow-sm"
+                />
+              </div>
+            </div>
+
+            {/* Status Filter */}
+            <div>
+              <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
+                <Package className="w-3 h-3 inline mr-1" />
+                Status
+              </label>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="w-full px-4 py-3 bg-white/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#563435] focus:border-transparent transition-all shadow-sm font-medium"
+              >
+                <option value="ALL">Svi statusi</option>
+                <option value="NEW">Nova</option>
+                <option value="PENDING">Na čekanju</option>
+                <option value="CONFIRMED">Potvrđeno</option>
+                <option value="PREPARING">U pripremi</option>
+                <option value="SHIPPED">Poslano</option>
+                <option value="DELIVERED">Dostavljeno</option>
+                <option value="CANCELLED">Otkazano</option>
+                <option value="RETURNED">Vraćeno</option>
+              </select>
+            </div>
+
+            {/* Date From */}
+            <div>
+              <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
+                <Clock className="w-3 h-3 inline mr-1" />
+                Datum od
+              </label>
+              <input
+                type="date"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+                className="w-full px-4 py-3 bg-white/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#563435] focus:border-transparent transition-all shadow-sm"
+              />
+            </div>
+
+            {/* Date To */}
+            <div>
+              <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
+                <Clock className="w-3 h-3 inline mr-1" />
+                Datum do
+              </label>
+              <input
+                type="date"
+                value={dateTo}
+                onChange={(e) => setDateTo(e.target.value)}
+                className="w-full px-4 py-3 bg-white/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#563435] focus:border-transparent transition-all shadow-sm"
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Orders Table */}
         <div className="bg-white/60 backdrop-blur-md rounded-3xl shadow-sm border border-white/40 overflow-hidden">
@@ -615,7 +739,7 @@ export default function OrdersPage() {
                             <p className="text-xs text-gray-500">{order.customer.phone}</p>
                           </td>
                           <td className="px-6 py-4 text-sm font-bold text-[#563435] cursor-pointer" onClick={() => toggleOrderDetails(order.id)}>
-                            {order.totalAmount.toFixed(2)} KM
+                            {(order.totalAmount / 100).toFixed(2)} KM
                           </td>
                           <td className="px-6 py-4 cursor-pointer" onClick={() => toggleOrderDetails(order.id)}>
                             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${statusConfig[order.status]?.color}`}>
@@ -635,40 +759,85 @@ export default function OrdersPage() {
 
                         {/* Expanded Details Row */}
                         {isExpanded && (
-                          <tr className="bg-white/80 border-b-2 border-gray-200/60">
-                            <td colSpan={7} className="px-6 py-6">
-                              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                          <tr className="bg-gradient-to-br from-[#563435]/5 via-amber-50/30 to-transparent">
+                            <td colSpan={7} className="px-6 py-8">
+                              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 {/* Details Col 1: Customer */}
                                 <div className="space-y-4">
-                                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Podaci o kupcu</h4>
-                                  <div className="bg-gray-50/50 rounded-xl p-4 space-y-3">
+                                  <div className="flex items-center justify-between">
+                                    <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Podaci o kupcu</h4>
+                                    <Link
+                                      href={`/admin/customers/${order.customer.id}`}
+                                      className="flex items-center gap-1 px-3 py-1 bg-[#563435] text-white text-xs font-medium rounded-lg hover:bg-[#563435]/90 transition-all shadow-sm"
+                                    >
+                                      <User className="w-3 h-3" />
+                                      Profil
+                                      <ExternalLink className="w-3 h-3" />
+                                    </Link>
+                                  </div>
+                                  <div className="bg-white/60 backdrop-blur-md rounded-2xl p-5 border border-white/40 shadow-sm space-y-4">
+                                    {/* Customer Name - Clickable */}
+                                    <Link
+                                      href={`/admin/customers/${order.customer.id}`}
+                                      className="flex items-center gap-3 p-3 rounded-xl bg-[#563435]/5 hover:bg-[#563435]/10 transition-all group"
+                                    >
+                                      <div className="w-10 h-10 rounded-full bg-[#563435] flex items-center justify-center text-white flex-shrink-0">
+                                        <User className="w-5 h-5" />
+                                      </div>
+                                      <div className="flex-1">
+                                        <p className="font-bold text-gray-800 group-hover:text-[#563435] transition-colors">{order.customer.fullName}</p>
+                                        <p className="text-xs text-gray-500">Klikni za profil</p>
+                                      </div>
+                                      <ExternalLink className="w-4 h-4 text-[#563435] opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    </Link>
+
+                                    {/* Phone */}
                                     <div className="flex items-center gap-3 text-sm text-gray-700">
-                                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+                                      <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
                                         <Phone className="w-4 h-4" />
                                       </div>
-                                      <span className="font-medium">{order.customer.phone}</span>
+                                      <div className="flex-1">
+                                        <p className="text-xs text-gray-500">Telefon</p>
+                                        <a href={`tel:${order.customer.phone}`} className="font-medium hover:text-blue-600 transition-colors">
+                                          {order.customer.phone}
+                                        </a>
+                                      </div>
                                     </div>
+
+                                    {/* Email */}
                                     {order.customer.email && (
                                       <div className="flex items-center gap-3 text-sm text-gray-700">
-                                        <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 flex-shrink-0">
+                                        <div className="w-9 h-9 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 flex-shrink-0">
                                           <Mail className="w-4 h-4" />
                                         </div>
-                                        <span>{order.customer.email}</span>
+                                        <div className="flex-1">
+                                          <p className="text-xs text-gray-500">Email</p>
+                                          <a href={`mailto:${order.customer.email}`} className="font-medium hover:text-purple-600 transition-colors break-all">
+                                            {order.customer.email}
+                                          </a>
+                                        </div>
                                       </div>
                                     )}
+
+                                    {/* Address */}
                                     <div className="flex items-start gap-3 text-sm text-gray-700">
-                                      <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 flex-shrink-0">
+                                      <div className="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0">
                                         <MapPin className="w-4 h-4" />
                                       </div>
-                                      <div>
-                                        <p className="font-medium">{order.shippingAddress}</p>
-                                        <p>{order.city} {order.zipCode}</p>
+                                      <div className="flex-1">
+                                        <p className="text-xs text-gray-500 mb-1">Adresa dostave</p>
+                                        <p className="font-medium text-gray-800">{order.shippingAddress}</p>
+                                        <p className="text-gray-600">{order.city} {order.zipCode}</p>
                                       </div>
                                     </div>
+
+                                    {/* Notes */}
                                     {order.notes && (
-                                      <div className="mt-2 pt-2 border-t border-gray-200">
-                                        <p className="text-xs text-gray-500 mb-1">Napomena:</p>
-                                        <p className="text-sm italic text-gray-700">{order.notes}</p>
+                                      <div className="mt-2 pt-3 border-t border-gray-200/60">
+                                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Napomena:</p>
+                                        <p className="text-sm text-gray-700 bg-amber-50/50 rounded-lg p-3 italic border border-amber-100">
+                                          {order.notes}
+                                        </p>
                                       </div>
                                     )}
                                   </div>
@@ -677,21 +846,24 @@ export default function OrdersPage() {
                                 {/* Details Col 2: Items */}
                                 <div className="space-y-4">
                                   <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Naručeni proizvodi</h4>
-                                  <div className="bg-gray-50/50 rounded-xl p-4 space-y-3">
+                                  <div className="bg-white/60 backdrop-blur-md rounded-2xl p-5 border border-white/40 shadow-sm space-y-3">
                                     {order.items.map((item, idx) => (
-                                      <div key={idx} className="flex justify-between items-center text-sm border-b border-gray-100 last:border-0 pb-2 last:pb-0">
-                                        <div className="flex items-center gap-2">
-                                          <span className="w-6 h-6 rounded bg-white border border-gray-200 flex items-center justify-center font-medium text-xs text-gray-600">
+                                      <div key={idx} className="flex justify-between items-center p-3 rounded-xl bg-gradient-to-r from-gray-50/80 to-transparent border border-gray-100 hover:shadow-sm transition-all">
+                                        <div className="flex items-center gap-3">
+                                          <span className="w-8 h-8 rounded-lg bg-[#563435] text-white flex items-center justify-center font-bold text-sm shadow-sm">
                                             {item.quantity}x
                                           </span>
-                                          <span className="font-medium text-gray-800">{item.productName}</span>
+                                          <div>
+                                            <p className="font-semibold text-gray-800">{item.productName}</p>
+                                            <p className="text-xs text-gray-500">{(item.price / 100).toFixed(2)} KM po komadu</p>
+                                          </div>
                                         </div>
-                                        <span className="font-bold text-[#563435]">{(item.price * item.quantity).toFixed(2)} KM</span>
+                                        <span className="font-bold text-[#563435] text-lg">{(item.price * item.quantity / 100).toFixed(2)} KM</span>
                                       </div>
                                     ))}
-                                    <div className="flex justify-between items-center pt-2 mt-2 border-t border-gray-200">
-                                      <span className="font-medium text-gray-600">Ukupno za naplatu:</span>
-                                      <span className="text-lg font-bold text-[#563435]">{order.totalAmount.toFixed(2)} KM</span>
+                                    <div className="flex justify-between items-center pt-4 mt-3 border-t-2 border-[#563435]/20">
+                                      <span className="font-bold text-gray-700">Ukupno za naplatu:</span>
+                                      <span className="text-2xl font-bold text-[#563435]">{(order.totalAmount / 100).toFixed(2)} KM</span>
                                     </div>
                                   </div>
                                 </div>
@@ -699,42 +871,42 @@ export default function OrdersPage() {
                                 {/* Details Col 3: Actions */}
                                 <div className="space-y-4">
                                   <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Upravljanje statusom</h4>
-                                  <div className="bg-gray-50/50 rounded-xl p-4 flex flex-col gap-3">
-                                    
+                                  <div className="bg-white/60 backdrop-blur-md rounded-2xl p-5 border border-white/40 shadow-sm flex flex-col gap-3">
+
                                     {(order.status === "NEW" || order.status === "PENDING") && (
                                       <button
                                         onClick={() => updateOrderStatus(order.id, "CONFIRMED")}
-                                        className="w-full flex items-center justify-center gap-2 py-2.5 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors shadow-sm"
+                                        className="w-full flex items-center justify-center gap-2 py-3 bg-[#563435] text-white text-sm font-bold rounded-xl hover:bg-[#563435]/90 transition-all shadow-md hover:shadow-lg"
                                       >
-                                        <CheckCircle className="w-4 h-4" /> Potvrdi narudžbu
+                                        <CheckCircle className="w-5 h-5" /> Potvrdi narudžbu
                                       </button>
                                     )}
 
                                     {order.status === "CONFIRMED" && (
                                       <button
                                         onClick={() => updateOrderStatus(order.id, "PREPARING")}
-                                        className="w-full flex items-center justify-center gap-2 py-2.5 bg-indigo-500 text-white text-sm font-semibold rounded-lg hover:bg-indigo-600 transition-colors shadow-sm"
+                                        className="w-full flex items-center justify-center gap-2 py-3 bg-amber-600 text-white text-sm font-bold rounded-xl hover:bg-amber-700 transition-all shadow-md hover:shadow-lg"
                                       >
-                                        <Package className="w-4 h-4" /> U pripremi
+                                        <Package className="w-5 h-5" /> U pripremi
                                       </button>
                                     )}
 
                                     {(order.status === "PREPARING" || order.status === "CONFIRMED") && (
                                       <button
                                         onClick={() => updateOrderStatus(order.id, "SHIPPED")}
-                                        className="w-full flex items-center justify-center gap-2 py-2.5 bg-purple-500 text-white text-sm font-semibold rounded-lg hover:bg-purple-600 transition-colors shadow-sm"
+                                        className="w-full flex items-center justify-center gap-2 py-3 bg-[#563435]/80 text-white text-sm font-bold rounded-xl hover:bg-[#563435] transition-all shadow-md hover:shadow-lg"
                                       >
-                                        <Truck className="w-4 h-4" /> Označi kao POSLANO
+                                        <Truck className="w-5 h-5" /> Označi kao POSLANO
                                       </button>
                                     )}
-                                    
+
                                     {order.status === "SHIPPED" && (
                                       <>
                                         <button
                                           onClick={() => updateOrderStatus(order.id, "DELIVERED")}
-                                          className="w-full flex items-center justify-center gap-2 py-2.5 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600 transition-colors shadow-sm"
+                                          className="w-full flex items-center justify-center gap-2 py-3 bg-emerald-600 text-white text-sm font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-md hover:shadow-lg"
                                         >
-                                          <Package className="w-4 h-4" /> Označi kao DOSTAVLJENO
+                                          <CheckCircle className="w-5 h-5" /> Označi kao DOSTAVLJENO
                                         </button>
                                         <button
                                           onClick={() => {
@@ -742,9 +914,9 @@ export default function OrdersPage() {
                                               updateOrderStatus(order.id, "RETURNED");
                                             }
                                           }}
-                                          className="w-full flex items-center justify-center gap-2 py-2.5 bg-orange-500 text-white text-sm font-semibold rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
+                                          className="w-full flex items-center justify-center gap-2 py-3 bg-orange-500 text-white text-sm font-bold rounded-xl hover:bg-orange-600 transition-all shadow-md hover:shadow-lg"
                                         >
-                                          <RotateCcw className="w-4 h-4" /> Vraćeno
+                                          <RotateCcw className="w-5 h-5" /> Vraćeno
                                         </button>
                                       </>
                                     )}
@@ -756,19 +928,19 @@ export default function OrdersPage() {
                                             updateOrderStatus(order.id, "CANCELLED");
                                           }
                                         }}
-                                        className="w-full flex items-center justify-center gap-2 py-2.5 bg-white border border-red-200 text-red-600 hover:bg-red-50 text-sm font-semibold rounded-lg transition-colors"
+                                        className="w-full flex items-center justify-center gap-2 py-3 bg-white border-2 border-red-300 text-red-600 hover:bg-red-50 text-sm font-bold rounded-xl transition-all"
                                       >
-                                        <XCircle className="w-4 h-4" /> Otkaži narudžbu
+                                        <XCircle className="w-5 h-5" /> Otkaži narudžbu
                                       </button>
                                     )}
 
                                     {/* Print PDF Button */}
-                                    <div className="pt-3 mt-1 border-t border-gray-200">
+                                    <div className="pt-3 mt-2 border-t-2 border-gray-200/60">
                                       <button
                                         onClick={() => generatePDF(order)}
-                                        className="w-full flex items-center justify-center gap-2 py-2.5 bg-gray-800 text-white text-sm font-semibold rounded-lg hover:bg-gray-900 transition-colors shadow-sm"
+                                        className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-gray-800 to-gray-900 text-white text-sm font-bold rounded-xl hover:from-gray-900 hover:to-black transition-all shadow-md hover:shadow-lg"
                                       >
-                                        <Printer className="w-4 h-4" /> Štampaj dostavnicu (PDF)
+                                        <Printer className="w-5 h-5" /> Štampaj dostavnicu (PDF)
                                       </button>
                                     </div>
 
@@ -799,7 +971,7 @@ export default function OrdersPage() {
           actions={[
             {
               label: "Promijeni status",
-              onClick: handleBulkStatusUpdate,
+              onClick: () => setShowStatusModal(true),
               icon: <Edit className="w-4 h-4" />,
             },
             {
@@ -815,6 +987,92 @@ export default function OrdersPage() {
             },
           ]}
         />
+
+        {/* Bulk Status Modal */}
+        <BulkStatusModal
+          isOpen={showStatusModal}
+          onClose={() => setShowStatusModal(false)}
+          onConfirm={handleBulkStatusUpdate}
+          selectedCount={selectedOrders.length}
+          statusOptions={Object.entries(statusConfig).map(([value, config]) => ({
+            value,
+            label: config.label,
+            color: config.color,
+            icon: config.icon
+          }))}
+          title="narudžbe"
+          currentStatusConfig={statusConfig}
+        />
+
+        {/* Live Order Processor */}
+        <LiveOrderProcessor
+          isOpen={showLiveProcessor}
+          onClose={() => setShowLiveProcessor(false)}
+          initialOrders={orders.filter(o => o.status === "NEW") as any}
+          onOrdersUpdate={fetchOrders}
+        />
+
+        {/* Shipping Animation Modal */}
+        {showShippingAnimation && (
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center">
+            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-8 max-w-lg w-full mx-4 shadow-2xl">
+              <div className="text-center mb-6">
+                <div className="w-20 h-20 rounded-full bg-[#563435]/10 flex items-center justify-center mx-auto mb-4">
+                  <Truck className="w-10 h-10 text-[#563435]" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                  Narudžba je poslana! 🚚
+                </h3>
+                <p className="text-gray-600">
+                  Paket je na putu ka kupcu
+                </p>
+              </div>
+
+              {/* Animated Truck */}
+              <div className="flex justify-center mb-6">
+                <DeliveryTruck size={280} />
+              </div>
+
+              <button
+                onClick={() => setShowShippingAnimation(false)}
+                className="w-full px-6 py-3 bg-[#563435] text-white rounded-xl font-bold hover:bg-[#563435]/90 transition-all"
+              >
+                Zatvori
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Delivered Animation Modal */}
+        {showDeliveredAnimation && (
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center">
+            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-8 max-w-lg w-full mx-4 shadow-2xl">
+              <div className="text-center mb-6">
+                <div className="w-20 h-20 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="w-10 h-10 text-emerald-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                  Uspješno dostavljeno! 🏡
+                </h3>
+                <p className="text-gray-600">
+                  Paket je stigao na odredište
+                </p>
+              </div>
+
+              {/* Animated House with Package */}
+              <div className="flex justify-center mb-6">
+                <DeliveredPackage size={280} />
+              </div>
+
+              <button
+                onClick={() => setShowDeliveredAnimation(false)}
+                className="w-full px-6 py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-all"
+              >
+                Zatvori
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

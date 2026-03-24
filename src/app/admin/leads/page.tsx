@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Users, Phone, Mail, Filter, Search, X, Download, Edit, Trash2, UserPlus } from "lucide-react";
+import { ArrowLeft, Users, Phone, Mail, Filter, Search, X, Download, Edit, Trash2, UserPlus, PhoneCall, CheckCircle, XCircle, AlertCircle, Clock } from "lucide-react";
 import BulkActionBar from "@/components/admin/BulkActionBar";
 import { exportToExcel, formatLeadsForExport } from "@/lib/excel";
 import CommentSection from "@/components/admin/CommentSection";
+import BulkStatusModal from "@/components/admin/BulkStatusModal";
+import { toast } from "sonner";
 
 interface Lead {
   id: string;
@@ -40,6 +42,7 @@ export default function LeadsPage() {
 
   // Bulk operations
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
+  const [showStatusModal, setShowStatusModal] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -100,10 +103,7 @@ export default function LeadsPage() {
     }
   };
 
-  const handleBulkStatusUpdate = async () => {
-    const newStatus = prompt("Novi status (NEW/CALLED/CONFIRMED/CANCELLED/NO_ANSWER/FOLLOW_UP):");
-    if (!newStatus) return;
-
+  const handleBulkStatusUpdate = async (newStatus: string) => {
     try {
       const response = await fetch("/api/admin/leads/bulk", {
         method: "POST",
@@ -111,19 +111,21 @@ export default function LeadsPage() {
         body: JSON.stringify({
           action: "updateStatus",
           leadIds: selectedLeads,
-          status: newStatus.toUpperCase(),
+          status: newStatus,
         }),
       });
 
       if (response.ok) {
-        const result = await response.json();
-        alert(result.message);
+        toast.success("Status ažuriran!");
         fetchLeads();
         setSelectedLeads([]);
+        setShowStatusModal(false);
+      } else {
+        toast.error("Greška pri ažuriranju leadova");
       }
     } catch (error) {
       console.error("Bulk status update failed:", error);
-      alert("Greška pri ažuriranju leadova");
+      toast.error("Greška pri ažuriranju leadova");
     }
   };
 
@@ -237,6 +239,11 @@ export default function LeadsPage() {
     QUALIFIED: "bg-purple-100 text-purple-800",
     CONVERTED: "bg-green-100 text-green-800",
     LOST: "bg-red-100 text-red-800",
+    CALLED: "bg-yellow-100 text-yellow-800",
+    CONFIRMED: "bg-green-100 text-green-800",
+    CANCELLED: "bg-red-100 text-red-800",
+    NO_ANSWER: "bg-gray-100 text-gray-800",
+    FOLLOW_UP: "bg-orange-100 text-orange-800",
   };
 
   const statusLabels: Record<string, string> = {
@@ -245,6 +252,20 @@ export default function LeadsPage() {
     QUALIFIED: "Kvalifikovan",
     CONVERTED: "Konvertovan",
     LOST: "Izgubljen",
+    CALLED: "Pozvan",
+    CONFIRMED: "Potvrđen",
+    CANCELLED: "Otkazan",
+    NO_ANSWER: "Bez odgovora",
+    FOLLOW_UP: "Praćenje",
+  };
+
+  const statusConfig: Record<string, { color: string, label: string, icon: any }> = {
+    NEW: { color: "bg-blue-100 text-blue-800 border-blue-200", label: "Novi", icon: AlertCircle },
+    CALLED: { color: "bg-yellow-100 text-yellow-800 border-yellow-200", label: "Pozvan", icon: PhoneCall },
+    CONFIRMED: { color: "bg-green-100 text-green-800 border-green-200", label: "Potvrđen", icon: CheckCircle },
+    CANCELLED: { color: "bg-red-100 text-red-800 border-red-200", label: "Otkazan", icon: XCircle },
+    NO_ANSWER: { color: "bg-gray-100 text-gray-800 border-gray-200", label: "Bez odgovora", icon: Phone },
+    FOLLOW_UP: { color: "bg-orange-100 text-orange-800 border-orange-200", label: "Praćenje", icon: Clock },
   };
 
   return (
@@ -525,7 +546,7 @@ export default function LeadsPage() {
           actions={[
             {
               label: "Promijeni status",
-              onClick: handleBulkStatusUpdate,
+              onClick: () => setShowStatusModal(true),
               icon: <Edit className="w-4 h-4" />,
             },
             {
@@ -540,6 +561,22 @@ export default function LeadsPage() {
               className: "bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl font-medium transition-colors flex items-center gap-2",
             },
           ]}
+        />
+
+        {/* Bulk Status Modal */}
+        <BulkStatusModal
+          isOpen={showStatusModal}
+          onClose={() => setShowStatusModal(false)}
+          onConfirm={handleBulkStatusUpdate}
+          selectedCount={selectedLeads.length}
+          statusOptions={Object.entries(statusConfig).map(([value, config]) => ({
+            value,
+            label: config.label,
+            color: config.color,
+            icon: config.icon
+          }))}
+          title="leadove"
+          currentStatusConfig={statusConfig}
         />
       </div>
     </div>

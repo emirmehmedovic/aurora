@@ -12,38 +12,55 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get("status");
+    const statusFilter = searchParams.get("status");
     const search = searchParams.get("search");
 
-    const where: any = {};
-
-    if (status && status !== "ALL") {
-      where.status = status;
-    }
+    // Fetch orders with RETURNED status
+    const orderWhere: any = {
+      status: "RETURNED"
+    };
 
     if (search) {
-      where.OR = [
-        { rmaNumber: { contains: search, mode: "insensitive" } },
+      orderWhere.OR = [
+        { orderNumber: { contains: search, mode: "insensitive" } },
         { customer: { fullName: { contains: search, mode: "insensitive" } } },
+        { customer: { phone: { contains: search, mode: "insensitive" } } },
       ];
     }
 
-    const returns = await prisma.return.findMany({
-      where,
+    const returnedOrders = await prisma.order.findMany({
+      where: orderWhere,
       include: {
         customer: true,
-        order: {
+        items: {
           include: {
-            items: {
-              include: {
-                product: true,
-              },
-            },
+            product: true,
           },
         },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { updatedAt: "desc" },
     });
+
+    // Map orders to return format for compatibility with frontend
+    const returns = returnedOrders.map(order => ({
+      id: order.id,
+      rmaNumber: `RMA-${order.orderNumber}`,
+      reason: "Vraćeno",
+      status: "RECEIVED", // Orders marked as RETURNED are considered received
+      refundAmount: null,
+      createdAt: order.updatedAt || order.createdAt,
+      customer: {
+        id: order.customer.id,
+        fullName: order.customer.fullName,
+        phone: order.customer.phone,
+      },
+      order: {
+        id: order.id,
+        orderNumber: order.orderNumber,
+        totalAmount: order.totalAmount,
+        items: order.items,
+      },
+    }));
 
     return NextResponse.json({ returns });
   } catch (error) {

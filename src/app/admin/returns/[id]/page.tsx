@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -8,7 +8,8 @@ import { ArrowLeft, CheckCircle, XCircle, Package, DollarSign } from "lucide-rea
 import { format } from "date-fns";
 import { toast } from "sonner";
 
-export default function ReturnDetailPage({ params }: { params: { id: string } }) {
+export default function ReturnDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const { data: session, status } = useSession();
   const router = useRouter();
   const [returnData, setReturnData] = useState<any>(null);
@@ -31,7 +32,7 @@ export default function ReturnDetailPage({ params }: { params: { id: string } })
 
   const fetchReturn = async () => {
     try {
-      const response = await fetch(`/api/admin/returns/${params.id}`);
+      const response = await fetch(`/api/admin/returns/${id}`);
       if (response.ok) {
         const data = await response.json();
         setReturnData(data);
@@ -47,7 +48,7 @@ export default function ReturnDetailPage({ params }: { params: { id: string } })
 
   const updateStatus = async (newStatus: string) => {
     try {
-      const response = await fetch(`/api/admin/returns/${params.id}`, {
+      const response = await fetch(`/api/admin/returns/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

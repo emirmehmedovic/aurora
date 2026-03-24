@@ -76,43 +76,73 @@ export default function ReturnsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50/30">
-      <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen bg-gray-50/30 relative overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-orange-50/40 to-transparent pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 relative z-10">
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center">
-              <RotateCcw className="w-5 h-5 text-white" />
+        <div className="mb-6 bg-white/40 backdrop-blur-md border border-white/30 rounded-3xl p-6 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg">
+                <RotateCcw className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-800">Povrati i refundacije</h1>
+                <p className="text-gray-600">
+                  Narudžbe označene kao vraćene
+                </p>
+              </div>
             </div>
-            <h1 className="text-3xl font-bold text-gray-800">Povrati i refundacije</h1>
+            <div className="px-4 py-2 bg-orange-100 border border-orange-300 rounded-xl">
+              <p className="text-sm font-bold text-orange-800">
+                {returns.length} {returns.length === 1 ? 'povrat' : 'povrata'}
+              </p>
+            </div>
           </div>
-          <p className="text-gray-600">
-            Upravljanje zahtjevima za povrat i refundacijom
-          </p>
         </div>
 
         {/* Filters */}
-        <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 mb-6 shadow-sm">
+        <div className="bg-gradient-to-br from-white/70 via-white/60 to-white/50 backdrop-blur-md border border-white/40 rounded-3xl p-6 mb-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-[#563435] flex items-center justify-center">
+              <Filter className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-800">Filteri</h3>
+              <p className="text-xs text-gray-500">Pretraži i filtriraj povrate</p>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Pretraži po RMA broju ili kupcu..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
+            <div>
+              <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
+                <Search className="w-3 h-3 inline mr-1" />
+                Pretraga
+              </label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Narudžba, kupac, telefon..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-white/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#563435] focus:border-transparent transition-all shadow-sm"
+                />
+              </div>
             </div>
 
             {/* Status Filter */}
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <div>
+              <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
+                <Package className="w-3 h-3 inline mr-1" />
+                Status
+              </label>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 appearance-none"
+                className="w-full px-4 py-3 bg-white/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#563435] focus:border-transparent transition-all shadow-sm font-medium"
               >
                 <option value="ALL">Svi statusi</option>
                 <option value="REQUESTED">Zahtjev</option>
@@ -127,49 +157,55 @@ export default function ReturnsPage() {
 
         {/* Returns List */}
         {loading ? (
-          <div className="text-center py-12">
-            <div className="text-gray-500">Učitavanje...</div>
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-3xl p-12 text-center shadow-sm">
+            <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4">
+              <RotateCcw className="w-8 h-8 animate-spin text-orange-600" />
+            </div>
+            <p className="text-gray-600 font-medium">Učitavanje povrata...</p>
           </div>
         ) : returns.length === 0 ? (
-          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-12 text-center">
-            <RotateCcw className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-600">Nema povrata</p>
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-3xl p-12 text-center shadow-sm">
+            <div className="w-20 h-20 rounded-full bg-orange-50 flex items-center justify-center mx-auto mb-4">
+              <RotateCcw className="w-10 h-10 text-orange-400" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-800 mb-2">Nema povrata</h3>
+            <p className="text-gray-600">Trenutno nema narudžbi označenih kao vraćene</p>
           </div>
         ) : (
-          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-3xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50/50 border-b border-gray-200">
+                <thead className="bg-gradient-to-r from-gray-50/80 to-gray-50/40 border-b-2 border-gray-200/60">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                       RMA Broj
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                       Kupac
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                       Narudžba
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                       Razlog
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                       Datum
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                       Akcije
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-100">
                   {returns.map((returnItem) => {
                     const StatusIcon = statusConfig[returnItem.status]?.icon || Package;
 
                     return (
-                      <tr key={returnItem.id} className="hover:bg-white/60 transition-colors">
+                      <tr key={returnItem.id} className="hover:bg-white/70 transition-all">
                         <td className="px-6 py-4">
                           <div className="font-semibold text-gray-800">
                             {returnItem.rmaNumber}
@@ -211,10 +247,11 @@ export default function ReturnsPage() {
                         </td>
                         <td className="px-6 py-4">
                           <Link
-                            href={`/admin/returns/${returnItem.id}`}
-                            className="text-orange-600 hover:text-orange-800 font-medium text-sm"
+                            href={`/admin/orders/${returnItem.id}`}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-[#563435] text-white text-sm font-bold rounded-xl hover:bg-[#563435]/90 transition-all shadow-sm hover:shadow-md"
                           >
-                            Detalji →
+                            Vidi narudžbu
+                            <Package className="w-4 h-4" />
                           </Link>
                         </td>
                       </tr>

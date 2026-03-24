@@ -3,6 +3,62 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 import { sendOrderStatusUpdate } from "@/lib/telegram";
+import { updateCustomerStats } from "@/lib/customerStats";
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { id } = await params;
+
+    const order = await prisma.order.findUnique({
+      where: { id },
+      include: {
+        customer: true,
+        items: {
+          include: {
+            product: true
+          }
+        },
+        returns: true,
+        comments: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
+            }
+          },
+          orderBy: {
+            createdAt: 'desc'
+          }
+        }
+      }
+    });
+
+    if (!order) {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ order });
+
+  } catch (error) {
+    console.error("Get order error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function PATCH(
   request: NextRequest,
@@ -64,6 +120,9 @@ export async function PATCH(
         console.error('Failed to send status update to Telegram:', error);
         // Don't fail the request if Telegram notification fails
       }
+
+      // Update customer stats when status changes
+      await updateCustomerStats(order.customerId);
     }
 
     return NextResponse.json({ order });

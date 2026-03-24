@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -16,7 +16,11 @@ import {
   MessageSquare,
   X,
   Plus,
-  Save
+  Save,
+  DollarSign,
+  CheckCircle,
+  RotateCcw,
+  AlertTriangle
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -37,11 +41,14 @@ interface CustomerDetail {
     totalOrders: number;
     totalSpent: number;
     averageOrderValue: number;
+    deliveredOrders: number;
+    returnedOrders: number;
     favoriteProduct: { name: string; count: number } | null;
   };
 }
 
-export default function CustomerDetailPage({ params }: { params: { id: string } }) {
+export default function CustomerDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const { data: session, status } = useSession();
   const router = useRouter();
   const [customer, setCustomer] = useState<CustomerDetail | null>(null);
@@ -65,7 +72,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
   const fetchCustomer = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/admin/customers/${params.id}`);
+      const response = await fetch(`/api/admin/customers/${id}`);
       if (response.ok) {
         const data = await response.json();
         setCustomer(data);
@@ -92,7 +99,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
 
   const handleSaveTags = async () => {
     try {
-      const response = await fetch(`/api/admin/customers/${params.id}`, {
+      const response = await fetch(`/api/admin/customers/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tags: editedTags }),
@@ -109,7 +116,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
 
   const handleSaveNotes = async () => {
     try {
-      const response = await fetch(`/api/admin/customers/${params.id}`, {
+      const response = await fetch(`/api/admin/customers/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ notes: editedNotes }),
@@ -141,19 +148,22 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
   }
 
   return (
-    <div className="min-h-screen bg-gray-50/30">
-      <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen bg-gray-50/30 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-purple-50/40 to-transparent pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 relative z-10">
         {/* Back button */}
         <Link
           href="/admin/customers"
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6"
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6 font-medium"
         >
           <ArrowLeft className="w-4 h-4" />
           Nazad na kupce
         </Link>
 
         {/* Header */}
-        <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-6 mb-6 shadow-sm">
+        <div className="bg-white/40 backdrop-blur-md border border-white/30 rounded-3xl p-6 mb-6 shadow-sm">
           <div className="flex items-start justify-between mb-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-800 mb-2">
@@ -191,7 +201,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
             <div className="flex gap-2">
               <a
                 href={`tel:${customer.phone}`}
-                className="px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors text-sm font-medium"
+                className="px-4 py-2 bg-[#563435] text-white rounded-xl hover:bg-[#563435]/90 transition-colors text-sm font-medium"
               >
                 Pozovi
               </a>
@@ -199,14 +209,14 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
                 href={`https://wa.me/${customer.phone.replace(/[^0-9]/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors text-sm font-medium"
+                className="px-4 py-2 bg-[#563435] text-white rounded-xl hover:bg-[#563435]/90 transition-colors text-sm font-medium"
               >
                 WhatsApp
               </a>
               {customer.email && (
                 <a
                   href={`mailto:${customer.email}`}
-                  className="px-4 py-2 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-colors text-sm font-medium"
+                  className="px-4 py-2 bg-[#563435] text-white rounded-xl hover:bg-[#563435]/90 transition-colors text-sm font-medium"
                 >
                   Email
                 </a>
@@ -221,7 +231,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
               {!isEditingTags && (
                 <button
                   onClick={() => setIsEditingTags(true)}
-                  className="text-xs text-purple-600 hover:text-purple-800"
+                  className="text-xs text-[#563435] hover:text-[#563435]/80 font-medium"
                 >
                   Uredi
                 </button>
@@ -234,7 +244,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
                   {editedTags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 bg-purple-100 text-purple-700 rounded-lg text-sm font-medium flex items-center gap-2"
+                      className="px-3 py-1 bg-[#563435]/10 text-[#563435] rounded-lg text-sm font-medium flex items-center gap-2"
                     >
                       {tag}
                       <button onClick={() => handleRemoveTag(tag)}>
@@ -262,7 +272,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
                 <div className="flex gap-2">
                   <button
                     onClick={handleSaveTags}
-                    className="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 text-sm font-medium flex items-center gap-2"
+                    className="px-4 py-2 bg-[#563435] text-white rounded-xl hover:bg-[#563435]/90 text-sm font-medium flex items-center gap-2"
                   >
                     <Save className="w-4 h-4" />
                     Sačuvaj
@@ -284,7 +294,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
                   customer.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 bg-purple-100 text-purple-700 rounded-lg text-sm font-medium"
+                      className="px-3 py-1 bg-[#563435]/10 text-[#563435] rounded-lg text-sm font-medium"
                     >
                       {tag}
                     </span>
@@ -297,27 +307,134 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-          {/* Statistics */}
-          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-6 shadow-sm">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Statistika</h2>
-            <div className="space-y-4">
-              <div>
-                <div className="text-sm text-gray-500 mb-1">Ukupno narudžbi</div>
-                <div className="text-2xl font-bold text-gray-800">
+        {/* Warning Card for Multiple Returns */}
+        {customer.stats.returnedOrders >= 2 && (
+          <div className="mb-6 bg-gradient-to-r from-red-50 to-orange-50 backdrop-blur-md border-2 border-red-300 rounded-3xl p-6 shadow-lg">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-red-500 flex items-center justify-center flex-shrink-0 shadow-md">
+                <AlertTriangle className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-red-800 mb-2">
+                  Upozorenje: Puno povrata
+                </h3>
+                <p className="text-red-700 mb-3">
+                  Ovaj kupac ima <span className="font-bold">{customer.stats.returnedOrders} {customer.stats.returnedOrders === 1 ? 'povrat' : 'povrata'}</span>. Potrebna je dodatna pažnja pri obradi novih narudžbi.
+                </p>
+                <div className="flex items-center gap-2 text-sm text-red-600">
+                  <RotateCcw className="w-4 h-4" />
+                  <span className="font-medium">Provjerite razloge povrata prije obrade</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* KPI Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          {/* Total Orders */}
+          <div className="bg-gradient-to-br from-[#563435]/5 via-white/60 to-white/50 backdrop-blur-md border border-white/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-xl bg-[#563435] flex items-center justify-center shadow-sm">
+                <ShoppingCart className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-bold text-[#563435]">
                   {customer.stats.totalOrders}
                 </div>
               </div>
-              <div>
-                <div className="text-sm text-gray-500 mb-1">Ukupna potrošnja</div>
-                <div className="text-2xl font-bold text-gray-800">
-                  {(customer.stats.totalSpent / 100).toFixed(0)} KM
+            </div>
+            <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">
+              Ukupno narudžbi
+            </h3>
+            <p className="text-xs text-gray-500 mt-1">
+              Bez otkazanih
+            </p>
+          </div>
+
+          {/* Delivered Orders */}
+          <div className="bg-gradient-to-br from-emerald-50/30 via-white/60 to-white/50 backdrop-blur-md border border-white/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center shadow-sm">
+                <CheckCircle className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-bold text-emerald-600">
+                  {customer.stats.deliveredOrders}
                 </div>
               </div>
+            </div>
+            <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">
+              Preuzeto i plaćeno
+            </h3>
+            <p className="text-xs text-gray-500 mt-1">
+              Uspješno dostavljeno
+            </p>
+          </div>
+
+          {/* Returns */}
+          <div className={`bg-gradient-to-br backdrop-blur-md border border-white/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all ${
+            customer.stats.returnedOrders >= 2
+              ? 'from-red-50/50 via-white/60 to-white/50 border-red-200'
+              : 'from-orange-50/30 via-white/60 to-white/50'
+          }`}>
+            <div className="flex items-center justify-between mb-4">
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-sm ${
+                customer.stats.returnedOrders >= 2 ? 'bg-red-500' : 'bg-orange-500'
+              }`}>
+                <RotateCcw className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-right">
+                <div className={`text-3xl font-bold ${
+                  customer.stats.returnedOrders >= 2 ? 'text-red-600' : 'text-orange-600'
+                }`}>
+                  {customer.stats.returnedOrders}
+                </div>
+              </div>
+            </div>
+            <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">
+              Povrati
+            </h3>
+            <p className="text-xs text-gray-500 mt-1">
+              {customer.stats.returnedOrders >= 2 ? '⚠️ Upozorenje!' : 'Vraćene narudžbe'}
+            </p>
+          </div>
+
+          {/* Total Spent */}
+          <div className="bg-gradient-to-br from-amber-50/30 via-white/60 to-white/50 backdrop-blur-md border border-white/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-600 flex items-center justify-center shadow-sm">
+                <DollarSign className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-bold text-amber-600">
+                  {(customer.stats.totalSpent / 100).toFixed(0)}
+                </div>
+              </div>
+            </div>
+            <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">
+              Ukupna potrošnja
+            </h3>
+            <p className="text-xs text-gray-500 mt-1">
+              KM
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {/* Additional Statistics */}
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Dodatna statistika</h2>
+            <div className="space-y-4">
               <div>
-                <div className="text-sm text-gray-500 mb-1">Prosječna narudžba</div>
-                <div className="text-2xl font-bold text-gray-800">
-                  {(customer.stats.averageOrderValue / 100).toFixed(0)} KM
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center flex-shrink-0">
+                    <TrendingUp className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">Prosječna narudžba</div>
+                </div>
+                <div className="text-2xl font-bold text-gray-800 ml-11">
+                  {(customer.stats.averageOrderValue / 100).toFixed(0)} <span className="text-sm text-gray-500 font-normal">KM</span>
                 </div>
               </div>
               {customer.stats.favoriteProduct && (
@@ -344,7 +461,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
               {!isEditingNotes && (
                 <button
                   onClick={() => setIsEditingNotes(true)}
-                  className="text-sm text-purple-600 hover:text-purple-800"
+                  className="text-sm text-[#563435] hover:text-[#563435]/80 font-medium"
                 >
                   Uredi
                 </button>
@@ -362,7 +479,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
                 <div className="flex gap-2">
                   <button
                     onClick={handleSaveNotes}
-                    className="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 text-sm font-medium flex items-center gap-2"
+                    className="px-4 py-2 bg-[#563435] text-white rounded-xl hover:bg-[#563435]/90 text-sm font-medium flex items-center gap-2"
                   >
                     <Save className="w-4 h-4" />
                     Sačuvaj
@@ -389,7 +506,7 @@ export default function CustomerDetailPage({ params }: { params: { id: string } 
         </div>
 
         {/* Order History */}
-        <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-6 shadow-sm">
+        <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
           <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
             <ShoppingCart className="w-5 h-5" />
             Istorija narudžbi ({customer.orders.length})

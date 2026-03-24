@@ -32,6 +32,15 @@ export async function POST(request: Request) {
           );
         }
 
+        // Validate status
+        const validLeadStatuses = ['NEW', 'CALLED', 'CONFIRMED', 'CANCELLED', 'NO_ANSWER', 'FOLLOW_UP'];
+        if (!validLeadStatuses.includes(status)) {
+          return NextResponse.json(
+            { error: "Invalid status" },
+            { status: 400 }
+          );
+        }
+
         result = await prisma.lead.updateMany({
           where: { id: { in: leadIds } },
           data: { status },

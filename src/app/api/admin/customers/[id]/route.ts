@@ -15,21 +15,41 @@ export async function GET(
     }
 
     const { id } = await params;
+
+    // Fetch customer with selective fields and pagination
     const customer = await prisma.customer.findUnique({
       where: { id },
       include: {
         orders: {
-          include: {
+          select: {
+            id: true,
+            orderNumber: true,
+            status: true,
+            totalAmount: true,
+            createdAt: true,
             items: {
-              include: {
-                product: true,
-              },
-            },
+              select: {
+                id: true,
+                quantity: true,
+                product: {
+                  select: { id: true, name: true }
+                }
+              }
+            }
           },
           orderBy: { createdAt: "desc" },
+          take: 50  // Pagination limit
         },
         leads: {
+          select: {
+            id: true,
+            fullName: true,
+            phone: true,
+            status: true,
+            createdAt: true
+          },
           orderBy: { createdAt: "desc" },
+          take: 20
         },
       },
     });
@@ -38,45 +58,71 @@ export async function GET(
       return NextResponse.json({ error: "Customer not found" }, { status: 404 });
     }
 
-    // Calculate statistics
-    const stats = {
-      totalOrders: customer.orders.length,
-      totalSpent: customer.orders
-        .filter((o) => o.status !== "CANCELLED")
-        .reduce((sum, o) => sum + o.totalAmount, 0),
-      averageOrderValue: 0,
-      favoriteProduct: null as { name: string; count: number } | null,
-    };
-
-    if (stats.totalOrders > 0) {
-      stats.averageOrderValue = stats.totalSpent / stats.totalOrders;
-    }
-
-    // Find favorite product
-    const productCounts = new Map<string, { name: string; count: number }>();
-    customer.orders.forEach((order) => {
-      order.items.forEach((item) => {
-        const existing = productCounts.get(item.productId);
-        if (existing) {
-          existing.count += item.quantity;
-        } else {
-          productCounts.set(item.productId, {
-            name: item.product.name,
-            count: item.quantity,
-          });
-        }
-      });
+    // Calculate stats using SQL aggregation
+    const orderStats = await prisma.order.aggregate({
+      where: {
+        customerId: id,
+        status: { notIn: ['CANCELLED', 'RETURNED'] }
+      },
+      _count: { id: true },
+      _sum: { totalAmount: true }
     });
 
-    if (productCounts.size > 0) {
-      stats.favoriteProduct = Array.from(productCounts.values()).reduce((prev, curr) =>
-        curr.count > prev.count ? curr : prev
-      );
-    }
+    // Count delivered/paid orders
+    const deliveredCount = await prisma.order.count({
+      where: {
+        customerId: id,
+        status: 'DELIVERED'
+      }
+    });
+
+    // Count returned orders
+    const returnedCount = await prisma.order.count({
+      where: {
+        customerId: id,
+        status: 'RETURNED'
+      }
+    });
+
+    // Favorite product - use raw SQL for efficiency
+    const favoriteProduct = await prisma.$queryRaw<Array<{
+      productId: string;
+      productName: string;
+      totalQuantity: bigint;
+    }>>`
+      SELECT
+        oi."productId",
+        p.name as "productName",
+        SUM(oi.quantity) as "totalQuantity"
+      FROM order_items oi
+      JOIN orders o ON oi."orderId" = o.id
+      JOIN products p ON oi."productId" = p.id
+      WHERE o."customerId" = ${id}
+        AND o.status NOT IN ('CANCELLED', 'RETURNED')
+      GROUP BY oi."productId", p.name
+      ORDER BY SUM(oi.quantity) DESC
+      LIMIT 1
+    `;
+
+    const stats = {
+      totalOrders: orderStats._count.id,
+      totalSpent: orderStats._sum.totalAmount || 0,
+      averageOrderValue: orderStats._count.id > 0
+        ? (orderStats._sum.totalAmount || 0) / orderStats._count.id
+        : 0,
+      deliveredOrders: deliveredCount,
+      returnedOrders: returnedCount,
+      favoriteProduct: favoriteProduct.length > 0
+        ? {
+            name: favoriteProduct[0].productName,
+            count: Number(favoriteProduct[0].totalQuantity)
+          }
+        : null
+    };
 
     return NextResponse.json({
       ...customer,
-      stats,
+      stats
     });
   } catch (error) {
     console.error("Customer detail error:", error);
