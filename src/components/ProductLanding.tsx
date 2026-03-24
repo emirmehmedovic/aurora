@@ -284,6 +284,9 @@ export default function ProductLanding({ slug, product: customProduct }: Product
   
   if (!product) return null;
 
+  const orderProductId = product.id || slug || "ice-cool-pro";
+  const orderHref = `/naruci?product=${orderProductId}`;
+
   const discount = Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100);
 
   // Set default usage images if none exist
@@ -410,7 +413,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
 
                 {/* CTA Button */}
                 <Link 
-                  href="/naruci"
+                  href={orderHref}
                   className="group relative w-full py-5 px-8 bg-[#563435] hover:bg-[#6d4446] text-white text-center font-bold text-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-3">
@@ -622,7 +625,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
              </div>
           </div>
           <Link 
-            href="/naruci"
+            href={orderHref}
             className="flex-1 sm:flex-none sm:w-auto bg-[#563435] hover:bg-[#6d4446] text-white font-bold py-3 px-8 rounded-full shadow-lg text-center flex items-center justify-center gap-2"
           >
             <ShoppingCart className="w-5 h-5" />

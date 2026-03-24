@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "ICE COOL PRO – IPL aparat za trajno uklanjanje dlačica kod kuće. 5 nivoa intenziteta, Ice Cool™ hlađenje, 999k bljeskova. Besplatna dostava u BiH. Naruči danas →",
   keywords: "IPL aparat, IPL epilator, lasersko uklanjanje dlačica kod kuće, IPL aparat cijena BiH, IPL uređaj Bosna, ICE COOL PRO, epilacija kod kuće",
   alternates: {
-    canonical: "https://icecoolpro.ba/l/ipl-aparat-protiv-dlacica",
+    canonical: "https://aurorashop.ba/l/ipl-aparat-protiv-dlacica",
   }
 };
 

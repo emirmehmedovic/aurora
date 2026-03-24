@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "ICE COOL LITE – kompaktni IPL uređaj idealan za putovanja i tretmane lica. Lagan, prenosiv, 500k bljeskova. Besplatna dostava u BiH. Naruči danas →",
   keywords: "kompaktni IPL uređaj, mini IPL aparat, laserski epilator za putovanja, ICE COOL LITE, IPL bikini zona, IPL za lice BiH",
   alternates: {
-    canonical: "https://icecoolpro.ba/l/kompaktni-ipl-uredjaj",
+    canonical: "https://aurorashop.ba/l/kompaktni-ipl-uredjaj",
   }
 };
 

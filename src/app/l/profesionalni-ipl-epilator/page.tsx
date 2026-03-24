@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "ICE COOL Max – profesionalni IPL epilator s najvećom površinom bljeska i naprednim hlađenjem. Salon rezultati kod kuće. Besplatna dostava u BiH →",
   keywords: "profesionalni IPL epilator, IPL aparat, lasersko uklanjanje dlačica, trajno uklanjanje dlačica BiH, ICE COOL Max, IPL epilator cijena",
   alternates: {
-    canonical: "https://icecoolpro.ba/l/profesionalni-ipl-epilator",
+    canonical: "https://aurorashop.ba/l/profesionalni-ipl-epilator",
   }
 };
 

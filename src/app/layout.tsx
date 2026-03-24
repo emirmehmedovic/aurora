@@ -4,8 +4,37 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Ice Cool PRO™ — IPL Uređaji za Trajno Uklanjanje Dlačica | Dostava u BiH",
-  description: "Profesionalno IPL uklanjanje dlačica iz udobnosti vašeg doma. 3 modela za svaki tip kože. Besplatna dostava u BiH, plaćanje pouzećem, 14 dana povrat novca.",
+  metadataBase: new URL("https://aurorashop.ba"),
+  title: "IPL Epilator za Kućnu Upotrebu | Trajno Uklanjanje Dlačica u BiH",
+  description:
+    "Kućni IPL epilator s ugrađenim hlađenjem za trajno uklanjanje dlačica. 3 modela od 165 KM. Besplatna dostava u BiH, plaćanje pouzećem i 14 dana povrata.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "IPL Epilator za Kućnu Upotrebu | Aurora Shop",
+    description:
+      "Kućni IPL epilator od 165 KM. Besplatna dostava u BiH, plaćanje pouzećem i vidljivi rezultati za 8 sedmica.",
+    url: "https://aurorashop.ba",
+    siteName: "Aurora Shop",
+    locale: "bs_BA",
+    type: "website",
+    images: [
+      {
+        url: "/slike/PRO/cover-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Aurora Shop IPL epilator",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "IPL Epilator za Kućnu Upotrebu | Aurora Shop",
+    description:
+      "Kućni IPL epilator od 165 KM. Besplatna dostava u BiH i plaćanje pouzećem.",
+    images: ["/slike/PRO/cover-image.png"],
+  },
 };
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import FeaturedProducts from "@/components/FeaturedProducts";
@@ -12,6 +13,23 @@ import USPSection from "@/components/USPSection";
 import OfferSection from "@/components/OfferSection";
 import FaqSection from "@/components/FaqSection";
 import FinalCtaSection from "@/components/FinalCtaSection";
+
+export const metadata: Metadata = {
+  title:
+    "IPL Epilator za Kućnu Upotrebu | Trajno Uklanjanje Dlačica - Besplatna Dostava BiH",
+  description:
+    "Kućni IPL epilator s ugrađenim hlađenjem, bez salona i bez boli. 3 modela od 165 KM. Besplatna dostava u BiH, plaćanje pouzećem i rezultati za 8 sedmica.",
+  keywords: [
+    "IPL epilator BiH",
+    "IPL aparat BiH",
+    "kućna IPL depilacija",
+    "trajno uklanjanje dlačica kod kuće",
+    "IPL epilator cijena",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default function Home() {
   return (

@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/api"],
       },
     ],
-    sitemap: "https://icecoolpro.ba/sitemap.xml",
+    sitemap: "https://aurorashop.ba/sitemap.xml",
   };
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Check, Truck, ShieldCheck, Clock, CreditCard, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { trackInitiateCheckout, trackPurchase, trackLead } from "@/lib/analytics";
@@ -35,6 +36,9 @@ const products = [
 ];
 
 export default function CheckoutForm() {
+  const searchParams = useSearchParams();
+  const requestedProduct = searchParams.get("product");
+  const lockedProduct = products.find((product) => product.id === requestedProduct) ?? null;
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -48,6 +52,16 @@ export default function CheckoutForm() {
 
   const [submitted, setSubmitted] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(products[0]);
+
+  useEffect(() => {
+    if (!lockedProduct) return;
+
+    setFormData((current) =>
+      current.product === lockedProduct.id
+        ? current
+        : { ...current, product: lockedProduct.id }
+    );
+  }, [lockedProduct]);
 
   useEffect(() => {
     const product = products.find(p => p.id === formData.product);
@@ -93,7 +107,7 @@ export default function CheckoutForm() {
   };
 
   const handleProductSelect = (productId: string) => {
-    setFormData({ ...formData, product: productId });
+    setFormData((current) => ({ ...current, product: productId }));
   };
 
   if (submitted) {
@@ -184,11 +198,16 @@ export default function CheckoutForm() {
             {products.map((p) => (
               <div 
                 key={p.id}
-                onClick={() => handleProductSelect(p.id)}
-                className={`relative flex items-center p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
+                onClick={() => {
+                  if (lockedProduct) return;
+                  handleProductSelect(p.id);
+                }}
+                className={`relative flex items-center p-4 rounded-2xl border-2 transition-all duration-200 ${
                   formData.product === p.id 
                     ? "border-[#563435] bg-white shadow-md" 
                     : "border-transparent bg-white/50 hover:bg-white hover:border-gray-200"
+                } ${lockedProduct && formData.product !== p.id ? "opacity-45 blur-[1px] saturate-50" : ""} ${
+                  lockedProduct ? "cursor-default" : "cursor-pointer"
                 }`}
               >
                 <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
@@ -214,6 +233,11 @@ export default function CheckoutForm() {
               </div>
             ))}
           </div>
+          {lockedProduct && (
+            <p className="mt-4 text-sm text-gray-500">
+              Model je automatski odabran sa prethodne stranice.
+            </p>
+          )}
         </div>
 
         {/* Shipping Form */}

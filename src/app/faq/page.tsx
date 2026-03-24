@@ -1,10 +1,8 @@
-"use client";
-
-import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import NextImage from "next/image";
+import Script from "next/script";
 
 const faqs = [
   {
@@ -69,11 +67,36 @@ const faqs = [
   }
 ];
 
+export const metadata: Metadata = {
+  title: "FAQ | IPL Epilator, Dostava i Sigurnost | Aurora Shop",
+  description:
+    "Odgovori na najčešća pitanja o IPL epilatorima, rezultatima, sigurnosti, dostavi i garanciji za kupce u BiH.",
+  alternates: {
+    canonical: "/faq",
+  },
+};
+
 export default function FAQPage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
 
   return (
     <>
+      <Script
+        id="faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <Navbar />
       <main className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
@@ -100,27 +123,20 @@ export default function FAQPage() {
           {/* FAQ List */}
           <div className="space-y-4">
             {faqs.map((faq) => (
-              <div
+              <details
                 key={faq.id}
-                className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
+                className="group bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
               >
-                <button
-                  onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}
-                  className="w-full p-6 text-left flex items-center justify-between hover:bg-white/30 transition-colors"
-                >
+                <summary className="w-full list-none cursor-pointer p-6 text-left flex items-center justify-between hover:bg-white/30 transition-colors">
                   <span className="font-semibold text-gray-800 pr-4">{faq.question}</span>
-                  {openFaq === faq.id ? (
-                    <ChevronUp className="w-5 h-5 text-[#563435] flex-shrink-0" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-gray-600 flex-shrink-0" />
-                  )}
-                </button>
-                {openFaq === faq.id && (
-                  <div className="px-6 pb-6">
-                    <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
-                  </div>
-                )}
-              </div>
+                  <span className="flex-shrink-0 text-gray-600 transition-transform duration-200 group-open:rotate-45 group-open:text-[#563435]">
+                    +
+                  </span>
+                </summary>
+                <div className="px-6 pb-6">
+                  <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                </div>
+              </details>
             ))}
           </div>
 

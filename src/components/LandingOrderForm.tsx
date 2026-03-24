@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { Check, Truck, ShieldCheck, CreditCard, ChevronRight, Clock, Gift, ArrowRight } from "lucide-react";
 import { trackInitiateCheckout, trackPurchase, trackLead, trackFormStart, trackFormAbandon, getUtmParams } from "@/lib/analytics";
+import { DeliveryTruck } from "@/components/admin/DeliveryTruck";
+import { DeliveredPackage } from "@/components/admin/DeliveredPackage";
 
 interface LandingOrderFormProps {
   product: {
@@ -116,7 +118,47 @@ export default function LandingOrderForm({ product }: LandingOrderFormProps) {
             <p className="flex justify-between pt-2 border-t border-gray-200"><span className="font-bold">Ukupno:</span> <span className="font-bold text-lg">{product.price.toFixed(2)} KM</span></p>
           </div>
         </div>
-        <p className="text-sm text-gray-500 mt-6">Naruči do 15h — šalje se danas · Isporuka 1-3 dana · Plaćanje pouzećem</p>
+
+        <div className="mt-8 bg-gradient-to-br from-[#563435]/5 via-amber-50/30 to-transparent backdrop-blur-md rounded-3xl border border-white/40 shadow-sm p-8">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 mb-6">
+            <div className="flex flex-col items-center">
+              <div className="bg-white/60 rounded-2xl p-6 shadow-sm border border-white/40">
+                <DeliveryTruck size={200} />
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <Clock className="w-4 h-4 text-[#563435]" />
+                <span className="text-sm font-medium text-gray-700">Slanje</span>
+              </div>
+            </div>
+
+            <div className="hidden md:flex items-center">
+              <ChevronRight className="w-8 h-8 text-[#563435]/40" />
+            </div>
+            <div className="md:hidden">
+              <ChevronRight className="w-8 h-8 text-[#563435]/40 rotate-90" />
+            </div>
+
+            <div className="flex flex-col items-center">
+              <div className="bg-white/60 rounded-2xl p-6 shadow-sm border border-white/40">
+                <DeliveredPackage size={200} />
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <Check className="w-4 h-4 text-emerald-600" />
+                <span className="text-sm font-medium text-gray-700">Dostava</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 px-6 py-3 bg-[#563435] text-white rounded-xl font-semibold shadow-md">
+              <Truck className="w-5 h-5" />
+              Dostava 1-3 radna dana
+            </div>
+            <p className="mt-3 text-sm text-gray-600">
+              Besplatna dostava na vašu adresu
+            </p>
+          </div>
+        </div>
       </div>
     );
   }

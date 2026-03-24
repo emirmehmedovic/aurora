@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { LayoutDashboard, ShoppingCart, Users, Package, TrendingUp, LogOut, X, UserCog, Image as ImageIcon, Sparkles, Upload, UserCircle, RotateCcw, UserX } from "lucide-react";
+import { LayoutDashboard, ShoppingCart, Users, Package, TrendingUp, LogOut, X, UserCog, Image as ImageIcon, Sparkles, Upload, UserCircle, RotateCcw, UserX, LayoutTemplate, BookOpen } from "lucide-react";
 
 interface AdminSidebarProps {
   isOpen?: boolean;
@@ -21,6 +21,8 @@ export default function AdminSidebar({ isOpen = false, onClose }: AdminSidebarPr
     { href: "/admin/customers/duplicates", icon: UserX, label: "Dupli Kupci" },
     { href: "/admin/returns", icon: RotateCcw, label: "Povrati" },
     { href: "/admin/campaigns", icon: TrendingUp, label: "Kampanje" },
+    { href: "/admin/landing-pages", icon: LayoutTemplate, label: "Landing Pages" },
+    { href: "/admin/blog", icon: BookOpen, label: "Blog" },
     { href: "/admin/products", icon: Package, label: "Proizvodi" },
     { href: "/admin/media", icon: ImageIcon, label: "Media Library" },
     { href: "/admin/hero", icon: Sparkles, label: "Hero Sekcija" },

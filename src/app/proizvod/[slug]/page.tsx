@@ -18,24 +18,38 @@ type ProductData = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   
-  const productMeta: Record<string, { title: string; description: string }> = {
+  const productMeta: Record<
+    string,
+    { title: string; description: string; canonical: string }
+  > = {
     "ice-cool-pro": {
-      title: "Ice Cool PRO™ - IPL Uklanjanje Dlačica | BiH",
-      description: "Bezbolno IPL uklanjanje dlačica sa ugrađenim hlađenjem. 50% popust, besplatna dostava, plaćanje pouzećem."
+      title: "ICE COOL PRO - IPL Epilator za Trajno Uklanjanje Dlačica | 175 KM | BiH",
+      description:
+        "Bezbolni kućni IPL epilator s Ice Cool hlađenjem. Vidljivi rezultati za 8 sedmica, 999.999 bljeskova i besplatna dostava u BiH.",
+      canonical: "/proizvod/ice-cool-pro",
     },
     "ice-cool-pro-max": {
-      title: "Ice Cool PRO™ Max - Premium IPL Uređaj | BiH",
-      description: "Premium IPL uređaj sa više nivoa intenziteta. Nježniji kućni IPL tretman za osjetljivu kožu."
+      title: "ICE COOL Max - Najbrži IPL Epilator | Noge za 10 Minuta | BiH",
+      description:
+        "Najbrži kućni IPL epilator s većom površinom bljeska i dvostrukim hlađenjem. Noge za 10 minuta i besplatna dostava u BiH.",
+      canonical: "/proizvod/ice-cool-pro-max",
     },
     "ice-cool-lite": {
-      title: "Ice Cool Lite™ - Kompaktni IPL Uređaj | BiH",
-      description: "Brži kućni tretmani za glatku kožu bez salona. Kompaktna verzija idealna za putovanja."
+      title: "ICE COOL LITE - Kompaktni IPL Epilator za Lice i Putovanja | 165 KM | BiH",
+      description:
+        "Kompaktni IPL epilator za lice, bikini zonu i putovanja. Precizan tretman, 500.000 bljeskova i besplatna dostava u BiH.",
+      canonical: "/proizvod/ice-cool-lite",
     }
   };
 
+  const meta = productMeta[slug];
+
   return {
-    title: productMeta[slug]?.title || "Ice Cool PRO™",
-    description: productMeta[slug]?.description || "IPL uklanjanje dlačica kod kuće"
+    title: meta?.title || "IPL epilator | Aurora Shop",
+    description: meta?.description || "IPL uklanjanje dlačica kod kuće",
+    alternates: {
+      canonical: meta?.canonical || `/proizvod/${slug}`,
+    },
   };
 }
 
