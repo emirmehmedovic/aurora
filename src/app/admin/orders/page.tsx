@@ -415,9 +415,9 @@ export default function OrdersPage() {
     // Search filter (by customer name, phone, or order ID)
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      const matchesCustomer = order.customer.fullName.toLowerCase().includes(query);
+      const matchesCustomer = order.customer.fullName?.toLowerCase().includes(query) ?? false;
       const matchesPhone = order.customer.phone.includes(query);
-      const matchesOrderId = order.id.toLowerCase().includes(query);
+      const matchesOrderId = order.id?.toLowerCase().includes(query) ?? false;
 
       if (!matchesCustomer && !matchesPhone && !matchesOrderId) {
         return false;

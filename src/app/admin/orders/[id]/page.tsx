@@ -338,6 +338,8 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                       <img
                         src={item.product.images[0]}
                         alt={item.product.name}
+                        width={64}
+                        height={64}
                         className="w-16 h-16 rounded-lg object-cover"
                       />
                     )}

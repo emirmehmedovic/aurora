@@ -177,7 +177,7 @@ export default function LeadsPage() {
     // Search filter (by name, phone, or email)
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      const matchesName = lead.fullName.toLowerCase().includes(query);
+      const matchesName = lead.fullName?.toLowerCase().includes(query) ?? false;
       const matchesPhone = lead.phone.includes(query);
       const matchesEmail = lead.email?.toLowerCase().includes(query);
 
