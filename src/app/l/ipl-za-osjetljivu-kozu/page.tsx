@@ -3,7 +3,10 @@ import Script from "next/script";
 import DirectResponseLanding from "@/components/DirectResponseLanding";
 import type { LandingContent } from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
-import { prisma } from "@/lib/prisma";
+import {
+  getStorefrontProductBySlugOrFallback,
+  getStorefrontProducts,
+} from "@/lib/storefront-products";
 
 export const dynamic = "force-dynamic";
 
@@ -94,73 +97,21 @@ const osjetljivaContent: LandingContent = {
 };
 
 export default async function IplZaOsjetljivuKozuPage() {
-  let dbProduct = null;
-  try {
-    dbProduct = await prisma.product.findUnique({
-      where: { slug: "ice-cool-pro-max" },
-      include: {
-        galleryImages: { include: { media: true }, orderBy: { order: "asc" } },
-        usageImages: { include: { media: true }, orderBy: { order: "asc" } },
-      },
-    });
-  } catch (error) {
-    console.error("Error fetching product:", error);
-  }
-
-  const product = dbProduct
-    ? {
-        id: dbProduct.slug,
-        name: dbProduct.name,
-        price: dbProduct.price / 100,
-        compareAtPrice: dbProduct.compareAtPrice
-          ? dbProduct.compareAtPrice / 100
-          : dbProduct.price / 100,
-        images:
-          dbProduct.galleryImages.length > 0
-            ? dbProduct.galleryImages.map((gi) => gi.media.url)
-            : [
-                "/slike/ELITE/cover.png",
-                "/slike/ELITE/slika1.png",
-                "/slike/ELITE/slika2.png",
-              ],
-        usageImages:
-          dbProduct.usageImages.length > 0
-            ? dbProduct.usageImages.map((ui) => ui.media.url)
-            : [
-                "/slike/ELITE/koristenje1.png",
-                "/slike/ELITE/koristenje2.png",
-                "/slike/ELITE/koristenje3.png",
-              ],
-        image: dbProduct.galleryImages[0]?.media.url || "/slike/ELITE/cover.png",
-      }
-    : {
-        id: "ice-cool-pro-max",
-        name: "ICE COOL Max",
-        price: 190.0,
-        compareAtPrice: 380.0,
-        images: [
-          "/slike/ELITE/cover.png",
-          "/slike/ELITE/slika1.png",
-          "/slike/ELITE/slika2.png",
-        ],
-        usageImages: [
-          "/slike/ELITE/koristenje1.png",
-          "/slike/ELITE/koristenje2.png",
-          "/slike/ELITE/koristenje3.png",
-        ],
-        image: "/slike/ELITE/cover.png",
-      };
+  const [product, comparisonProducts] = await Promise.all([
+    getStorefrontProductBySlugOrFallback("ice-cool-pro-max"),
+    getStorefrontProducts(),
+  ]);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: "ICE COOL Max",
+    name: product.name,
     description: "IPL epilator za osjetljivu kožu — dvostruko hlađenje Ice Cool+™ štiti kožu pri svakom tretmanu.",
     brand: { "@type": "Brand", name: "Ice Cool PRO™" },
-    image: "https://aurorashop.ba/slike/ELITE/cover.png",
+    image: `https://aurorashop.ba${product.image}`,
     offers: {
       "@type": "Offer",
-      price: "190.00",
+      price: product.price.toFixed(2),
       priceCurrency: "BAM",
       availability: "https://schema.org/InStock",
       url: "https://aurorashop.ba/l/ipl-za-osjetljivu-kozu",
@@ -194,7 +145,11 @@ export default async function IplZaOsjetljivuKozuPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <DirectResponseLanding product={product} content={osjetljivaContent} />
+      <DirectResponseLanding
+        product={product}
+        content={osjetljivaContent}
+        comparisonProducts={comparisonProducts}
+      />
       <Footer />
     </>
   );

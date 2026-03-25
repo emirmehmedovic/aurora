@@ -54,11 +54,24 @@ interface DirectResponseProps {
     images?: string[];
     image?: string;
     usageImages?: string[];
+    flashes?: string;
+    levels?: string;
+    cooling?: string;
+    weight?: string;
   };
   content: LandingContent;
+  comparisonProducts?: Array<{
+    name: string;
+    price: number;
+    flashes: string;
+    levels: string;
+    cooling: string;
+    weight: string;
+    slug?: string;
+  }>;
 }
 
-export default function DirectResponseLanding({ product, content }: DirectResponseProps) {
+export default function DirectResponseLanding({ product, content, comparisonProducts }: DirectResponseProps) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [specsOpen, setSpecsOpen] = useState(false);
 
@@ -79,11 +92,16 @@ export default function DirectResponseLanding({ product, content }: DirectRespon
   const savings = p.compareAtPrice - p.price;
   const discount = Math.round((savings / p.compareAtPrice) * 100);
 
-  const allModels = [
-    { name: "ICE COOL PRO", price: "175 KM", flashes: "999,999", levels: "5", cooling: "Ice Cool™", weight: "~300g", highlight: p.id === "ice-cool-pro" },
-    { name: "ICE COOL Max", price: "190 KM", flashes: "999,999", levels: "5+", cooling: "Ice Cool+™", weight: "~350g", highlight: p.id === "ice-cool-pro-max" },
-    { name: "ICE COOL LITE", price: "165 KM", flashes: "500,000", levels: "3", cooling: "Ice Cool™", weight: "~200g", highlight: p.id === "ice-cool-lite" },
-  ];
+  const allModels = (comparisonProducts && comparisonProducts.length > 0
+    ? comparisonProducts
+    : [
+        { name: "ICE COOL PRO", price: 175, flashes: "999,999", levels: "5", cooling: "Ice Cool™", weight: "~300g", slug: "ice-cool-pro" },
+        { name: "ICE COOL Max", price: 190, flashes: "999,999", levels: "5+", cooling: "Ice Cool+™", weight: "~350g", slug: "ice-cool-pro-max" },
+        { name: "ICE COOL LITE", price: 165, flashes: "500,000", levels: "3", cooling: "Ice Cool™", weight: "~200g", slug: "ice-cool-lite" },
+      ]).map((model) => ({
+        ...model,
+        highlight: (model.slug || p.id) === p.id,
+      }));
 
   // Track ViewContent when page loads
   useEffect(() => {
@@ -436,7 +454,7 @@ export default function DirectResponseLanding({ product, content }: DirectRespon
                         {model.name}
                         {model.highlight && <span className="ml-2 text-xs bg-[#563435] text-white px-2 py-0.5 rounded-full">Gledate ovaj</span>}
                       </td>
-                      <td className="p-4 text-center font-bold text-[#563435]">{model.price}</td>
+                      <td className="p-4 text-center font-bold text-[#563435]">{model.price.toFixed(2)} KM</td>
                       <td className="p-4 text-center text-gray-700">{model.flashes}</td>
                       <td className="p-4 text-center text-gray-700">{model.levels}</td>
                       <td className="p-4 text-center text-gray-700">{model.cooling}</td>

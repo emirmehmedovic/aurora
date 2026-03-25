@@ -3,7 +3,10 @@ import Script from "next/script";
 import DirectResponseLanding from "@/components/DirectResponseLanding";
 import type { LandingContent } from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
-import { prisma } from "@/lib/prisma";
+import {
+  getStorefrontProductBySlugOrFallback,
+  getStorefrontProducts,
+} from "@/lib/storefront-products";
 
 export const dynamic = "force-dynamic";
 
@@ -94,67 +97,21 @@ const liceContent: LandingContent = {
 };
 
 export default async function IplEpilatorZaLicePage() {
-  let dbProduct = null;
-  try {
-    dbProduct = await prisma.product.findUnique({
-      where: { slug: "ice-cool-lite" },
-      include: {
-        galleryImages: { include: { media: true }, orderBy: { order: "asc" } },
-        usageImages: { include: { media: true }, orderBy: { order: "asc" } },
-      },
-    });
-  } catch (error) {
-    console.error("Error fetching product:", error);
-  }
-
-  const product = dbProduct
-    ? {
-        id: dbProduct.slug,
-        name: dbProduct.name,
-        price: dbProduct.price / 100,
-        compareAtPrice: dbProduct.compareAtPrice
-          ? dbProduct.compareAtPrice / 100
-          : dbProduct.price / 100,
-        images:
-          dbProduct.galleryImages.length > 0
-            ? dbProduct.galleryImages.map((gi) => gi.media.url)
-            : [
-                "/slike/LITE/cover.png",
-                "/slike/LITE/1.png",
-                "/slike/LITE/2.png",
-                "/slike/LITE/3.png",
-              ],
-        usageImages:
-          dbProduct.usageImages.length > 0
-            ? dbProduct.usageImages.map((ui) => ui.media.url)
-            : ["/slike/LITE/4.png", "/slike/LITE/5.png", "/slike/LITE/6.png"],
-        image: dbProduct.galleryImages[0]?.media.url || "/slike/LITE/cover.png",
-      }
-    : {
-        id: "ice-cool-lite",
-        name: "ICE COOL LITE",
-        price: 165.0,
-        compareAtPrice: 330.0,
-        images: [
-          "/slike/LITE/cover.png",
-          "/slike/LITE/1.png",
-          "/slike/LITE/2.png",
-          "/slike/LITE/3.png",
-        ],
-        usageImages: ["/slike/LITE/4.png", "/slike/LITE/5.png", "/slike/LITE/6.png"],
-        image: "/slike/LITE/cover.png",
-      };
+  const [product, comparisonProducts] = await Promise.all([
+    getStorefrontProductBySlugOrFallback("ice-cool-lite"),
+    getStorefrontProducts(),
+  ]);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: "ICE COOL LITE",
+    name: product.name,
     description: "Kompaktni IPL epilator za lice — gornja usna, brada, zalisci. Ice cooling tehnologija.",
     brand: { "@type": "Brand", name: "Ice Cool PRO™" },
-    image: "https://aurorashop.ba/slike/LITE/cover.png",
+    image: `https://aurorashop.ba${product.image}`,
     offers: {
       "@type": "Offer",
-      price: "165.00",
+      price: product.price.toFixed(2),
       priceCurrency: "BAM",
       availability: "https://schema.org/InStock",
       url: "https://aurorashop.ba/l/ipl-epilator-za-lice",
@@ -188,7 +145,11 @@ export default async function IplEpilatorZaLicePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <DirectResponseLanding product={product} content={liceContent} />
+      <DirectResponseLanding
+        product={product}
+        content={liceContent}
+        comparisonProducts={comparisonProducts}
+      />
       <Footer />
     </>
   );

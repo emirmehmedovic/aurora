@@ -141,20 +141,49 @@ export default function HeroEditorPage() {
         </p>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="rounded-2xl border border-violet-200 bg-violet-50/70 p-4">
+          <p className="text-sm font-semibold text-violet-900 mb-1">Slot 1</p>
+          <p className="text-sm text-violet-800">Prvi slajd koji korisnik vidi na početnoj stranici.</p>
+        </div>
+        <div className="rounded-2xl border border-sky-200 bg-sky-50/70 p-4">
+          <p className="text-sm font-semibold text-sky-900 mb-1">Slot 2</p>
+          <p className="text-sm text-sky-800">Drugi slajd u hero carouselu.</p>
+        </div>
+        <div className="rounded-2xl border border-amber-200 bg-amber-50/70 p-4">
+          <p className="text-sm font-semibold text-amber-900 mb-1">Slot 3</p>
+          <p className="text-sm text-amber-800">Treći slajd koji se prikazuje nakon rotacije.</p>
+        </div>
+      </div>
+
       <div className="space-y-6">
         {heroProducts.map((hero, index) => (
           <div
             key={index}
-            className="bg-white border border-gray-200 rounded-lg p-6"
+            className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm"
           >
-            <h3 className="text-lg font-semibold mb-4">
-              Slot {index + 1}
-            </h3>
+            <div className="flex items-start justify-between gap-4 mb-5">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Hero Slot {index + 1}
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  Odaberi proizvod, pripadajuću hero sliku i subtitle za ovaj konkretni slide.
+                </p>
+              </div>
+              <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${
+                hero.productId && hero.imageId
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-amber-100 text-amber-700'
+              }`}>
+                {hero.productId && hero.imageId ? 'Spreman' : 'Nedostaje izbor'}
+              </span>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Product Selection */}
-              <div>
-                <label className="block text-sm font-medium mb-2">
+              <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
+                <label className="block text-sm font-medium mb-2 text-gray-800">
                   Product
                 </label>
                 <select
@@ -172,8 +201,8 @@ export default function HeroEditorPage() {
               </div>
 
               {/* Subtitle */}
-              <div>
-                <label className="block text-sm font-medium mb-2">
+              <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
+                <label className="block text-sm font-medium mb-2 text-gray-800">
                   Subtitle (optional)
                 </label>
                 <input
@@ -186,13 +215,16 @@ export default function HeroEditorPage() {
               </div>
 
               {/* Image Selection */}
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium mb-2">
+              <div className="md:col-span-2 rounded-2xl border border-gray-100 bg-gray-50/70 p-4">
+                <label className="block text-sm font-medium mb-2 text-gray-800">
                   Hero Image
                 </label>
+                <p className="text-xs text-gray-500 mb-3">
+                  Ova slika se prikazuje desno u hero slideru za Slot {index + 1}.
+                </p>
                 <div className="flex items-start gap-4">
                   {hero.image && (
-                    <div className="relative w-32 h-32 border border-gray-300 rounded-lg overflow-hidden">
+                    <div className="relative w-32 h-32 border border-gray-300 rounded-2xl overflow-hidden shadow-sm">
                       <Image
                         src={hero.image.thumbnailUrl || hero.image.url}
                         alt={hero.image.alt || 'Hero image'}

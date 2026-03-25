@@ -30,6 +30,17 @@ export default function MediaPage() {
         </button>
       </div>
 
+      <div className="mb-6 rounded-2xl border border-gray-200 bg-white/80 p-4 shadow-sm">
+        <p className="text-sm font-semibold text-gray-800 mb-1">
+          Kako koristiti Media Library
+        </p>
+        <p className="text-sm text-gray-600">
+          Ovdje samo uploaduješ i organizuješ slike. Koja slika ide u <span className="font-medium text-gray-800">hero</span>,
+          <span className="font-medium text-gray-800"> gallery</span> ili <span className="font-medium text-gray-800">usage</span> dio
+          određuješ u odgovarajućem editoru proizvoda ili hero sekcije.
+        </p>
+      </div>
+
       <MediaLibrary key={refreshKey} />
 
       <ImageUploadModal

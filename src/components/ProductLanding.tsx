@@ -278,9 +278,20 @@ export default function ProductLanding({ slug, product: customProduct }: Product
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  
-  // Use custom product if provided, otherwise fallback to looking up by slug
-  const product = customProduct || (slug ? productData[slug] : productData["ice-cool-pro"]);
+
+  const baseProduct = slug ? productData[slug] : productData["ice-cool-pro"];
+  const product = customProduct
+    ? {
+        ...baseProduct,
+        ...customProduct,
+        hero: customProduct.hero ?? baseProduct?.hero,
+        benefits: customProduct.benefits ?? baseProduct?.benefits,
+        features: customProduct.features ?? baseProduct?.features,
+        howItWorks: customProduct.howItWorks ?? baseProduct?.howItWorks,
+        faq: customProduct.faq ?? baseProduct?.faq,
+        testimonials: customProduct.testimonials ?? baseProduct?.testimonials,
+      }
+    : baseProduct;
   
   if (!product) return null;
 

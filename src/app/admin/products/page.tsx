@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Package, Plus, Edit, Trash2, X } from "lucide-react";
+import ProductImageManager from "@/components/admin/ProductImageManager";
 
 interface Product {
   id: string;
@@ -237,7 +238,7 @@ export default function ProductsPage() {
 
       {editingProduct && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-gray-200">
+          <div className="w-full max-w-6xl max-h-[92vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border border-gray-200">
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <div>
                 <h2 className="text-xl font-bold text-gray-800">Uredi proizvod</h2>
@@ -251,92 +252,117 @@ export default function ProductsPage() {
               </button>
             </div>
 
-            <form onSubmit={handleEditSubmit} className="p-6 space-y-5">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Naziv
-                </label>
-                <input
-                  type="text"
-                  value={editForm.name}
-                  onChange={(e) =>
-                    setEditForm((current) => ({ ...current, name: e.target.value }))
-                  }
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] outline-none"
-                  required
-                />
+            <div className="p-6 space-y-6">
+              <div className="rounded-2xl border border-[#563435]/15 bg-[#563435]/5 p-4">
+                <p className="text-sm font-semibold text-[#563435] mb-1">
+                  Šta uređuješ u ovom prozoru
+                </p>
+                <p className="text-sm text-gray-700">
+                  Gore mijenjaš osnovne podatke proizvoda. Ispod toga direktno uređuješ slike po poziciji prikaza na sajtu:
+                  <span className="font-medium"> cover / glavna galerija / usage slike za landing sekcije</span>.
+                </p>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Slug
-                </label>
-                <input
-                  type="text"
-                  value={editForm.slug}
-                  onChange={(e) =>
-                    setEditForm((current) => ({ ...current, slug: e.target.value }))
-                  }
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] outline-none"
-                  required
-                />
-              </div>
+              <form onSubmit={handleEditSubmit} className="space-y-5 rounded-3xl border border-gray-200 bg-gray-50/50 p-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                      Naziv
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.name}
+                      onChange={(e) =>
+                        setEditForm((current) => ({ ...current, name: e.target.value }))
+                      }
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] outline-none"
+                      required
+                    />
+                  </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Cijena
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={editForm.price}
-                    onChange={(e) =>
-                      setEditForm((current) => ({ ...current, price: e.target.value }))
-                    }
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] outline-none"
-                    required
-                  />
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                      Slug
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.slug}
+                      onChange={(e) =>
+                        setEditForm((current) => ({ ...current, slug: e.target.value }))
+                      }
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] outline-none"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                      Cijena
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={editForm.price}
+                      onChange={(e) =>
+                        setEditForm((current) => ({ ...current, price: e.target.value }))
+                      }
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] outline-none"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                      Stara cijena
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={editForm.compareAtPrice}
+                      onChange={(e) =>
+                        setEditForm((current) => ({
+                          ...current,
+                          compareAtPrice: e.target.value,
+                        }))
+                      }
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] outline-none"
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Stara cijena
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={editForm.compareAtPrice}
-                    onChange={(e) =>
-                      setEditForm((current) => ({
-                        ...current,
-                        compareAtPrice: e.target.value,
-                      }))
-                    }
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] outline-none"
-                  />
+                <div className="flex items-center justify-end gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={closeEditModal}
+                    className="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-50"
+                  >
+                    Otkaži
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSaving}
+                    className="px-4 py-2.5 rounded-xl bg-[#563435] text-white font-semibold hover:bg-[#6d4446] disabled:opacity-60"
+                  >
+                    {isSaving ? "Spremam..." : "Spremi izmjene"}
+                  </button>
                 </div>
-              </div>
+              </form>
 
-              <div className="flex items-center justify-end gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={closeEditModal}
-                  className="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-50"
-                >
-                  Otkaži
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSaving}
-                  className="px-4 py-2.5 rounded-xl bg-[#563435] text-white font-semibold hover:bg-[#6d4446] disabled:opacity-60"
-                >
-                  {isSaving ? "Spremam..." : "Spremi izmjene"}
-                </button>
+              <div className="rounded-3xl border border-gray-200 bg-gray-50/40 p-6">
+                <div className="mb-4">
+                  <h3 className="text-lg font-bold text-gray-800">Uredi slike i njihove pozicije</h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Ovdje ispod uređuješ tačno gdje se koja slika prikazuje za proizvod <span className="font-medium text-gray-700">{editingProduct.name}</span>.
+                  </p>
+                </div>
+                <ProductImageManager
+                  productId={editingProduct.id}
+                  productName={editingProduct.name}
+                />
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}

@@ -3,7 +3,10 @@ import Script from "next/script";
 import DirectResponseLanding from "@/components/DirectResponseLanding";
 import type { LandingContent } from "@/components/DirectResponseLanding";
 import Footer from "@/components/Footer";
-import { prisma } from "@/lib/prisma";
+import {
+  getStorefrontProductBySlugOrFallback,
+  getStorefrontProducts,
+} from "@/lib/storefront-products";
 
 export const dynamic = "force-dynamic";
 
@@ -62,91 +65,21 @@ const proContent: LandingContent = {
 };
 
 export default async function IplAparatLandingPage() {
-  // Fetch product with images from database
-  let dbProduct = null;
-  try {
-    dbProduct = await prisma.product.findUnique({
-      where: { slug: "ice-cool-pro" },
-      include: {
-        galleryImages: {
-          include: { media: true },
-          orderBy: { order: 'asc' }
-        },
-        usageImages: {
-          include: { media: true },
-          orderBy: { order: 'asc' }
-        }
-      }
-    });
-  } catch (error) {
-    console.error('Error fetching product:', error);
-  }
-
-  // Map database product to component props with fallback to hardcoded
-  const product = dbProduct ? {
-    id: dbProduct.slug,
-    name: dbProduct.name,
-    price: dbProduct.price / 100,
-    compareAtPrice: dbProduct.compareAtPrice ? dbProduct.compareAtPrice / 100 : dbProduct.price / 100,
-    images: dbProduct.galleryImages.length > 0
-      ? dbProduct.galleryImages.map(gi => gi.media.url)
-      : [
-          "/slike/PRO/cover-image.png",
-          "/slike/PRO/slika2.png",
-          "/slike/PRO/slika3.webp",
-          "/slike/PRO/slika4.png",
-          "/slike/PRO/slika5.png",
-          "/slike/PRO/slika6.webp",
-          "/slike/PRO/slika7.png"
-        ],
-    usageImages: dbProduct.usageImages.length > 0
-      ? dbProduct.usageImages.map(ui => ui.media.url)
-      : [
-          "/slike/PRO/koristenje1.png",
-          "/slike/PRO/koristenje2.png",
-          "/slike/PRO/koristenje3.png",
-          "/slike/PRO/koristenje4.png",
-          "/slike/PRO/koristenje5.png",
-          "/slike/PRO/koristenje6.png",
-          "/slike/PRO/koristenje7.png"
-        ],
-    image: dbProduct.galleryImages[0]?.media.url || "/slike/PRO/cover-image.png"
-  } : {
-    id: "ice-cool-pro",
-    name: "ICE COOL PRO",
-    price: 175.00,
-    compareAtPrice: 350.00,
-    images: [
-      "/slike/PRO/cover-image.png",
-      "/slike/PRO/slika2.png",
-      "/slike/PRO/slika3.webp",
-      "/slike/PRO/slika4.png",
-      "/slike/PRO/slika5.png",
-      "/slike/PRO/slika6.webp",
-      "/slike/PRO/slika7.png"
-    ],
-    usageImages: [
-      "/slike/PRO/koristenje1.png",
-      "/slike/PRO/koristenje2.png",
-      "/slike/PRO/koristenje3.png",
-      "/slike/PRO/koristenje4.png",
-      "/slike/PRO/koristenje5.png",
-      "/slike/PRO/koristenje6.png",
-      "/slike/PRO/koristenje7.png"
-    ],
-    image: "/slike/PRO/cover-image.png"
-  };
+  const [product, comparisonProducts] = await Promise.all([
+    getStorefrontProductBySlugOrFallback("ice-cool-pro"),
+    getStorefrontProducts(),
+  ]);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": "ICE COOL PRO",
+    "name": product.name,
     "description": "IPL uređaj za trajno uklanjanje dlačica kod kuće sa Ice Cool™ hlađenjem",
     "brand": { "@type": "Brand", "name": "Ice Cool PRO™" },
-    "image": "https://aurorashop.ba/slike/PRO/cover-image.png",
+    "image": `https://aurorashop.ba${product.image}`,
     "offers": {
       "@type": "Offer",
-      "price": "175.00",
+      "price": product.price.toFixed(2),
       "priceCurrency": "BAM",
       "availability": "https://schema.org/InStock",
       "url": "https://aurorashop.ba/l/ipl-aparat-protiv-dlacica",
@@ -201,7 +134,11 @@ export default async function IplAparatLandingPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <DirectResponseLanding product={product} content={proContent} />
+      <DirectResponseLanding
+        product={product}
+        content={proContent}
+        comparisonProducts={comparisonProducts}
+      />
       <Footer />
     </>
   );

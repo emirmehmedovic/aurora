@@ -29,9 +29,10 @@ interface UsageImage {
 
 interface ProductImageManagerProps {
   productId: string;
+  productName?: string;
 }
 
-export default function ProductImageManager({ productId }: ProductImageManagerProps) {
+export default function ProductImageManager({ productId, productName }: ProductImageManagerProps) {
   const [activeTab, setActiveTab] = useState<'gallery' | 'usage'>('gallery');
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [usageImages, setUsageImages] = useState<UsageImage[]>([]);
@@ -157,25 +158,51 @@ export default function ProductImageManager({ productId }: ProductImageManagerPr
 
   return (
     <div className="space-y-6">
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+        <p className="text-sm font-semibold text-gray-900 mb-1">
+          Uređuješ slike za: {productName || "odabrani proizvod"}
+        </p>
+        <p className="text-sm text-gray-600">
+          Ovdje jasno razdvajaš slike po poziciji prikaza na sajtu, tako da ne moraš nagađati koja slika ide gdje.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="rounded-2xl border border-blue-200 bg-blue-50/70 p-4">
+          <p className="text-sm font-semibold text-blue-900 mb-1">Galerija proizvoda</p>
+          <p className="text-sm text-blue-800">
+            Ove slike se prikazuju na <span className="font-semibold">/proizvod/[slug]</span> stranici i u product galeriji. 
+            Slika označena kao <span className="font-semibold">Cover</span> je glavna slika koju kupac prvo vidi.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-amber-200 bg-amber-50/70 p-4">
+          <p className="text-sm font-semibold text-amber-900 mb-1">Usage / lifestyle slike</p>
+          <p className="text-sm text-amber-800">
+            Ove slike pokazuju kako se uređaj koristi i pojavljuju se u sekcijama tipa
+            <span className="font-semibold"> “kako se koristi”, “rezultati” i lifestyle blokovima</span> na landing stranicama.
+          </p>
+        </div>
+      </div>
+
       {/* Tabs */}
-      <div className="border-b border-gray-200">
-        <div className="flex gap-4">
+      <div className="rounded-2xl border border-gray-200 bg-white p-2 shadow-sm">
+        <div className="flex gap-2">
           <button
             onClick={() => setActiveTab('gallery')}
-            className={`px-4 py-2 border-b-2 font-medium ${
+            className={`flex-1 rounded-xl px-4 py-3 font-medium transition-colors ${
               activeTab === 'gallery'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                ? 'bg-blue-50 text-blue-700'
+                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
             }`}
           >
             Gallery Images ({galleryImages.length})
           </button>
           <button
             onClick={() => setActiveTab('usage')}
-            className={`px-4 py-2 border-b-2 font-medium ${
+            className={`flex-1 rounded-xl px-4 py-3 font-medium transition-colors ${
               activeTab === 'usage'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                ? 'bg-amber-50 text-amber-700'
+                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
             }`}
           >
             Usage Images ({usageImages.length})
@@ -185,11 +212,17 @@ export default function ProductImageManager({ productId }: ProductImageManagerPr
 
       {/* Gallery Tab */}
       {activeTab === 'gallery' && (
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-600">
-              Product gallery images shown on product pages
-            </p>
+        <div className="space-y-4 rounded-3xl border border-blue-100 bg-white p-6 shadow-sm">
+          <div className="flex justify-between items-center gap-4">
+            <div>
+              <p className="text-sm font-semibold text-gray-800">
+                Product gallery images shown on product pages
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Pozicija: <span className="font-semibold text-blue-600">glavna galerija proizvoda</span>.
+                Slika označena kao <span className="font-semibold text-blue-600">Cover</span> je naslovna slika kartice i proizvoda.
+              </p>
+            </div>
             <ImagePicker
               onSelect={handleAddGalleryImage}
               categoryFilter="PRODUCT"
@@ -201,10 +234,12 @@ export default function ProductImageManager({ productId }: ProductImageManagerPr
             {galleryImages.map((image, index) => (
               <div
                 key={image.id}
-                className="relative group border-2 rounded-lg overflow-hidden"
+                className={`relative group overflow-hidden rounded-2xl border-2 bg-white shadow-sm ${
+                  image.isCover ? 'border-blue-400 ring-2 ring-blue-100' : 'border-gray-200'
+                }`}
               >
                 {image.isCover && (
-                  <div className="absolute top-2 left-2 bg-blue-500 text-white px-2 py-1 rounded text-xs z-10">
+                  <div className="absolute top-3 left-3 bg-blue-600 text-white px-2.5 py-1 rounded-full text-xs font-semibold z-10 shadow">
                     Cover
                   </div>
                 )}
@@ -234,8 +269,13 @@ export default function ProductImageManager({ productId }: ProductImageManagerPr
                     </button>
                   </div>
                 </div>
-                <div className="absolute top-2 right-2 bg-white rounded px-2 py-1 text-xs">
+                <div className="absolute top-3 right-3 bg-white/95 rounded-full px-2.5 py-1 text-xs font-semibold shadow">
                   #{index + 1}
+                </div>
+                <div className="border-t border-gray-100 px-3 py-2 bg-gray-50/70">
+                  <p className="text-xs font-medium text-gray-700 truncate">
+                    {image.media.alt || `Gallery image ${index + 1}`}
+                  </p>
                 </div>
               </div>
             ))}
@@ -251,11 +291,17 @@ export default function ProductImageManager({ productId }: ProductImageManagerPr
 
       {/* Usage Tab */}
       {activeTab === 'usage' && (
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-600">
-              Usage/lifestyle images showing the product in use
-            </p>
+        <div className="space-y-4 rounded-3xl border border-amber-100 bg-white p-6 shadow-sm">
+          <div className="flex justify-between items-center gap-4">
+            <div>
+              <p className="text-sm font-semibold text-gray-800">
+                Usage/lifestyle images showing the product in use
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Pozicija: <span className="font-semibold text-amber-700">sekcije demonstracije i korištenja</span> na landing pageovima.
+                Biraj slike na kojima je jasno prikazan uređaj u ruci ili na koži.
+              </p>
+            </div>
             <ImagePicker
               onSelect={handleAddUsageImage}
               categoryFilter="USAGE"
@@ -267,7 +313,7 @@ export default function ProductImageManager({ productId }: ProductImageManagerPr
             {usageImages.map((image) => (
               <div
                 key={image.id}
-                className="relative group border-2 rounded-lg overflow-hidden"
+                className="relative group overflow-hidden rounded-2xl border-2 border-amber-100 bg-white shadow-sm"
               >
                 <div className="aspect-square relative bg-gray-100">
                   <Image
@@ -278,8 +324,8 @@ export default function ProductImageManager({ productId }: ProductImageManagerPr
                   />
                 </div>
                 {image.caption && (
-                  <div className="p-2 bg-white">
-                    <p className="text-xs text-gray-600">{image.caption}</p>
+                  <div className="p-3 bg-amber-50/60 border-t border-amber-100">
+                    <p className="text-xs text-amber-900">{image.caption}</p>
                   </div>
                 )}
               </div>
