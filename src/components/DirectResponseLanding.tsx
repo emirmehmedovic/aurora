@@ -28,18 +28,42 @@ export interface LandingSpec {
   value: string;
 }
 
+export interface LandingVsRow {
+  salon: string;
+  ipl: string;
+}
+
 export interface LandingContent {
   badge: string;
+  heroHeadline?: string;
   heroSubtitle: string;
+  heroSubline?: string;
   benefits: string[];
+  empathyLabel?: string;
   empathyTitle: string;
   empathySubtitle: string;
   empathyParagraph1: string;
   empathyParagraph2: string;
+  empathyParagraph3?: string;
   empathyHighlight: string;
   story: LandingStory;
   howItWorks: { step: number; title: string; desc: string }[];
+  urgencySection?: {
+    title: string;
+    subtitle: string;
+  };
   reviews: LandingReview[];
+  vsSection?: {
+    label: string;
+    title: string;
+    subtitle: string;
+    rows: LandingVsRow[];
+  };
+  skepticSection?: {
+    label: string;
+    title: string;
+    items: { q: string; a: string }[];
+  };
   specs: LandingSpec[];
   closingTitle: string;
   closingText: string;
@@ -74,6 +98,8 @@ interface DirectResponseProps {
 export default function DirectResponseLanding({ product, content, comparisonProducts }: DirectResponseProps) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [specsOpen, setSpecsOpen] = useState(false);
+  const [timeLeft, setTimeLeft] = useState({ h: 23, m: 47, s: 12 });
+  const [stockCount, setStockCount] = useState(23);
 
   const p = product;
   const c = content;
@@ -113,6 +139,25 @@ export default function DirectResponseLanding({ product, content, comparisonProd
   }, [p.id, p.name, p.price]);
 
   useScrollDepth(`landing-${p.id}`);
+
+  useEffect(() => {
+    if (!c.urgencySection) return;
+    const endTime = Date.now() + 24 * 60 * 60 * 1000;
+    const timer = setInterval(() => {
+      const diff = endTime - Date.now();
+      if (diff <= 0) { clearInterval(timer); return; }
+      setTimeLeft({
+        h: Math.floor(diff / 3600000),
+        m: Math.floor((diff % 3600000) / 60000),
+        s: Math.floor((diff % 60000) / 1000),
+      });
+    }, 1000);
+    const stockTimer = setInterval(() => {
+      setStockCount(prev => prev > 7 ? prev - 1 : prev);
+    }, 150000);
+    return () => { clearInterval(timer); clearInterval(stockTimer); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const scrollToForm = (ctaLocation: string) => {
     trackCtaClick('Naruci', ctaLocation, `landing-${p.id}`);
@@ -183,9 +228,18 @@ export default function DirectResponseLanding({ product, content, comparisonProd
                 <span>{c.badge}</span>
               </div>
               
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6 leading-tight">
-                {p.name} <br/> <span className="text-[#563435] text-3xl md:text-4xl lg:text-5xl">{c.heroSubtitle}</span>
-              </h1>
+              {c.heroHeadline ? (
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4 leading-tight">
+                  {c.heroHeadline}
+                </h1>
+              ) : (
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6 leading-tight">
+                  {p.name} <br/> <span className="text-[#563435] text-3xl md:text-4xl lg:text-5xl">{c.heroSubtitle}</span>
+                </h1>
+              )}
+              {c.heroSubline && (
+                <p className="text-lg text-gray-600 mb-6 leading-relaxed max-w-xl">{c.heroSubline}</p>
+              )}
               
               <div className="space-y-3 mb-8 text-lg text-gray-600">
                 {c.benefits.map((benefit, i) => (
@@ -269,6 +323,9 @@ export default function DirectResponseLanding({ product, content, comparisonProd
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="mb-8">
+                {c.empathyLabel && (
+                  <div className="text-xs font-bold tracking-widest uppercase text-[#563435] mb-3">{c.empathyLabel}</div>
+                )}
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 leading-tight">
                   {c.empathyTitle}
                 </h2>
@@ -277,7 +334,8 @@ export default function DirectResponseLanding({ product, content, comparisonProd
               
               <div className="text-lg text-gray-700 leading-relaxed">
                 <p className="mb-6">{c.empathyParagraph1}</p>
-                <p className="mb-8">{c.empathyParagraph2}</p>
+                <p className="mb-6">{c.empathyParagraph2}</p>
+                {c.empathyParagraph3 && <p className="mb-8">{c.empathyParagraph3}</p>}
                 <div className="flex items-center gap-4 p-6 bg-gradient-to-br from-violet-50/50 to-purple-50/50 rounded-2xl border border-white/50">
                   <Sparkles className="w-8 h-8 text-[#563435] flex-shrink-0" />
                   <p className="font-bold text-gray-800">{c.empathyHighlight}</p>
@@ -367,6 +425,43 @@ export default function DirectResponseLanding({ product, content, comparisonProd
           </div>
         </div>
 
+        {/* URGENCY BAND */}
+        {c.urgencySection && (
+          <div className="max-w-7xl mx-auto mb-20">
+            <div className="bg-gray-900 rounded-[2.5rem] p-8 md:p-12 text-center text-white relative overflow-hidden shadow-2xl">
+              <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-[#563435]/20 rounded-full blur-3xl pointer-events-none" />
+              <div className="relative z-10">
+                <p className="text-xl md:text-2xl font-bold mb-2">{c.urgencySection.title}</p>
+                <p className="text-sm text-gray-400 mb-8">{c.urgencySection.subtitle}</p>
+                <div className="flex justify-center items-start gap-2 md:gap-4 mb-8">
+                  {[
+                    { val: String(timeLeft.h).padStart(2, '0'), label: 'SATI' },
+                    { sep: true },
+                    { val: String(timeLeft.m).padStart(2, '0'), label: 'MINUTA' },
+                    { sep: true },
+                    { val: String(timeLeft.s).padStart(2, '0'), label: 'SEKUNDI' },
+                  ].map((item, i) =>
+                    'sep' in item ? (
+                      <span key={i} className="text-4xl font-bold text-[#563435] mt-1">:</span>
+                    ) : (
+                      <div key={i} className="text-center">
+                        <span className="block bg-[#563435] text-white text-3xl md:text-4xl font-bold font-mono px-4 py-2 rounded-xl min-w-[60px] tabular-nums">
+                          {item.val}
+                        </span>
+                        <span className="block text-xs text-gray-500 mt-2 tracking-wider">{item.label}</span>
+                      </div>
+                    )
+                  )}
+                </div>
+                <div className="inline-flex items-center gap-2 bg-white/5 border border-yellow-400/30 rounded-full px-5 py-3 text-sm text-yellow-400 font-semibold">
+                  <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse flex-shrink-0" />
+                  Preostalo na akcijskoj cijeni: <strong>{stockCount}</strong> kom.
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* SECTION 5: Technical Specifications */}
         <div className="max-w-3xl mx-auto mb-20">
           <button
@@ -393,8 +488,9 @@ export default function DirectResponseLanding({ product, content, comparisonProd
         {/* SECTION 6: Reviews */}
         <div className="max-w-7xl mx-auto mb-20">
           <div className="text-center mb-12">
+            <div className="text-xs font-bold tracking-widest uppercase text-[#563435] mb-3">Šta kažu kupice</div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-              Žene iz BiH dijele svoja iskustva
+              Žene iz BiH koje su prestale ići u salon
             </h2>
             <div className="flex items-center justify-center gap-2 text-lg text-gray-600">
                <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
@@ -429,6 +525,55 @@ export default function DirectResponseLanding({ product, content, comparisonProd
             ))}
           </div>
         </div>
+
+        {/* VS TABLE — Salon vs. Ice Cool PRO */}
+        {c.vsSection && (
+          <div className="max-w-4xl mx-auto mb-20">
+            <div className="text-center mb-8">
+              <div className="text-xs font-bold tracking-widest uppercase text-[#563435] mb-3">{c.vsSection.label}</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">{c.vsSection.title}</h2>
+              <p className="text-gray-500">{c.vsSection.subtitle}</p>
+            </div>
+            <div className="bg-white/40 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr>
+                      <th className="p-4 text-center text-white font-bold bg-gray-600 text-sm w-1/2">💸 Salon / Vosak</th>
+                      <th className="p-4 text-center text-white font-bold bg-[#563435] text-sm w-1/2">✅ Ice Cool PRO™</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {c.vsSection.rows.map((row, i) => (
+                      <tr key={i} className="border-b border-gray-100 last:border-0">
+                        <td className="p-4 text-center text-sm text-red-600 bg-red-50/30">{row.salon}</td>
+                        <td className="p-4 text-center text-sm text-green-700 font-semibold bg-green-50/30">{row.ipl}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* SKEPTIC Q&A */}
+        {c.skepticSection && (
+          <div className="max-w-3xl mx-auto mb-20">
+            <div className="text-center mb-8">
+              <div className="text-xs font-bold tracking-widest uppercase text-[#563435] mb-3">{c.skepticSection.label}</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800">{c.skepticSection.title}</h2>
+            </div>
+            <div className="space-y-4">
+              {c.skepticSection.items.map((item, i) => (
+                <div key={i} className="bg-white/40 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-sm hover:bg-white/50 transition-colors">
+                  <p className="font-bold text-gray-800 mb-3 text-lg">{item.q}</p>
+                  <p className="text-gray-600 leading-relaxed">{item.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* SECTION 7: Model Comparison Table */}
         <div className="max-w-4xl mx-auto mb-20">

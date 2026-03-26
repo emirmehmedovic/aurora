@@ -170,9 +170,9 @@ export async function getStorefrontProducts(): Promise<StorefrontProduct[]> {
   }
 }
 
-export async function getStorefrontProductBySlug(slug: string) {
+export async function getStorefrontProductBySlug(slugOrId: string) {
   const products = await getStorefrontProducts();
-  return products.find((product) => product.slug === slug) ?? null;
+  return products.find((p) => p.slug === slugOrId || p.id === slugOrId) ?? null;
 }
 
 export async function getStorefrontProductBySlugOrFallback(
