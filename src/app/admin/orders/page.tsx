@@ -944,6 +944,16 @@ export default function OrdersPage() {
                                       </button>
                                     </div>
 
+                                    {/* View Details Button - NEW */}
+                                    <div className="pt-3 mt-2 border-t-2 border-gray-200/60">
+                                      <Link
+                                        href={`/admin/orders/${order.id}`}
+                                        className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-bold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg"
+                                      >
+                                        <Edit className="w-5 h-5" /> Detalji & Uredi narudžbu
+                                      </Link>
+                                    </div>
+
                                   </div>
                                 </div>
                               </div>

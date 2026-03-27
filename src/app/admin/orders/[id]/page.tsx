@@ -21,7 +21,10 @@ import {
   RotateCcw,
   ShoppingBag,
   MessageSquare,
-  Loader2
+  Loader2,
+  Save,
+  X as CloseIcon,
+  RefreshCw
 } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -79,6 +82,23 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
   const [trackingNumber, setTrackingNumber] = useState("");
   const [editingTracking, setEditingTracking] = useState(false);
 
+  // Customer editing states
+  const [editingCustomer, setEditingCustomer] = useState(false);
+  const [customerData, setCustomerData] = useState({
+    fullName: "",
+    phone: "",
+    email: "",
+    address: "",
+    city: "",
+    zipCode: ""
+  });
+
+  // Product replacement states
+  const [replacingItemId, setReplacingItemId] = useState<string | null>(null);
+  const [availableProducts, setAvailableProducts] = useState<any[]>([]);
+  const [selectedProductId, setSelectedProductId] = useState("");
+  const [loadingProducts, setLoadingProducts] = useState(false);
+
   useEffect(() => {
     if (sessionStatus === "unauthenticated") {
       router.push("/admin/login");
@@ -101,6 +121,14 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         setNewStatus(data.order.status);
         setNotes(data.order.notes || "");
         setTrackingNumber(data.order.trackingNumber || "");
+        setCustomerData({
+          fullName: data.order.customer.fullName || "",
+          phone: data.order.customer.phone || "",
+          email: data.order.customer.email || "",
+          address: data.order.customer.address || "",
+          city: data.order.customer.city || "",
+          zipCode: data.order.customer.zipCode || ""
+        });
       } else {
         toast.error("Greška pri učitavanju narudžbe");
       }
@@ -109,6 +137,83 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       toast.error("Greška pri učitavanju narudžbe");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      setLoadingProducts(true);
+      const response = await fetch("/api/admin/products");
+      if (response.ok) {
+        const data = await response.json();
+        setAvailableProducts(data.products);
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+      toast.error("Greška pri učitavanju proizvoda");
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
+
+  const updateCustomer = async () => {
+    if (!order) return;
+
+    try {
+      setUpdating(true);
+      const response = await fetch(`/api/admin/customers/${order.customer.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(customerData),
+      });
+
+      if (response.ok) {
+        toast.success("Podaci kupca ažurirani!");
+        setEditingCustomer(false);
+        fetchOrder();
+      } else {
+        toast.error("Greška pri ažuriranju podataka");
+      }
+    } catch (error) {
+      console.error("Failed to update customer:", error);
+      toast.error("Greška pri ažuriranju podataka");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const replaceProduct = async (itemId: string) => {
+    if (!selectedProductId) {
+      toast.error("Odaberite proizvod");
+      return;
+    }
+
+    try {
+      setUpdating(true);
+      const selectedProduct = availableProducts.find(p => p.id === selectedProductId);
+
+      const response = await fetch(`/api/admin/orders/items/${itemId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId: selectedProductId,
+          price: selectedProduct.price
+        }),
+      });
+
+      if (response.ok) {
+        toast.success("Proizvod zamijenjen!");
+        setReplacingItemId(null);
+        setSelectedProductId("");
+        fetchOrder();
+      } else {
+        toast.error("Greška pri zamjeni proizvoda");
+      }
+    } catch (error) {
+      console.error("Failed to replace product:", error);
+      toast.error("Greška pri zamjeni proizvoda");
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -283,49 +388,149 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-bold text-gray-800">Informacije o kupcu</h2>
-                <Link
-                  href={`/admin/customers/${order.customer.id}`}
-                  className="text-sm text-[#563435] hover:text-[#563435]/80 flex items-center gap-1 font-medium"
-                >
-                  <User className="w-4 h-4" />
-                  Profil kupca
-                </Link>
+                <div className="flex items-center gap-2">
+                  {!editingCustomer && (
+                    <button
+                      onClick={() => setEditingCustomer(true)}
+                      className="text-sm text-[#563435] hover:text-[#563435]/80 flex items-center gap-1 font-medium"
+                    >
+                      <Edit className="w-4 h-4" />
+                      Uredi
+                    </button>
+                  )}
+                  <Link
+                    href={`/admin/customers/${order.customer.id}`}
+                    className="text-sm text-[#563435] hover:text-[#563435]/80 flex items-center gap-1 font-medium"
+                  >
+                    <User className="w-4 h-4" />
+                    Profil
+                  </Link>
+                </div>
               </div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <User className="w-5 h-5 text-gray-400 mt-0.5" />
+
+              {editingCustomer ? (
+                <div className="space-y-4">
                   <div>
-                    <p className="font-semibold text-gray-900">{order.customer.fullName}</p>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Ime i prezime</label>
+                    <input
+                      type="text"
+                      value={customerData.fullName}
+                      onChange={(e) => setCustomerData({ ...customerData, fullName: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
                   </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
-                    <a href={`tel:${order.customer.phone}`} className="text-blue-500 hover:underline">
-                      {order.customer.phone}
-                    </a>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Telefon</label>
+                    <input
+                      type="text"
+                      value={customerData.phone}
+                      onChange={(e) => setCustomerData({ ...customerData, phone: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
                   </div>
-                </div>
-                {order.customer.email && (
-                  <div className="flex items-start gap-3">
-                    <Mail className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input
+                      type="email"
+                      value={customerData.email}
+                      onChange={(e) => setCustomerData({ ...customerData, email: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Adresa</label>
+                    <input
+                      type="text"
+                      value={customerData.address}
+                      onChange={(e) => setCustomerData({ ...customerData, address: e.target.value })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <a href={`mailto:${order.customer.email}`} className="text-blue-500 hover:underline">
-                        {order.customer.email}
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Grad</label>
+                      <input
+                        type="text"
+                        value={customerData.city}
+                        onChange={(e) => setCustomerData({ ...customerData, city: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Poštanski broj</label>
+                      <input
+                        type="text"
+                        value={customerData.zipCode}
+                        onChange={(e) => setCustomerData({ ...customerData, zipCode: e.target.value })}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      onClick={() => {
+                        setEditingCustomer(false);
+                        setCustomerData({
+                          fullName: order.customer.fullName || "",
+                          phone: order.customer.phone || "",
+                          email: order.customer.email || "",
+                          address: order.customer.address || "",
+                          city: order.customer.city || "",
+                          zipCode: order.customer.zipCode || ""
+                        });
+                      }}
+                      className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+                    >
+                      <CloseIcon className="w-4 h-4" />
+                      Otkaži
+                    </button>
+                    <button
+                      onClick={updateCustomer}
+                      disabled={updating}
+                      className="flex-1 px-4 py-2 bg-[#563435] text-white rounded-lg font-medium hover:bg-[#563435]/90 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                      <Save className="w-4 h-4" />
+                      {updating ? "Čuvanje..." : "Sačuvaj"}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <User className="w-5 h-5 text-gray-400 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-gray-900">{order.customer.fullName}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Phone className="w-5 h-5 text-gray-400 mt-0.5" />
+                    <div>
+                      <a href={`tel:${order.customer.phone}`} className="text-blue-500 hover:underline">
+                        {order.customer.phone}
                       </a>
                     </div>
                   </div>
-                )}
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
-                  <div>
-                    <p className="text-gray-700">{order.customer.address}</p>
-                    <p className="text-gray-500 text-sm">
-                      {order.customer.city} {order.customer.zipCode}
-                    </p>
+                  {order.customer.email && (
+                    <div className="flex items-start gap-3">
+                      <Mail className="w-5 h-5 text-gray-400 mt-0.5" />
+                      <div>
+                        <a href={`mailto:${order.customer.email}`} className="text-blue-500 hover:underline">
+                          {order.customer.email}
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
+                    <div>
+                      <p className="text-gray-700">{order.customer.address}</p>
+                      <p className="text-gray-500 text-sm">
+                        {order.customer.city} {order.customer.zipCode}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Order Items */}
@@ -333,28 +538,94 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               <h2 className="text-xl font-bold text-gray-800 mb-4">Stavke narudžbe</h2>
               <div className="space-y-4">
                 {order.items.map((item) => (
-                  <div key={item.id} className="flex items-center gap-4 pb-4 border-b last:border-b-0">
-                    {item.product.images && item.product.images[0] && (
-                      <img
-                        src={item.product.images[0]}
-                        alt={item.product.name}
-                        width={64}
-                        height={64}
-                        className="w-16 h-16 rounded-lg object-cover"
-                      />
+                  <div key={item.id}>
+                    <div className="flex items-center gap-4 pb-4 border-b last:border-b-0">
+                      {item.product.images && item.product.images[0] && (
+                        <img
+                          src={item.product.images[0]}
+                          alt={item.product.name}
+                          width={64}
+                          height={64}
+                          className="w-16 h-16 rounded-lg object-cover"
+                        />
+                      )}
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">{item.product.name}</h3>
+                        <p className="text-sm text-gray-500">Količina: {item.quantity}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-gray-900">
+                          {(item.price / 100).toFixed(2)} KM
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {((item.price * item.quantity) / 100).toFixed(2)} KM
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setReplacingItemId(item.id);
+                          setSelectedProductId(item.product.id);
+                          if (availableProducts.length === 0) {
+                            fetchProducts();
+                          }
+                        }}
+                        className="px-3 py-2 text-sm bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 transition-all flex items-center gap-2 font-medium border border-amber-200"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                        Zamijeni
+                      </button>
+                    </div>
+
+                    {/* Product Replacement UI */}
+                    {replacingItemId === item.id && (
+                      <div className="mt-4 p-4 bg-amber-50 border-2 border-amber-200 rounded-xl">
+                        <h4 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                          <RefreshCw className="w-5 h-5 text-amber-600" />
+                          Zamjena proizvoda
+                        </h4>
+                        {loadingProducts ? (
+                          <div className="text-center py-4">
+                            <Loader2 className="w-6 h-6 animate-spin text-amber-600 mx-auto" />
+                          </div>
+                        ) : (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Odaberi novi proizvod
+                            </label>
+                            <select
+                              value={selectedProductId}
+                              onChange={(e) => setSelectedProductId(e.target.value)}
+                              className="w-full px-4 py-2 border border-amber-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent mb-3"
+                            >
+                              <option value="">-- Odaberi proizvod --</option>
+                              {availableProducts.map((product) => (
+                                <option key={product.id} value={product.id}>
+                                  {product.name} - {(product.price / 100).toFixed(2)} KM
+                                </option>
+                              ))}
+                            </select>
+                            <div className="flex gap-3">
+                              <button
+                                onClick={() => {
+                                  setReplacingItemId(null);
+                                  setSelectedProductId("");
+                                }}
+                                className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all"
+                              >
+                                Otkaži
+                              </button>
+                              <button
+                                onClick={() => replaceProduct(item.id)}
+                                disabled={updating || !selectedProductId}
+                                className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {updating ? "Zamjena..." : "Potvrdi zamjenu"}
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     )}
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900">{item.product.name}</h3>
-                      <p className="text-sm text-gray-500">Količina: {item.quantity}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-gray-900">
-                        {(item.price / 100).toFixed(2)} KM
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {((item.price * item.quantity) / 100).toFixed(2)} KM
-                      </p>
-                    </div>
                   </div>
                 ))}
               </div>

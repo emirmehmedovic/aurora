@@ -146,11 +146,17 @@ export async function PATCH(
 
     const { id } = await params;
     const body = await request.json();
-    const { tags, notes } = body;
+    const { tags, notes, fullName, phone, email, address, city, zipCode } = body;
 
     const data: any = {};
     if (tags !== undefined) data.tags = tags;
     if (notes !== undefined) data.notes = notes;
+    if (fullName !== undefined) data.fullName = fullName;
+    if (phone !== undefined) data.phone = phone;
+    if (email !== undefined) data.email = email;
+    if (address !== undefined) data.address = address;
+    if (city !== undefined) data.city = city;
+    if (zipCode !== undefined) data.zipCode = zipCode;
 
     const customer = await prisma.customer.update({
       where: { id },
