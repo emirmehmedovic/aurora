@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { TrendingUp, DollarSign, Target, Upload, Plus, X } from "lucide-react";
+import { TrendingUp, DollarSign, Target, Upload, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import AttributionChart from "@/components/admin/AttributionChart";
 import CampaignFunnel from "@/components/admin/CampaignFunnel";
@@ -21,7 +21,21 @@ interface Campaign {
   roas: number;
   cpl: number;
   cpa: number;
+  impressions: number;
+  clicks: number;
+  results: number;
+  ctr: number;
+  cpc: number;
+  cpm: number;
   createdAt: string;
+}
+
+interface ImportInfo {
+  lastUploadedAt: string | null;
+  lastFilename: string | null;
+  lastImportedPeriodStart: string | null;
+  lastImportedPeriodEnd: string | null;
+  latestCoveredDate: string | null;
 }
 
 export default function CampaignsPage() {
@@ -32,6 +46,8 @@ export default function CampaignsPage() {
   const [showUpload, setShowUpload] = useState(false);
   const [showNewCampaign, setShowNewCampaign] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [deletingImports, setDeletingImports] = useState(false);
+  const [importInfo, setImportInfo] = useState<ImportInfo | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // New campaign form
@@ -58,6 +74,7 @@ export default function CampaignsPage() {
       if (response.ok) {
         const data = await response.json();
         setCampaigns(data.campaigns);
+        setImportInfo(data.importInfo ?? null);
       }
     } catch (error) {
       console.error("Failed to fetch campaigns:", error);
@@ -83,16 +100,18 @@ export default function CampaignsPage() {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success(`Uspješno importovano ${data.importedCount} redova!`);
+        toast.success(
+          `Import završio. Novo: ${data.importedCount}, ažurirano: ${data.updatedCount}, preskočeno: ${data.skippedOverlapCount}.`
+        );
         if (data.errors && data.errors.length > 0) {
-          toast.warning(`${data.errors.length} grešaka pri importu`, {
+          toast.warning(`${data.errors.length} upozorenja pri importu`, {
             description: data.errors.slice(0, 3).join("\n"),
           });
         }
-        fetchCampaigns();
+        await fetchCampaigns();
         setShowUpload(false);
       } else {
-        toast.error(data.error || "Greška pri importu CSV-a");
+        toast.error(data.error || "Greška pri importu fajla");
       }
     } catch (error) {
       toast.error("Greška pri upload-u fajla");
@@ -141,6 +160,37 @@ export default function CampaignsPage() {
     }
   };
 
+  const handleDeleteImportedData = async () => {
+    const confirmed = window.confirm(
+      "Obrisati sve importovane ad spend podatke? Kampanje će ostati, ali će spend i import historija biti uklonjeni."
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingImports(true);
+    try {
+      const response = await fetch("/api/admin/campaigns/import", {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.error || "Greška pri brisanju importovanih podataka");
+        return;
+      }
+
+      toast.success(`Obrisano redova: ${data.deletedRows}.`);
+      await fetchCampaigns();
+    } catch (error) {
+      toast.error("Greška pri brisanju importovanih podataka");
+    } finally {
+      setDeletingImports(false);
+    }
+  };
+
   if (status === "loading" || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -157,13 +207,24 @@ export default function CampaignsPage() {
     return price.toFixed(2);
   };
 
+  const formatDate = (value: string | null) => {
+    if (!value) return "Nije dostupno";
+    return new Date(value).toLocaleDateString("bs-BA");
+  };
+
   const totalSpend = campaigns.reduce((sum, c) => sum + c.spend, 0);
   const totalRevenue = campaigns.reduce((sum, c) => sum + c.revenue, 0);
   const totalOrders = campaigns.reduce((sum, c) => sum + c.orders, 0);
   const totalLeads = campaigns.reduce((sum, c) => sum + c.leads, 0);
+  const totalImpressions = campaigns.reduce((sum, c) => sum + c.impressions, 0);
+  const totalClicks = campaigns.reduce((sum, c) => sum + c.clicks, 0);
+  const totalResults = campaigns.reduce((sum, c) => sum + c.results, 0);
   const overallROAS = totalSpend > 0 ? totalRevenue / totalSpend : 0;
   const overallCPL = totalLeads > 0 ? totalSpend / totalLeads : 0;
   const overallCPA = totalOrders > 0 ? totalSpend / totalOrders : 0;
+  const overallCTR = totalImpressions > 0 ? (totalClicks / totalImpressions) * 100 : 0;
+  const overallCPC = totalClicks > 0 ? totalSpend / totalClicks : 0;
+  const overallCPM = totalImpressions > 0 ? (totalSpend / totalImpressions) * 1000 : 0;
 
   return (
     <div className="min-h-screen bg-gray-50/30">
@@ -180,7 +241,15 @@ export default function CampaignsPage() {
               className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center justify-center gap-2"
             >
               <Upload className="w-5 h-5" />
-              Import CSV
+              Import CSV/XLSX
+            </button>
+            <button
+              onClick={handleDeleteImportedData}
+              disabled={deletingImports}
+              className="px-4 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              <Trash2 className="w-5 h-5" />
+              {deletingImports ? "Brišem..." : "Obriši import"}
             </button>
             <button
               onClick={() => setShowNewCampaign(true)}
@@ -193,7 +262,7 @@ export default function CampaignsPage() {
         </div>
 
         {/* Overall Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
           {/* Total Spend */}
           <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center gap-3 mb-3">
@@ -239,6 +308,30 @@ export default function CampaignsPage() {
           </div>
         </div>
 
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-2">Impressions</p>
+            <p className="text-2xl font-bold text-gray-800">{totalImpressions.toLocaleString()}</p>
+          </div>
+
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-2">Clicks</p>
+            <p className="text-2xl font-bold text-gray-800">{totalClicks.toLocaleString()}</p>
+            <p className="text-sm text-gray-500 mt-1">CTR {overallCTR.toFixed(2)}%</p>
+          </div>
+
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-2">Results</p>
+            <p className="text-2xl font-bold text-gray-800">{totalResults.toLocaleString()}</p>
+          </div>
+
+          <div className="bg-white/60 backdrop-blur-md border border-white/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-2">CPC / CPM</p>
+            <p className="text-2xl font-bold text-gray-800">{formatPrice(overallCPC)} <span className="text-sm text-gray-500 font-normal">KM</span></p>
+            <p className="text-sm text-gray-500 mt-1">CPM {formatPrice(overallCPM)} KM</p>
+          </div>
+        </div>
+
         {/* Advanced Analytics */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <AttributionChart />
@@ -249,7 +342,7 @@ export default function CampaignsPage() {
         {showUpload && (
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-800">Import Ad Spend CSV</h2>
+              <h2 className="text-xl font-bold text-gray-800">Import Ad Spend CSV/XLSX</h2>
               <button
                 onClick={() => setShowUpload(false)}
                 className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100"
@@ -257,16 +350,35 @@ export default function CampaignsPage() {
                 <X className="w-5 h-5" />
               </button>
             </div>
+            <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              <p className="font-semibold">
+                Zadnji pokriveni datum: {formatDate(importInfo?.latestCoveredDate ?? null)}
+              </p>
+              <p className="mt-1">
+                Preporuka je da novi izvještaj krene od tog datuma ili kasnije, da se izbjegne djelimično preklapanje.
+              </p>
+              <p className="mt-1 text-amber-800">
+                Ako želiš krenuti ispočetka, koristi dugme <span className="font-semibold">Obriši import</span> pa onda uradi novi upload.
+              </p>
+              {importInfo?.lastFilename && (
+                <p className="mt-1 text-amber-800">
+                  Zadnji upload: {importInfo.lastFilename}
+                  {importInfo.lastImportedPeriodStart && importInfo.lastImportedPeriodEnd
+                    ? ` (${formatDate(importInfo.lastImportedPeriodStart)} - ${formatDate(importInfo.lastImportedPeriodEnd)})`
+                    : ""}
+                </p>
+              )}
+            </div>
             <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
               <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600 mb-2">Prevuci CSV fajl ili klikni za upload</p>
+              <p className="text-gray-600 mb-2">Prevuci CSV/XLSX fajl ili klikni za upload</p>
               <p className="text-sm text-gray-500 mb-4">
-                Format: Date, Campaign, Spend, Impressions (optional), Clicks (optional)
+                Podržano: Meta export i slični izvještaji sa datumom, nazivom kampanje/oglasa i troškom
               </p>
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".csv"
+                accept=".csv,.xlsx,.xls"
                 onChange={handleFileSelect}
                 className="hidden"
               />
@@ -393,17 +505,23 @@ export default function CampaignsPage() {
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Spend</th>
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Revenue</th>
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">ROAS</th>
+                  <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Impr.</th>
+                  <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Clicks</th>
+                  <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">CTR</th>
+                  <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Results</th>
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Leadovi</th>
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">CPL</th>
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Narudžbe</th>
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">CPA</th>
+                  <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">CPC</th>
+                  <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">CPM</th>
                 </tr>
               </thead>
               <tbody>
                 {campaigns.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="py-12 text-center text-gray-500">
-                      Nema kampanja. Kreiraj novu ili importuj CSV.
+                    <td colSpan={15} className="py-12 text-center text-gray-500">
+                      Nema kampanja. Kreiraj novu ili importuj CSV/XLSX.
                     </td>
                   </tr>
                 ) : (
@@ -433,10 +551,16 @@ export default function CampaignsPage() {
                           {campaign.roas.toFixed(2)}x
                         </span>
                       </td>
+                      <td className="py-4 px-6 text-right text-gray-800">{campaign.impressions.toLocaleString()}</td>
+                      <td className="py-4 px-6 text-right text-gray-800">{campaign.clicks.toLocaleString()}</td>
+                      <td className="py-4 px-6 text-right text-gray-800">{campaign.ctr.toFixed(2)}%</td>
+                      <td className="py-4 px-6 text-right text-gray-800">{campaign.results.toLocaleString()}</td>
                       <td className="py-4 px-6 text-right text-gray-800">{campaign.leads}</td>
                       <td className="py-4 px-6 text-right text-gray-800">{formatPrice(campaign.cpl)} KM</td>
                       <td className="py-4 px-6 text-right text-gray-800">{campaign.orders}</td>
                       <td className="py-4 px-6 text-right text-gray-800">{formatPrice(campaign.cpa)} KM</td>
+                      <td className="py-4 px-6 text-right text-gray-800">{formatPrice(campaign.cpc)} KM</td>
+                      <td className="py-4 px-6 text-right text-gray-800">{formatPrice(campaign.cpm)} KM</td>
                     </tr>
                   ))
                 )}
@@ -448,7 +572,7 @@ export default function CampaignsPage() {
           <div className="md:hidden">
             {campaigns.length === 0 ? (
               <div className="p-8 text-center text-gray-500">
-                Nema kampanja. Kreiraj novu ili importuj CSV.
+                Nema kampanja. Kreiraj novu ili importuj CSV/XLSX.
               </div>
             ) : (
               <div className="divide-y divide-gray-100">
@@ -483,16 +607,28 @@ export default function CampaignsPage() {
                         <p className="text-xs text-gray-500">CPA</p>
                         <p className="font-semibold text-gray-800">{formatPrice(campaign.cpa)} KM</p>
                       </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Clicks / CTR</p>
+                        <p className="font-semibold text-gray-800">{campaign.clicks.toLocaleString()} / {campaign.ctr.toFixed(2)}%</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">CPC / CPM</p>
+                        <p className="font-semibold text-gray-800">{formatPrice(campaign.cpc)} / {formatPrice(campaign.cpm)} KM</p>
+                      </div>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-gray-50">
+                    <div className="grid grid-cols-4 gap-2 pt-2 border-t border-gray-50">
                        <div className="text-center">
+                         <p className="text-xs text-gray-500">Impr.</p>
+                         <p className="font-semibold">{campaign.impressions.toLocaleString()}</p>
+                       </div>
+                       <div className="text-center border-l border-gray-100">
                          <p className="text-xs text-gray-500">Leadovi</p>
                          <p className="font-semibold">{campaign.leads}</p>
                        </div>
                        <div className="text-center border-l border-gray-100">
-                         <p className="text-xs text-gray-500">CPL</p>
-                         <p className="font-semibold">{formatPrice(campaign.cpl)}</p>
+                         <p className="text-xs text-gray-500">Results</p>
+                         <p className="font-semibold">{campaign.results.toLocaleString()}</p>
                        </div>
                        <div className="text-center border-l border-gray-100">
                          <p className="text-xs text-gray-500">Narudžbe</p>

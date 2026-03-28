@@ -59,6 +59,8 @@ export default function CampaignFunnel({ campaignId = null }: Props) {
     return null;
   }
 
+  const clampPercent = (value: number) => Math.max(0, Math.min(100, value));
+
   const stages = [
     {
       label: "Impressions",
@@ -72,7 +74,7 @@ export default function CampaignFunnel({ campaignId = null }: Props) {
       value: data.clicks,
       icon: MousePointer,
       color: "bg-purple-500",
-      width: data.impressions > 0 ? (data.clicks / data.impressions) * 100 : 0,
+      width: clampPercent(data.impressions > 0 ? (data.clicks / data.impressions) * 100 : 0),
       rate: data.clickRate,
     },
     {
@@ -80,7 +82,7 @@ export default function CampaignFunnel({ campaignId = null }: Props) {
       value: data.leads,
       icon: Users,
       color: "bg-orange-500",
-      width: data.impressions > 0 ? (data.leads / data.impressions) * 100 : 0,
+      width: clampPercent(data.impressions > 0 ? (data.leads / data.impressions) * 100 : 0),
       rate: data.leadRate,
     },
     {
@@ -88,7 +90,7 @@ export default function CampaignFunnel({ campaignId = null }: Props) {
       value: data.orders,
       icon: ShoppingCart,
       color: "bg-green-500",
-      width: data.impressions > 0 ? (data.orders / data.impressions) * 100 : 0,
+      width: clampPercent(data.impressions > 0 ? (data.orders / data.impressions) * 100 : 0),
       rate: data.conversionRate,
     },
   ];
@@ -99,9 +101,12 @@ export default function CampaignFunnel({ campaignId = null }: Props) {
 
       <div className="space-y-4">
         {stages.map((stage, index) => {
+          const previousValue = index > 0 ? stages[index - 1].value : 0;
           const Icon = stage.icon;
           const dropoff = index > 0
-            ? ((stages[index - 1].value - stage.value) / stages[index - 1].value * 100)
+            ? previousValue > 0
+              ? ((previousValue - stage.value) / previousValue) * 100
+              : 0
             : 0;
 
           return (
@@ -111,10 +116,10 @@ export default function CampaignFunnel({ campaignId = null }: Props) {
                   <Icon className="w-5 h-5 text-white" />
                 </div>
 
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-1">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
                     <span className="text-sm font-medium text-gray-700">{stage.label}</span>
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-1 text-right">
                       {stage.rate !== undefined && (
                         <span className="text-xs text-green-600 font-semibold">
                           {stage.rate.toFixed(1)}% rate
@@ -125,7 +130,7 @@ export default function CampaignFunnel({ campaignId = null }: Props) {
                           -{dropoff.toFixed(1)}% dropoff
                         </span>
                       )}
-                      <span className="text-sm font-bold text-gray-800 min-w-[80px] text-right">
+                      <span className="text-sm font-bold text-gray-800 min-w-[80px]">
                         {stage.value.toLocaleString()}
                       </span>
                     </div>

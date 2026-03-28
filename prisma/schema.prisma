@@ -202,28 +202,34 @@ model Campaign {
 }
 
 model AdSpendImport {
-  id        String   @id @default(cuid())
-  filename  String
-  uploadedAt DateTime @default(now())
-  rows      AdSpendRow[]
+  id          String   @id @default(cuid())
+  filename    String
+  uploadedAt  DateTime @default(now())
+  periodStart DateTime?
+  periodEnd   DateTime?
+  rows        AdSpendRow[]
 
   @@map("ad_spend_imports")
 }
 
 model AdSpendRow {
-  id            String         @id @default(cuid())
-  importId      String
-  import        AdSpendImport  @relation(fields: [importId], references: [id])
-  date          DateTime
-  campaignName  String
-  adSetName     String?
-  adName        String?
-  spend         Float
-  impressions   Int?
-  clicks        Int?
-  cpm           Float?
-  cpc           Float?
-  createdAt     DateTime       @default(now())
+  id              String        @id @default(cuid())
+  importId        String
+  import          AdSpendImport @relation(fields: [importId], references: [id])
+  date            DateTime
+  startDate       DateTime?
+  endDate         DateTime?
+  campaignName    String
+  adSetName       String?
+  adName          String?
+  resultCount     Float?
+  resultIndicator String?
+  spend           Float
+  impressions     Int?
+  clicks          Int?
+  cpm             Float?
+  cpc             Float?
+  createdAt       DateTime      @default(now())
 
   @@map("ad_spend_rows")
 }
