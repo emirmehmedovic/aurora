@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
+import { OrderStatus } from "@prisma/client";
 
 const PRODUCT_COST_KM = 30;
 const SHIPPING_COST_KM = 10;
@@ -10,6 +11,7 @@ const FIXED_COST_PER_ORDER_KM = PRODUCT_COST_KM + SHIPPING_COST_KM;
 type DailyBucket = {
   date: string;
   deliveredOrders: number;
+  returnedOrders: number;
   revenue: number;
   leads: number;
   adSpend: number;
@@ -47,6 +49,7 @@ function ensureBucket(map: Map<string, DailyBucket>, date: string) {
     map.set(date, {
       date,
       deliveredOrders: 0,
+      returnedOrders: 0,
       revenue: 0,
       leads: 0,
       adSpend: 0,
@@ -83,8 +86,8 @@ export async function GET(request: Request) {
     const from = fromParam ? startOfDay(new Date(`${fromParam}T00:00:00.000Z`)) : defaultFrom;
     const to = toParam ? startOfDay(new Date(`${toParam}T00:00:00.000Z`)) : defaultTo;
 
-    const deliveredWhere = {
-      status: "DELIVERED" as const,
+    const orderWhere = {
+      status: { in: [OrderStatus.DELIVERED, OrderStatus.RETURNED] },
       createdAt: {
         gte: from,
         lte: new Date(`${toDateOnlyString(to)}T23:59:59.999Z`),
@@ -113,11 +116,12 @@ export async function GET(request: Request) {
       ? { campaignName: { contains: campaignFilter, mode: "insensitive" as const } }
       : {};
 
-    const [deliveredOrders, leads, adSpendRows, campaignNames] = await Promise.all([
+    const [orders, leads, adSpendRows, campaignNames] = await Promise.all([
       prisma.order.findMany({
-        where: deliveredWhere,
+        where: orderWhere,
         select: {
           id: true,
+          status: true,
           totalAmount: true,
           createdAt: true,
           utmCampaign: true,
@@ -154,18 +158,24 @@ export async function GET(request: Request) {
     const buckets = new Map<string, DailyBucket>();
     buildDateRange(from, to).forEach((date) => ensureBucket(buckets, toDateOnlyString(date)));
 
-    for (const order of deliveredOrders) {
+    for (const order of orders) {
       const date = toDateOnlyString(order.createdAt);
       const bucket = ensureBucket(buckets, date);
-      const revenueKm = order.totalAmount / 100;
-
-      bucket.deliveredOrders += 1;
-      bucket.revenue += revenueKm;
-      bucket.productCost += PRODUCT_COST_KM;
-      bucket.shippingCost += SHIPPING_COST_KM;
-      bucket.fixedCosts += FIXED_COST_PER_ORDER_KM;
-
       const campaignName = order.attributedCampaign || order.utmCampaign;
+
+      if (order.status === "DELIVERED") {
+        const revenueKm = order.totalAmount / 100;
+        bucket.deliveredOrders += 1;
+        bucket.revenue += revenueKm;
+        bucket.productCost += PRODUCT_COST_KM;
+        bucket.shippingCost += SHIPPING_COST_KM;
+        bucket.fixedCosts += FIXED_COST_PER_ORDER_KM;
+      } else if (order.status === "RETURNED") {
+        bucket.returnedOrders += 1;
+        bucket.shippingCost += SHIPPING_COST_KM;
+        bucket.fixedCosts += SHIPPING_COST_KM;
+      }
+
       if (campaignName && !bucket.campaigns.includes(campaignName)) {
         bucket.campaigns.push(campaignName);
       }
@@ -230,6 +240,7 @@ export async function GET(request: Request) {
         acc.totalAdSpend += day.adSpend;
         acc.totalLeads += day.leads;
         acc.deliveredOrders += day.deliveredOrders;
+        acc.returnedOrders += day.returnedOrders;
         acc.totalProductCost += day.productCost;
         acc.totalShippingCost += day.shippingCost;
         acc.totalFixedCosts += day.fixedCosts;
@@ -241,6 +252,7 @@ export async function GET(request: Request) {
         totalAdSpend: 0,
         totalLeads: 0,
         deliveredOrders: 0,
+        returnedOrders: 0,
         totalProductCost: 0,
         totalShippingCost: 0,
         totalFixedCosts: 0,
@@ -282,6 +294,7 @@ export async function GET(request: Request) {
         totalProfit: Number(totals.totalProfit.toFixed(2)),
         totalLeads: totals.totalLeads,
         deliveredOrders: totals.deliveredOrders,
+        returnedOrders: totals.returnedOrders,
         averageLeadCost,
         averageProfitPerOrder,
         averageDailyProfit,

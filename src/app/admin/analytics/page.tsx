@@ -18,6 +18,7 @@ import {
 interface DailyAnalyticsRow {
   date: string;
   deliveredOrders: number;
+  returnedOrders: number;
   revenue: number;
   leads: number;
   adSpend: number;
@@ -52,6 +53,7 @@ interface AnalyticsData {
     totalProfit: number;
     totalLeads: number;
     deliveredOrders: number;
+    returnedOrders: number;
     averageLeadCost: number;
     averageProfitPerOrder: number;
     averageDailyProfit: number;
@@ -328,6 +330,12 @@ export default function AnalyticsPage() {
             tone="indigo"
           />
           <MetricCard
+            label="Povrati"
+            value={analytics.kpis.returnedOrders.toString()}
+            icon={TrendingDown}
+            tone="red"
+          />
+          <MetricCard
             label="Lead → sale"
             value={`${analytics.kpis.leadToDeliveredRate.toFixed(2)}%`}
             icon={Target}
@@ -425,6 +433,7 @@ export default function AnalyticsPage() {
               <SummaryRow label="Ad spend" value={formatCurrency(analytics.kpis.totalAdSpend)} />
               <SummaryRow label="Roba" value={formatCurrency(analytics.kpis.totalProductCost)} />
               <SummaryRow label="Poštarina" value={formatCurrency(analytics.kpis.totalShippingCost)} />
+              <SummaryRow label="Povrati" value={analytics.kpis.returnedOrders.toString()} />
               <SummaryRow label="Fiksni troškovi" value={formatCurrency(analytics.kpis.totalFixedCosts)} />
               <SummaryRow label="Neto profit" value={formatCurrency(analytics.kpis.totalProfit)} strong />
             </div>

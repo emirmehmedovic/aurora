@@ -96,6 +96,8 @@ interface DirectResponseProps {
 }
 
 export default function DirectResponseLanding({ product, content, comparisonProducts }: DirectResponseProps) {
+  const WHATSAPP_PHONE = "38761904759";
+  const VIBER_PHONE = "%2B38761904759";
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [specsOpen, setSpecsOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ h: 23, m: 47, s: 12 });
@@ -180,6 +182,26 @@ export default function DirectResponseLanding({ product, content, comparisonProd
       </button>
       <div className="mt-4 text-center bg-white/40 backdrop-blur-md text-[#563435] px-6 py-2.5 rounded-xl font-medium text-sm w-full border border-white/30 shadow-sm flex items-center justify-center gap-2">
         <Truck className="w-4 h-4" /> Naruči do 15h — šalje se danas · Plaćanje pouzećem · 14 dana povrat
+      </div>
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+        <a
+          href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(`Zdravo, želim naručiti ${p.name}.`)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackCtaClick("WhatsApp", "landing-contact", `landing-${p.id}`)}
+          className="flex items-center justify-center gap-3 rounded-2xl border border-green-200 bg-green-50 px-5 py-3.5 text-sm font-semibold text-green-700 shadow-sm transition-all hover:bg-green-100 hover:shadow-md"
+        >
+          <WhatsAppIcon />
+          <span>Naruči preko WhatsApp-a</span>
+        </a>
+        <a
+          href={`viber://chat?number=${VIBER_PHONE}`}
+          onClick={() => trackCtaClick("Viber", "landing-contact", `landing-${p.id}`)}
+          className="flex items-center justify-center gap-3 rounded-2xl border border-violet-200 bg-violet-50 px-5 py-3.5 text-sm font-semibold text-violet-700 shadow-sm transition-all hover:bg-violet-100 hover:shadow-md"
+        >
+          <ViberIcon />
+          <span>Naruči preko Viber-a</span>
+        </a>
       </div>
     </div>
   );
@@ -636,5 +658,23 @@ export default function DirectResponseLanding({ product, content, comparisonProd
 
       </div>
     </main>
+  );
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg viewBox="0 0 32 32" className="h-5 w-5 fill-current" aria-hidden="true">
+      <path d="M19.11 17.41c-.28-.14-1.64-.81-1.9-.9-.25-.09-.44-.14-.62.14-.18.28-.71.9-.87 1.08-.16.19-.32.21-.6.07-.28-.14-1.17-.43-2.22-1.38-.82-.73-1.37-1.64-1.53-1.91-.16-.28-.02-.43.12-.57.12-.12.28-.32.41-.48.14-.16.18-.28.28-.46.09-.19.05-.35-.02-.49-.07-.14-.62-1.49-.85-2.04-.22-.53-.45-.46-.62-.47-.16-.01-.35-.01-.53-.01-.18 0-.49.07-.74.35-.25.28-.97.95-.97 2.31s.99 2.69 1.13 2.88c.14.18 1.95 2.97 4.72 4.16.66.28 1.18.45 1.59.57.67.21 1.29.18 1.77.11.54-.08 1.64-.67 1.87-1.32.23-.65.23-1.2.16-1.32-.06-.12-.25-.19-.53-.33Z" />
+      <path d="M16.01 3.2c-7.07 0-12.8 5.71-12.8 12.75 0 2.25.59 4.45 1.72 6.38L3.1 28.8l6.65-1.73a12.85 12.85 0 0 0 6.26 1.61h.01c7.06 0 12.79-5.71 12.79-12.75 0-3.41-1.33-6.62-3.76-9.03a12.8 12.8 0 0 0-9.04-3.7Zm0 23.31h-.01a10.7 10.7 0 0 1-5.45-1.5l-.39-.23-3.95 1.03 1.05-3.85-.25-.4a10.55 10.55 0 0 1-1.64-5.62c0-5.86 4.79-10.63 10.68-10.63 2.85 0 5.53 1.1 7.54 3.09a10.52 10.52 0 0 1 3.14 7.54c0 5.86-4.8 10.63-10.72 10.63Z" />
+    </svg>
+  );
+}
+
+function ViberIcon() {
+  return (
+    <svg viewBox="0 0 32 32" className="h-5 w-5 fill-current" aria-hidden="true">
+      <path d="M16 3C8.82 3 3 8.4 3 15.05c0 3.45 1.56 6.55 4.05 8.73V29l5.11-2.8c1.2.33 2.49.5 3.84.5 7.18 0 13-5.4 13-12.05S23.18 3 16 3Zm6.52 17.38c-.3.84-1.76 1.56-2.43 1.6-.64.04-1.46.12-4.71-1.08-3.92-1.45-6.44-5.03-6.63-5.28-.18-.25-1.6-2.11-1.6-4.03s1.01-2.85 1.37-3.23c.36-.38.78-.47 1.05-.47h.76c.24 0 .56-.09.88.67.33.79 1.12 2.74 1.22 2.94.1.2.16.43.03.68-.12.25-.19.4-.37.61-.18.21-.38.47-.54.63-.18.18-.37.37-.16.72.21.35.95 1.56 2.03 2.53 1.4 1.25 2.57 1.64 2.93 1.83.37.18.58.16.79-.1.21-.25.91-1.04 1.15-1.39.24-.35.48-.29.81-.18.33.11 2.09.97 2.45 1.15.36.18.6.27.69.42.09.14.09.81-.21 1.64Z" />
+      <path d="M17.56 8.22c2.82.19 5.08 2.3 5.34 5.06.03.34.32.6.66.57a.61.61 0 0 0 .57-.66c-.31-3.37-3.07-5.98-6.49-6.22a.63.63 0 0 0-.67.57c-.03.34.23.65.59.68Zm-1.02 2.45c1.48.11 2.66 1.21 2.83 2.63.04.34.34.58.69.54.34-.04.58-.35.54-.69-.24-2-1.9-3.55-3.96-3.69a.62.62 0 1 0-.1 1.24Zm-.06 2.52a.62.62 0 0 0-.09 1.24c.18.01.33.15.35.32a.62.62 0 1 0 1.23-.13 1.92 1.92 0 0 0-1.49-1.43Z" />
+    </svg>
   );
 }
