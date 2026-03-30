@@ -14,6 +14,8 @@ export interface LandingReview {
   text: string;
   date: string;
   location: string;
+  imageSrc?: string;
+  imageAlt?: string;
 }
 
 export interface LandingStory {
