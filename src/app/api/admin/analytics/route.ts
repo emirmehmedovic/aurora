@@ -18,6 +18,7 @@ type DailyBucket = {
   productCost: number;
   shippingCost: number;
   fixedCosts: number;
+  variableCosts: number;
   profit: number;
   avgLeadCost: number;
   avgProfitPerOrder: number;
@@ -56,6 +57,7 @@ function ensureBucket(map: Map<string, DailyBucket>, date: string) {
       productCost: 0,
       shippingCost: 0,
       fixedCosts: 0,
+      variableCosts: 0,
       profit: 0,
       avgLeadCost: 0,
       avgProfitPerOrder: 0,
@@ -116,7 +118,7 @@ export async function GET(request: Request) {
       ? { campaignName: { contains: campaignFilter, mode: "insensitive" as const } }
       : {};
 
-    const [orders, leads, adSpendRows, campaignNames] = await Promise.all([
+    const [orders, leads, adSpendRows, variableCosts, campaignNames] = await Promise.all([
       prisma.order.findMany({
         where: orderWhere,
         select: {
@@ -148,6 +150,15 @@ export async function GET(request: Request) {
           campaignName: true,
         },
         orderBy: { date: "asc" },
+      }),
+      prisma.variableCost.findMany({
+        where: {
+          incurredOn: {
+            gte: from,
+            lte: new Date(`${toDateOnlyString(to)}T23:59:59.999Z`),
+          },
+        },
+        orderBy: { incurredOn: "desc" },
       }),
       prisma.campaign.findMany({
         orderBy: { name: "asc" },
@@ -214,10 +225,16 @@ export async function GET(request: Request) {
       }
     }
 
+    for (const variableCost of variableCosts) {
+      const date = toDateOnlyString(variableCost.incurredOn);
+      const bucket = ensureBucket(buckets, date);
+      bucket.variableCosts += variableCost.amount / 100;
+    }
+
     const historicalData = Array.from(buckets.values())
       .sort((a, b) => a.date.localeCompare(b.date))
       .map((bucket) => {
-        const profit = bucket.revenue - bucket.fixedCosts - bucket.adSpend;
+        const profit = bucket.revenue - bucket.fixedCosts - bucket.adSpend - bucket.variableCosts;
 
         return {
           ...bucket,
@@ -226,6 +243,7 @@ export async function GET(request: Request) {
           productCost: Number(bucket.productCost.toFixed(2)),
           shippingCost: Number(bucket.shippingCost.toFixed(2)),
           fixedCosts: Number(bucket.fixedCosts.toFixed(2)),
+          variableCosts: Number(bucket.variableCosts.toFixed(2)),
           profit: Number(profit.toFixed(2)),
           avgLeadCost: bucket.leads > 0 ? Number((bucket.adSpend / bucket.leads).toFixed(2)) : 0,
           avgProfitPerOrder:
@@ -244,6 +262,7 @@ export async function GET(request: Request) {
         acc.totalProductCost += day.productCost;
         acc.totalShippingCost += day.shippingCost;
         acc.totalFixedCosts += day.fixedCosts;
+        acc.totalVariableCosts += day.variableCosts;
         acc.totalProfit += day.profit;
         return acc;
       },
@@ -256,6 +275,7 @@ export async function GET(request: Request) {
         totalProductCost: 0,
         totalShippingCost: 0,
         totalFixedCosts: 0,
+        totalVariableCosts: 0,
         totalProfit: 0,
       }
     );
@@ -291,6 +311,7 @@ export async function GET(request: Request) {
         totalProductCost: Number(totals.totalProductCost.toFixed(2)),
         totalShippingCost: Number(totals.totalShippingCost.toFixed(2)),
         totalFixedCosts: Number(totals.totalFixedCosts.toFixed(2)),
+        totalVariableCosts: Number(totals.totalVariableCosts.toFixed(2)),
         totalProfit: Number(totals.totalProfit.toFixed(2)),
         totalLeads: totals.totalLeads,
         deliveredOrders: totals.deliveredOrders,
@@ -308,6 +329,13 @@ export async function GET(request: Request) {
       },
       calendar: historicalData,
       historicalData,
+      variableCosts: variableCosts.map((cost) => ({
+        id: cost.id,
+        description: cost.description,
+        amount: Number((cost.amount / 100).toFixed(2)),
+        incurredOn: toDateOnlyString(cost.incurredOn),
+        notes: cost.notes,
+      })),
       campaignOptions: campaignNames.map((campaign) => campaign.name),
     });
   } catch (error) {

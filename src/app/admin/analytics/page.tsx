@@ -3,12 +3,15 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import {
   CalendarDays,
   DollarSign,
+  Plus,
   Package,
   Search,
   Target,
+  Trash2,
   TrendingDown,
   TrendingUp,
   Truck,
@@ -25,10 +28,19 @@ interface DailyAnalyticsRow {
   productCost: number;
   shippingCost: number;
   fixedCosts: number;
+  variableCosts: number;
   profit: number;
   avgLeadCost: number;
   avgProfitPerOrder: number;
   campaigns: string[];
+}
+
+interface VariableCostEntry {
+  id: string;
+  description: string;
+  amount: number;
+  incurredOn: string;
+  notes: string | null;
 }
 
 interface AnalyticsData {
@@ -50,6 +62,7 @@ interface AnalyticsData {
     totalProductCost: number;
     totalShippingCost: number;
     totalFixedCosts: number;
+    totalVariableCosts: number;
     totalProfit: number;
     totalLeads: number;
     deliveredOrders: number;
@@ -66,6 +79,7 @@ interface AnalyticsData {
   };
   calendar: DailyAnalyticsRow[];
   historicalData: DailyAnalyticsRow[];
+  variableCosts: VariableCostEntry[];
   campaignOptions: string[];
 }
 
@@ -101,6 +115,14 @@ export default function AnalyticsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [tableFromDate, setTableFromDate] = useState(getDefaultFromDate);
   const [tableToDate, setTableToDate] = useState(getDefaultToDate);
+  const [savingCost, setSavingCost] = useState(false);
+  const [deletingCostId, setDeletingCostId] = useState<string | null>(null);
+  const [costForm, setCostForm] = useState({
+    description: "",
+    amount: "",
+    incurredOn: getDefaultToDate(),
+    notes: "",
+  });
   const quickRanges = [7, 14, 30, 60, 90];
 
   useEffect(() => {
@@ -136,6 +158,67 @@ export default function AnalyticsPage() {
       console.error("Failed to fetch analytics:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const createVariableCost = async () => {
+    try {
+      setSavingCost(true);
+      const amount = Math.round(Number.parseFloat(costForm.amount || "0") * 100);
+
+      if (!costForm.description.trim() || !costForm.incurredOn || !Number.isInteger(amount) || amount < 0) {
+        throw new Error("Neispravan unos troška");
+      }
+
+      const response = await fetch("/api/admin/analytics/costs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          description: costForm.description,
+          amount,
+          incurredOn: costForm.incurredOn,
+          notes: costForm.notes,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Greška pri snimanju troška");
+      }
+
+      toast.success("Varijabilni trošak je dodan");
+      setCostForm({
+        description: "",
+        amount: "",
+        incurredOn: getDefaultToDate(),
+        notes: "",
+      });
+      fetchAnalytics();
+    } catch (error) {
+      console.error("Failed to create variable cost:", error);
+      toast.error("Greška pri snimanju troška");
+    } finally {
+      setSavingCost(false);
+    }
+  };
+
+  const deleteVariableCost = async (id: string) => {
+    try {
+      setDeletingCostId(id);
+      const response = await fetch(`/api/admin/analytics/costs/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Greška pri brisanju troška");
+      }
+
+      toast.success("Trošak je obrisan");
+      fetchAnalytics();
+    } catch (error) {
+      console.error("Failed to delete variable cost:", error);
+      toast.error("Greška pri brisanju troška");
+    } finally {
+      setDeletingCostId(null);
     }
   };
 
@@ -354,6 +437,12 @@ export default function AnalyticsPage() {
             tone="purple"
           />
           <MetricCard
+            label="Var. troškovi"
+            value={formatCurrency(analytics.kpis.totalVariableCosts)}
+            icon={DollarSign}
+            tone="rose"
+          />
+          <MetricCard
             label="Prosj. dnevni profit"
             value={formatCurrency(analytics.kpis.averageDailyProfit)}
             icon={CalendarDays}
@@ -419,6 +508,10 @@ export default function AnalyticsPage() {
                       <span>Leadovi</span>
                       <span className="font-medium">{day.leads}</span>
                     </div>
+                    <div className="flex justify-between gap-2">
+                      <span>Var. troškovi</span>
+                      <span className="font-medium">{day.variableCosts.toFixed(0)} KM</span>
+                    </div>
                   </div>
                 </div>
               );
@@ -433,6 +526,7 @@ export default function AnalyticsPage() {
               <SummaryRow label="Ad spend" value={formatCurrency(analytics.kpis.totalAdSpend)} />
               <SummaryRow label="Roba" value={formatCurrency(analytics.kpis.totalProductCost)} />
               <SummaryRow label="Poštarina" value={formatCurrency(analytics.kpis.totalShippingCost)} />
+              <SummaryRow label="Varijabilni troškovi" value={formatCurrency(analytics.kpis.totalVariableCosts)} />
               <SummaryRow label="Povrati" value={analytics.kpis.returnedOrders.toString()} />
               <SummaryRow label="Fiksni troškovi" value={formatCurrency(analytics.kpis.totalFixedCosts)} />
               <SummaryRow label="Neto profit" value={formatCurrency(analytics.kpis.totalProfit)} strong />
@@ -454,6 +548,116 @@ export default function AnalyticsPage() {
               icon={TrendingDown}
               positive={false}
             />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-[1.1fr_0.9fr] gap-5 mb-6">
+          <div className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-11 h-11 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
+                <Plus className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-lg md:text-xl font-bold text-gray-800">Dodaj varijabilni trošak</h2>
+                <p className="text-sm text-gray-500">Unosi se u profit za odabrani datum</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Opis</label>
+                <input
+                  type="text"
+                  value={costForm.description}
+                  onChange={(e) => setCostForm((current) => ({ ...current, description: e.target.value }))}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                  placeholder="Ambalaža, kurir, bonus, povrat..."
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Iznos</label>
+                <input
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  value={costForm.amount}
+                  onChange={(e) => setCostForm((current) => ({ ...current, amount: e.target.value }))}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                  placeholder="0.00"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Datum troška</label>
+                <input
+                  type="date"
+                  value={costForm.incurredOn}
+                  onChange={(e) => setCostForm((current) => ({ ...current, incurredOn: e.target.value }))}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Napomena</label>
+                <textarea
+                  rows={3}
+                  value={costForm.notes}
+                  onChange={(e) => setCostForm((current) => ({ ...current, notes: e.target.value }))}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                  placeholder="Opcionalna napomena"
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={createVariableCost}
+              disabled={savingCost}
+              className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#563435] px-4 py-2.5 text-white font-medium hover:bg-[#563435]/90 transition-colors disabled:opacity-60"
+            >
+              <Plus className="w-4 h-4" />
+              {savingCost ? "Spremanje..." : "Dodaj trošak"}
+            </button>
+          </div>
+
+          <div className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100">
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <div>
+                <h2 className="text-lg md:text-xl font-bold text-gray-800">Varijabilni troškovi</h2>
+                <p className="text-sm text-gray-500">Troškovi u aktivnom periodu filtera</p>
+              </div>
+              <span className="text-sm font-semibold text-rose-700">
+                {formatCurrency(analytics.kpis.totalVariableCosts)}
+              </span>
+            </div>
+
+            <div className="space-y-3 max-h-[360px] overflow-y-auto pr-1">
+              {analytics.variableCosts.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-gray-300 px-4 py-8 text-center text-sm text-gray-500">
+                  Nema unesenih varijabilnih troškova za ovaj period.
+                </div>
+              ) : (
+                analytics.variableCosts.map((cost) => (
+                  <div key={cost.id} className="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-semibold text-gray-800">{cost.description}</p>
+                        <p className="text-xs text-gray-500">{formatDate(cost.incurredOn)}</p>
+                        {cost.notes && <p className="text-sm text-gray-600 mt-1">{cost.notes}</p>}
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-rose-700">{formatCurrency(cost.amount)}</p>
+                        <button
+                          onClick={() => deleteVariableCost(cost.id)}
+                          disabled={deletingCostId === cost.id}
+                          className="mt-2 inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-700 disabled:opacity-60"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          Obriši
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
 
@@ -494,6 +698,7 @@ export default function AnalyticsPage() {
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Ads</th>
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Roba</th>
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Poštarina</th>
+                  <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Var. troš.</th>
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Profit</th>
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Prosj. lead</th>
                   <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Prosj. profit</th>
@@ -510,6 +715,7 @@ export default function AnalyticsPage() {
                     <td className="py-4 px-6 text-sm text-right text-gray-800">{formatCurrency(row.adSpend)}</td>
                     <td className="py-4 px-6 text-sm text-right text-gray-800">{formatCurrency(row.productCost)}</td>
                     <td className="py-4 px-6 text-sm text-right text-gray-800">{formatCurrency(row.shippingCost)}</td>
+                    <td className="py-4 px-6 text-sm text-right text-gray-800">{formatCurrency(row.variableCosts)}</td>
                     <td className={`py-4 px-6 text-sm text-right font-semibold ${row.profit >= 0 ? "text-green-700" : "text-red-700"}`}>
                       {formatCurrency(row.profit)}
                     </td>
@@ -551,6 +757,10 @@ export default function AnalyticsPage() {
                   <div>
                     <p className="text-gray-500">Prosj. lead</p>
                     <p className="font-medium text-gray-800">{formatCurrency(row.avgLeadCost)}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">Var. troškovi</p>
+                    <p className="font-medium text-gray-800">{formatCurrency(row.variableCosts)}</p>
                   </div>
                 </div>
 

@@ -61,6 +61,7 @@ interface OrderDetail {
     product: {
       id: string;
       name: string;
+      price: number;
       images: string[];
     };
   }>;
@@ -95,9 +96,11 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
   // Product replacement states
   const [replacingItemId, setReplacingItemId] = useState<string | null>(null);
+  const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const [availableProducts, setAvailableProducts] = useState<any[]>([]);
   const [selectedProductId, setSelectedProductId] = useState("");
   const [loadingProducts, setLoadingProducts] = useState(false);
+  const [itemDrafts, setItemDrafts] = useState<Record<string, { quantity: string; price: string }>>({});
 
   useEffect(() => {
     if (sessionStatus === "unauthenticated") {
@@ -129,6 +132,17 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           city: data.order.customer.city || "",
           zipCode: data.order.customer.zipCode || ""
         });
+        setItemDrafts(
+          Object.fromEntries(
+            data.order.items.map((item: OrderDetail["items"][number]) => [
+              item.id,
+              {
+                quantity: String(item.quantity),
+                price: (item.price / 100).toFixed(2),
+              },
+            ])
+          )
+        );
       } else {
         toast.error("Greška pri učitavanju narudžbe");
       }
@@ -212,6 +226,49 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     } catch (error) {
       console.error("Failed to replace product:", error);
       toast.error("Greška pri zamjeni proizvoda");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const updateOrderItem = async (itemId: string) => {
+    const draft = itemDrafts[itemId];
+
+    if (!draft) {
+      return;
+    }
+
+    const quantity = Number.parseInt(draft.quantity, 10);
+    const price = Math.round(Number.parseFloat(draft.price) * 100);
+
+    if (!Number.isInteger(quantity) || quantity < 1) {
+      toast.error("Količina mora biti najmanje 1");
+      return;
+    }
+
+    if (!Number.isInteger(price) || price < 0) {
+      toast.error("Cijena nije ispravna");
+      return;
+    }
+
+    try {
+      setUpdating(true);
+      const response = await fetch(`/api/admin/orders/items/${itemId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quantity, price }),
+      });
+
+      if (response.ok) {
+        toast.success("Stavka narudžbe ažurirana");
+        setEditingItemId(null);
+        fetchOrder();
+      } else {
+        toast.error("Greška pri ažuriranju stavke");
+      }
+    } catch (error) {
+      console.error("Failed to update order item:", error);
+      toast.error("Greška pri ažuriranju stavke");
     } finally {
       setUpdating(false);
     }
@@ -560,21 +617,114 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                         <p className="text-sm text-gray-500">
                           {((item.price * item.quantity) / 100).toFixed(2)} KM
                         </p>
+                        {item.product.price !== item.price && (
+                          <p className="text-xs text-amber-700 font-medium">
+                            Regularno: {(item.product.price / 100).toFixed(2)} KM
+                          </p>
+                        )}
                       </div>
-                      <button
-                        onClick={() => {
-                          setReplacingItemId(item.id);
-                          setSelectedProductId(item.product.id);
-                          if (availableProducts.length === 0) {
-                            fetchProducts();
-                          }
-                        }}
-                        className="px-3 py-2 text-sm bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 transition-all flex items-center gap-2 font-medium border border-amber-200"
-                      >
-                        <RefreshCw className="w-4 h-4" />
-                        Zamijeni
-                      </button>
+                      <div className="flex flex-col gap-2">
+                        <button
+                          onClick={() => {
+                            setEditingItemId(item.id);
+                            setItemDrafts((current) => ({
+                              ...current,
+                              [item.id]: {
+                                quantity: String(item.quantity),
+                                price: (item.price / 100).toFixed(2),
+                              },
+                            }));
+                          }}
+                          className="px-3 py-2 text-sm bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-all flex items-center gap-2 font-medium border border-blue-200"
+                        >
+                          <Edit className="w-4 h-4" />
+                          Cijena
+                        </button>
+                        <button
+                          onClick={() => {
+                            setReplacingItemId(item.id);
+                            setSelectedProductId(item.product.id);
+                            if (availableProducts.length === 0) {
+                              fetchProducts();
+                            }
+                          }}
+                          className="px-3 py-2 text-sm bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 transition-all flex items-center gap-2 font-medium border border-amber-200"
+                        >
+                          <RefreshCw className="w-4 h-4" />
+                          Zamijeni
+                        </button>
+                      </div>
                     </div>
+
+                    {editingItemId === item.id && (
+                      <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded-xl">
+                        <h4 className="font-bold text-gray-800 mb-3">Uredi cijenu i količinu</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Količina</label>
+                            <input
+                              type="number"
+                              min={1}
+                              value={itemDrafts[item.id]?.quantity || ""}
+                              onChange={(e) =>
+                                setItemDrafts((current) => ({
+                                  ...current,
+                                  [item.id]: {
+                                    quantity: e.target.value,
+                                    price: current[item.id]?.price || (item.price / 100).toFixed(2),
+                                  },
+                                }))
+                              }
+                              className="w-full px-4 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Cijena po komadu</label>
+                            <input
+                              type="number"
+                              min={0}
+                              step="0.01"
+                              value={itemDrafts[item.id]?.price || ""}
+                              onChange={(e) =>
+                                setItemDrafts((current) => ({
+                                  ...current,
+                                  [item.id]: {
+                                    quantity: current[item.id]?.quantity || String(item.quantity),
+                                    price: e.target.value,
+                                  },
+                                }))
+                              }
+                              className="w-full px-4 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                          </div>
+                        </div>
+                        <p className="mt-3 text-sm text-blue-800">
+                          Regularna cijena proizvoda je {(item.product.price / 100).toFixed(2)} KM.
+                          {" "}Popust po komadu: {(
+                            Math.max(
+                              0,
+                              item.product.price -
+                                Math.round(Number.parseFloat(itemDrafts[item.id]?.price || "0") * 100)
+                            ) / 100
+                          ).toFixed(2)} KM
+                        </p>
+                        <div className="flex gap-3 mt-4">
+                          <button
+                            onClick={() => setEditingItemId(null)}
+                            className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all"
+                          >
+                            Otkaži
+                          </button>
+                          <button
+                            onClick={() => updateOrderItem(item.id)}
+                            disabled={updating}
+                            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all disabled:opacity-50"
+                          >
+                            {updating ? "Čuvanje..." : "Sačuvaj izmjene"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Product Replacement UI */}
                     {replacingItemId === item.id && (

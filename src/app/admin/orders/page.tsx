@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw, Filter, Search, X as XIcon, Download, Edit, Trash2, User, ExternalLink } from "lucide-react";
+import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw, Filter, Search, X as XIcon, Download, Edit, Trash2, User, ExternalLink, Plus, FileText, Loader2 } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import BulkActionBar from "@/components/admin/BulkActionBar";
@@ -17,9 +17,39 @@ import { DeliveredPackage } from "@/components/admin/DeliveredPackage";
 import { OrderProcessingAgent } from "@/components/admin/OrderProcessingAgent";
 import { toast } from "sonner";
 
+let pdfUnicodeFontPromise: Promise<string> | null = null;
+
+async function loadPdfUnicodeFont() {
+  if (!pdfUnicodeFontPromise) {
+    pdfUnicodeFontPromise = fetch("/fonts/ArialUnicode.ttf")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to load PDF font");
+        }
+
+        return response.arrayBuffer();
+      })
+      .then((buffer) => {
+        const bytes = new Uint8Array(buffer);
+        const chunkSize = 0x8000;
+        let binary = "";
+
+        for (let index = 0; index < bytes.length; index += chunkSize) {
+          binary += String.fromCharCode(...bytes.subarray(index, index + chunkSize));
+        }
+
+        return btoa(binary);
+      });
+  }
+
+  return pdfUnicodeFontPromise;
+}
+
 interface Order {
   id: string;
+  orderNumber: string;
   status: string;
+  source?: string | null;
   totalAmount: number;
   createdAt: string;
   customer: {
@@ -29,9 +59,15 @@ interface Order {
     email: string | null;
   };
   items: {
+    id?: string;
     productName: string;
     quantity: number;
     price: number;
+    product?: {
+      id: string;
+      name: string;
+      images: string[];
+    };
   }[];
   shippingAddress: string;
   city: string;
@@ -64,6 +100,29 @@ export default function OrdersPage() {
 
   // Delivered animation
   const [showDeliveredAnimation, setShowDeliveredAnimation] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [creatingOrder, setCreatingOrder] = useState(false);
+  const [exportingPendingPdf, setExportingPendingPdf] = useState(false);
+  const [availableProducts, setAvailableProducts] = useState<Array<{
+    id: string;
+    name: string;
+    price: number;
+    images: string[];
+  }>>([]);
+  const [loadingProducts, setLoadingProducts] = useState(false);
+  const [manualOrder, setManualOrder] = useState({
+    fullName: "",
+    phone: "",
+    email: "",
+    address: "",
+    city: "",
+    zipCode: "",
+    productId: "",
+    quantity: 1,
+    unitPrice: "",
+    source: "Društvene mreže",
+    notes: "",
+  });
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -77,6 +136,12 @@ export default function OrdersPage() {
     }
   }, [session]);
 
+  useEffect(() => {
+    if (showCreateModal && availableProducts.length === 0) {
+      fetchProducts();
+    }
+  }, [showCreateModal, availableProducts.length]);
+
   const fetchOrders = async () => {
     try {
       const response = await fetch("/api/orders");
@@ -88,6 +153,24 @@ export default function OrdersPage() {
       console.error("Failed to fetch orders:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      setLoadingProducts(true);
+      const response = await fetch("/api/admin/products");
+      if (!response.ok) {
+        throw new Error("Failed to fetch products");
+      }
+
+      const data = await response.json();
+      setAvailableProducts(data.products);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+      toast.error("Greška pri učitavanju proizvoda");
+    } finally {
+      setLoadingProducts(false);
     }
   };
 
@@ -224,12 +307,147 @@ export default function OrdersPage() {
       .replace(/ž/g, 'z').replace(/Ž/g, 'Z');
   };
 
-  const generatePDF = (order: Order) => {
+  const formatPdfDate = (value: string | Date) =>
+    new Date(value).toLocaleDateString("bs-BA", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+  const getPdfStatusLabel = (status: string) =>
+    ({
+      NEW: "Nova",
+      PENDING: "Na čekanju",
+      CONFIRMED: "Potvrđena",
+      PREPARING: "U pripremi",
+      SHIPPED: "Poslana",
+      DELIVERED: "Dostavljena",
+      CANCELLED: "Otkazana",
+      RETURNED: "Vraćena",
+    }[status] || status);
+
+  const ensurePdfUnicodeFont = async (doc: jsPDF) => {
+    const fontData = await loadPdfUnicodeFont();
+    const fontList = (doc as any).getFontList?.() || {};
+
+    if (!fontList.ArialUnicode) {
+      doc.addFileToVFS("ArialUnicode.ttf", fontData);
+      doc.addFont("ArialUnicode.ttf", "ArialUnicode", "normal");
+      doc.addFont("ArialUnicode.ttf", "ArialUnicode", "bold");
+    }
+
+    doc.setFont("ArialUnicode", "normal");
+  };
+
+  const resetManualOrder = () => {
+    setManualOrder({
+      fullName: "",
+      phone: "",
+      email: "",
+      address: "",
+      city: "",
+      zipCode: "",
+      productId: "",
+      quantity: 1,
+      unitPrice: "",
+      source: "Društvene mreže",
+      notes: "",
+    });
+  };
+
+  const openCreateModal = () => {
+    setShowCreateModal(true);
+  };
+
+  const closeCreateModal = () => {
+    setShowCreateModal(false);
+    resetManualOrder();
+  };
+
+  const selectedManualProduct = availableProducts.find((product) => product.id === manualOrder.productId);
+  const defaultUnitPrice = selectedManualProduct ? selectedManualProduct.price / 100 : 0;
+  const manualUnitPriceNumber = Number.parseFloat(manualOrder.unitPrice || "0");
+  const effectiveUnitPrice = Number.isFinite(manualUnitPriceNumber) ? manualUnitPriceNumber : 0;
+  const manualDiscountPerUnit = selectedManualProduct
+    ? Math.max(0, Number(((selectedManualProduct.price / 100) - effectiveUnitPrice).toFixed(2)))
+    : 0;
+  const manualTotal = Number((effectiveUnitPrice * manualOrder.quantity).toFixed(2));
+
+  const handleManualProductChange = (productId: string) => {
+    const product = availableProducts.find((entry) => entry.id === productId);
+    setManualOrder((current) => ({
+      ...current,
+      productId,
+      unitPrice: product ? (product.price / 100).toFixed(2) : "",
+    }));
+  };
+
+  const createDirectOrder = async () => {
+    if (!manualOrder.productId) {
+      toast.error("Odaberite proizvod");
+      return;
+    }
+
+    try {
+      setCreatingOrder(true);
+      const unitPrice = Math.round(effectiveUnitPrice * 100);
+      const response = await fetch("/api/admin/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...manualOrder,
+          quantity: manualOrder.quantity,
+          unitPrice,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "Greška pri kreiranju narudžbe");
+      }
+
+      toast.success("Direktna narudžba kreirana");
+      closeCreateModal();
+      fetchOrders();
+    } catch (error) {
+      console.error("Failed to create direct order:", error);
+      toast.error(error instanceof Error ? error.message : "Greška pri kreiranju narudžbe");
+    } finally {
+      setCreatingOrder(false);
+    }
+  };
+
+  const loadImageAsDataUrl = async (src: string) => {
+    return await new Promise<string>((resolve, reject) => {
+      const image = new Image();
+      image.crossOrigin = "anonymous";
+      image.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = image.naturalWidth || image.width;
+        canvas.height = image.naturalHeight || image.height;
+        const context = canvas.getContext("2d");
+
+        if (!context) {
+          reject(new Error("Canvas context not available"));
+          return;
+        }
+
+        context.drawImage(image, 0, 0);
+        resolve(canvas.toDataURL("image/png"));
+      };
+      image.onerror = reject;
+      image.src = src;
+    });
+  };
+
+  const generatePDF = async (order: Order) => {
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4'
     });
+
+    await ensurePdfUnicodeFont(doc);
 
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
@@ -244,11 +462,11 @@ export default function OrdersPage() {
 
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(28);
-    doc.setFont("helvetica", "bold");
+    doc.setFont("ArialUnicode", "bold");
     doc.text("ICE COOL PRO", pageWidth / 2, 20, { align: 'center' });
 
     doc.setFontSize(12);
-    doc.setFont("helvetica", "normal");
+    doc.setFont("ArialUnicode", "normal");
     doc.text("DOSTAVNICA / SHIPPING LABEL", pageWidth / 2, 30, { align: 'center' });
 
     // Reset text color
@@ -261,7 +479,7 @@ export default function OrdersPage() {
     doc.rect(10, 45, pageWidth - 20, 20);
 
     doc.setFontSize(20);
-    doc.setFont("courier", "bold");
+    doc.setFont("ArialUnicode", "bold");
     doc.text(`#${order.id.slice(0, 12).toUpperCase()}`, pageWidth / 2, 58, { align: 'center' });
 
     // ============= DELIVERY INFO BOX (MAIN SECTION) =============
@@ -272,7 +490,7 @@ export default function OrdersPage() {
     doc.rect(10, yPos, pageWidth - 20, 12, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(16);
-    doc.setFont("helvetica", "bold");
+    doc.setFont("ArialUnicode", "bold");
     doc.text("DOSTAVITI NA:", 15, yPos + 8);
 
     yPos += 18;
@@ -280,27 +498,27 @@ export default function OrdersPage() {
 
     // Customer name - LARGE
     doc.setFontSize(22);
-    doc.setFont("helvetica", "bold");
-    doc.text(sanitizeForPDF(order.customer.fullName), 15, yPos);
+    doc.setFont("ArialUnicode", "bold");
+    doc.text(order.customer.fullName, 15, yPos);
 
     yPos += 12;
 
     // Address - LARGE
     doc.setFontSize(18);
-    doc.setFont("helvetica", "normal");
-    doc.text(sanitizeForPDF(order.shippingAddress || "Nije uneseno"), 15, yPos);
+    doc.setFont("ArialUnicode", "normal");
+    doc.text(order.shippingAddress || "Nije uneseno", 15, yPos);
 
     yPos += 10;
 
     // City + Zip - LARGE
-    const cityText = `${sanitizeForPDF(order.city || "")} ${order.zipCode || ""}`.trim();
+    const cityText = `${order.city || ""} ${order.zipCode || ""}`.trim();
     doc.text(cityText, 15, yPos);
 
     yPos += 15;
 
     // Phone - LARGE with icon
     doc.setFontSize(20);
-    doc.setFont("helvetica", "bold");
+    doc.setFont("ArialUnicode", "bold");
     doc.text(`TEL: ${order.customer.phone}`, 15, yPos);
 
     // Box around delivery info
@@ -316,29 +534,29 @@ export default function OrdersPage() {
     doc.rect(10, yPos, pageWidth - 20, 25);
 
     doc.setFontSize(14);
-    doc.setFont("helvetica", "bold");
-    doc.text("NACIN PLACANJA:", 15, yPos + 8);
+    doc.setFont("ArialUnicode", "bold");
+    doc.text("NAČIN PLAĆANJA:", 15, yPos + 8);
 
     doc.setFontSize(24);
     doc.text("POUZECE", 15, yPos + 20);
 
     doc.setFontSize(28);
-    doc.setFont("helvetica", "bold");
+    doc.setFont("ArialUnicode", "bold");
     doc.text(`${(order.totalAmount / 100).toFixed(2)} KM`, pageWidth - 15, yPos + 20, { align: 'right' });
 
     yPos += 35;
 
     // ============= PRODUCTS TABLE =============
     doc.setFontSize(14);
-    doc.setFont("helvetica", "bold");
-    doc.text("SADRZAJ POSILJKE:", 15, yPos);
+    doc.setFont("ArialUnicode", "bold");
+    doc.text("SADRŽAJ POŠILJKE:", 15, yPos);
 
     yPos += 5;
 
     const tableData = order.items.map(item => [
       item.quantity + 'x',
-      sanitizeForPDF(item.productName),
-      `${item.price.toFixed(2)} KM`
+      item.productName,
+      `${(item.price / 100).toFixed(2)} KM`
     ]);
 
     autoTable(doc, {
@@ -347,6 +565,7 @@ export default function OrdersPage() {
       body: tableData,
       theme: 'grid',
       styles: {
+        font: "ArialUnicode",
         fontSize: 12,
         cellPadding: 4,
       },
@@ -372,16 +591,16 @@ export default function OrdersPage() {
       doc.rect(10, finalY + 10, pageWidth - 20, 20);
 
       doc.setFontSize(10);
-      doc.setFont("helvetica", "bold");
+      doc.setFont("ArialUnicode", "bold");
       doc.text("NAPOMENA ZA KURIRA:", 15, finalY + 17);
-      doc.setFont("helvetica", "normal");
-      doc.text(sanitizeForPDF(order.notes), 15, finalY + 24);
+      doc.setFont("ArialUnicode", "normal");
+      doc.text(order.notes, 15, finalY + 24);
     }
 
     // ============= FOOTER =============
     const footerY = pageHeight - 20;
     doc.setFontSize(9);
-    doc.setFont("helvetica", "normal");
+    doc.setFont("ArialUnicode", "normal");
     doc.setTextColor(100, 100, 100);
     const date = new Date(order.createdAt).toLocaleDateString("bs-BA", {
       year: 'numeric',
@@ -390,11 +609,137 @@ export default function OrdersPage() {
       hour: '2-digit',
       minute: '2-digit'
     });
-    doc.text(`Datum: ${sanitizeForPDF(date)}`, 15, footerY);
+    doc.text(`Datum: ${date}`, 15, footerY);
     doc.text("www.aurorashop.ba", pageWidth - 15, footerY, { align: 'right' });
 
     // Save PDF
     doc.save(`Dostavnica_${order.id.slice(0, 8)}.pdf`);
+  };
+
+  const exportConfirmedPendingOrdersPdf = async () => {
+    const exportOrders = orders.filter(
+      (order) => order.status === "CONFIRMED" || order.status === "PREPARING"
+    );
+
+    if (exportOrders.length === 0) {
+      toast.info("Nema potvrđenih, a neposlatih narudžbi");
+      return;
+    }
+
+    try {
+      setExportingPendingPdf(true);
+
+      const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      await ensurePdfUnicodeFont(doc);
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      for (let index = 0; index < exportOrders.length; index += 1) {
+        const order = exportOrders[index];
+
+        if (index > 0) {
+          doc.addPage();
+        }
+
+        doc.setFillColor(86, 52, 53);
+        doc.rect(0, 0, pageWidth, 22, "F");
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("ArialUnicode", "bold");
+        doc.setFontSize(18);
+        doc.text("Lista potvrđenih, neposlatih narudžbi", 14, 14);
+
+        doc.setTextColor(0, 0, 0);
+        doc.setFont("ArialUnicode", "normal");
+        doc.setFontSize(11);
+        doc.text(`Order: ${order.orderNumber || order.id}`, 14, 32);
+        doc.text(
+          `Datum: ${formatPdfDate(order.createdAt)} | Status: ${getPdfStatusLabel(order.status)}`,
+          14,
+          38
+        );
+
+        let imageBottomY = 42;
+        const coverImage = order.items[0]?.product?.images?.[0];
+
+        if (coverImage) {
+          try {
+            const imageData = await loadImageAsDataUrl(coverImage);
+            doc.addImage(imageData, "PNG", pageWidth - 56, 28, 34, 34);
+            imageBottomY = 64;
+          } catch (error) {
+            console.error("Failed to load cover image for PDF:", error);
+          }
+        }
+
+        const detailsTop = Math.max(48, imageBottomY + 2);
+
+        autoTable(doc, {
+          startY: detailsTop,
+          theme: "grid",
+          columnStyles: {
+            0: { cellWidth: 38, fontStyle: "bold" },
+            1: { cellWidth: pageWidth - 52 },
+          },
+          body: [
+            ["Kupac", order.customer.fullName],
+            ["Telefon", order.customer.phone],
+            ["Email", order.customer.email || "-"],
+            ["Adresa", order.shippingAddress || "-"],
+            ["Grad", `${order.city || ""} ${order.zipCode || ""}`.trim() || "-"],
+            ["Izvor", order.source || "Direktno / webshop"],
+            ["Napomena", order.notes || "-"],
+            ["Ukupno", `${(order.totalAmount / 100).toFixed(2)} KM`],
+          ],
+          margin: { left: 14, right: 14 },
+          styles: {
+            font: "ArialUnicode",
+            fontSize: 10,
+            cellPadding: 3,
+            overflow: "linebreak",
+          },
+        });
+
+        const itemRows = order.items.map((item) => [
+          item.productName,
+          `${item.quantity}x`,
+          `${(item.price / 100).toFixed(2)} KM`,
+          `${((item.price * item.quantity) / 100).toFixed(2)} KM`,
+        ]);
+
+        autoTable(doc, {
+          startY: (doc as any).lastAutoTable.finalY + 8,
+          head: [["Proizvod", "Kol.", "Cijena", "Ukupno"]],
+          body: itemRows,
+          theme: "striped",
+          styles: {
+            font: "ArialUnicode",
+            fontSize: 10,
+            cellPadding: 3,
+          },
+          headStyles: {
+            fillColor: [86, 52, 53],
+          },
+          margin: { left: 14, right: 14 },
+        });
+
+        doc.setFontSize(9);
+        doc.setFont("ArialUnicode", "normal");
+        doc.setTextColor(110, 110, 110);
+        doc.text(
+          `Generisano: ${new Date().toLocaleString("bs-BA")}`,
+          14,
+          pageHeight - 10
+        );
+      }
+
+      doc.save(`potvrdjene-neposlate-${new Date().toISOString().slice(0, 10)}.pdf`);
+      toast.success("PDF eksport je spreman");
+    } catch (error) {
+      console.error("Failed to export pending orders PDF:", error);
+      toast.error("Greška pri PDF eksportu");
+    } finally {
+      setExportingPendingPdf(false);
+    }
   };
 
   const toggleOrderDetails = (orderId: string) => {
@@ -501,6 +846,24 @@ export default function OrdersPage() {
                 </p>
               </div>
             )}
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={exportConfirmedPendingOrdersPdf}
+              disabled={exportingPendingPdf}
+              className="px-4 py-3 rounded-2xl border border-gray-200 bg-white text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center gap-2 disabled:opacity-60"
+            >
+              {exportingPendingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
+              PDF potvrđene / neposlate
+            </button>
+            <button
+              onClick={openCreateModal}
+              className="px-4 py-3 rounded-2xl bg-[#563435] text-white font-medium hover:bg-[#563435]/90 transition-colors flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Unesi direktnu prodaju
+            </button>
           </div>
         </div>
 
@@ -973,6 +1336,177 @@ export default function OrdersPage() {
             </div>
           )}
         </div>
+
+        {showCreateModal && (
+          <div className="fixed inset-0 z-[70] bg-black/55 backdrop-blur-sm p-4 overflow-y-auto">
+            <div className="min-h-full flex items-center justify-center">
+              <div className="w-full max-w-3xl rounded-3xl bg-white shadow-2xl border border-white/40 p-6 md:p-8">
+                <div className="flex items-start justify-between gap-4 mb-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">Direktna narudžba</h2>
+                    <p className="text-sm text-gray-500">Usmena, Instagram, Facebook, WhatsApp ili druga ručna prodaja</p>
+                  </div>
+                  <button
+                    onClick={closeCreateModal}
+                    className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                  >
+                    <XIcon className="w-5 h-5 text-gray-500" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Ime i prezime</label>
+                    <input
+                      type="text"
+                      value={manualOrder.fullName}
+                      onChange={(e) => setManualOrder((current) => ({ ...current, fullName: e.target.value }))}
+                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Telefon</label>
+                    <input
+                      type="text"
+                      value={manualOrder.phone}
+                      onChange={(e) => setManualOrder((current) => ({ ...current, phone: e.target.value }))}
+                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input
+                      type="email"
+                      value={manualOrder.email}
+                      onChange={(e) => setManualOrder((current) => ({ ...current, email: e.target.value }))}
+                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Izvor prodaje</label>
+                    <input
+                      type="text"
+                      value={manualOrder.source}
+                      onChange={(e) => setManualOrder((current) => ({ ...current, source: e.target.value }))}
+                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Adresa</label>
+                    <input
+                      type="text"
+                      value={manualOrder.address}
+                      onChange={(e) => setManualOrder((current) => ({ ...current, address: e.target.value }))}
+                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Grad</label>
+                    <input
+                      type="text"
+                      value={manualOrder.city}
+                      onChange={(e) => setManualOrder((current) => ({ ...current, city: e.target.value }))}
+                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Poštanski broj</label>
+                    <input
+                      type="text"
+                      value={manualOrder.zipCode}
+                      onChange={(e) => setManualOrder((current) => ({ ...current, zipCode: e.target.value }))}
+                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Proizvod</label>
+                    <select
+                      value={manualOrder.productId}
+                      onChange={(e) => handleManualProductChange(e.target.value)}
+                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    >
+                      <option value="">{loadingProducts ? "Učitavanje..." : "Odaberi proizvod"}</option>
+                      {availableProducts.map((product) => (
+                        <option key={product.id} value={product.id}>
+                          {product.name} - {(product.price / 100).toFixed(2)} KM
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Količina</label>
+                    <input
+                      type="number"
+                      min={1}
+                      value={manualOrder.quantity}
+                      onChange={(e) => setManualOrder((current) => ({ ...current, quantity: Math.max(1, Number.parseInt(e.target.value || "1", 10)) }))}
+                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Prodajna cijena / kom</label>
+                    <input
+                      type="number"
+                      min={0}
+                      step="0.01"
+                      value={manualOrder.unitPrice}
+                      onChange={(e) => setManualOrder((current) => ({ ...current, unitPrice: e.target.value }))}
+                      className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                    <div>
+                      <p className="text-gray-500">Regularna cijena</p>
+                      <p className="font-bold text-gray-900">{defaultUnitPrice.toFixed(2)} KM</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Popust po komadu</p>
+                      <p className="font-bold text-amber-700">{manualDiscountPerUnit.toFixed(2)} KM</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Ukupno za naplatu</p>
+                      <p className="font-bold text-[#563435]">{manualTotal.toFixed(2)} KM</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-5">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Napomena</label>
+                  <textarea
+                    rows={4}
+                    value={manualOrder.notes}
+                    onChange={(e) => setManualOrder((current) => ({ ...current, notes: e.target.value }))}
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#563435] focus:border-transparent"
+                    placeholder="Napomena za direktnu prodaju, popust, dogovor s kupcem..."
+                  />
+                </div>
+
+                <div className="mt-6 flex flex-col-reverse sm:flex-row justify-end gap-3">
+                  <button
+                    onClick={closeCreateModal}
+                    className="px-5 py-3 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                  >
+                    Otkaži
+                  </button>
+                  <button
+                    onClick={createDirectOrder}
+                    disabled={creatingOrder}
+                    className="px-5 py-3 rounded-xl bg-[#563435] text-white font-medium hover:bg-[#563435]/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                  >
+                    {creatingOrder ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                    Kreiraj narudžbu
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Bulk Action Bar */}
         <BulkActionBar

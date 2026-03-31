@@ -18,6 +18,14 @@ export async function PATCH(
     const body = await request.json();
     const { productId, quantity, price } = body;
 
+    if (quantity !== undefined && (!Number.isInteger(quantity) || quantity < 1)) {
+      return NextResponse.json({ error: "Invalid quantity" }, { status: 400 });
+    }
+
+    if (price !== undefined && (!Number.isInteger(price) || price < 0)) {
+      return NextResponse.json({ error: "Invalid price" }, { status: 400 });
+    }
+
     // Fetch current order item to get order details
     const currentItem = await prisma.orderItem.findUnique({
       where: { id },

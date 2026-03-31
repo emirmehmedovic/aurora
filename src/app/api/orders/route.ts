@@ -194,7 +194,20 @@ export async function GET(request: NextRequest) {
         customer: true,
         items: {
           include: {
-            product: true
+            product: {
+              include: {
+                galleryImages: {
+                  orderBy: [{ isCover: "desc" }, { order: "asc" }],
+                  select: {
+                    media: {
+                      select: {
+                        url: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           }
         }
       }
@@ -220,17 +233,22 @@ export async function GET(request: NextRequest) {
       shippingAddress: order.customer.address,
       city: order.customer.city,
       zipCode: order.customer.zipCode,
-      items: order.items.map(item => ({
-        id: item.id,
-        productName: item.product.name,
-        quantity: item.quantity,
-        price: item.price,
-        product: {
-          id: item.product.id,
-          name: item.product.name,
-          images: item.product.images,
-        }
-      }))
+      items: order.items.map((item) => {
+        const galleryImages = item.product.galleryImages.map((image) => image.media.url);
+        const images = galleryImages.length > 0 ? galleryImages : item.product.images;
+
+        return {
+          id: item.id,
+          productName: item.product.name,
+          quantity: item.quantity,
+          price: item.price,
+          product: {
+            id: item.product.id,
+            name: item.product.name,
+            images,
+          },
+        };
+      })
     }));
 
     return NextResponse.json({ orders });

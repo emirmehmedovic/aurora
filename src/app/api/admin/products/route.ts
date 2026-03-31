@@ -12,10 +12,40 @@ export async function GET() {
     }
 
     const products = await prisma.product.findMany({
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        price: true,
+        compareAtPrice: true,
+        active: true,
+        images: true,
+        createdAt: true,
+        galleryImages: {
+          orderBy: [{ isCover: "desc" }, { order: "asc" }],
+          select: {
+            media: {
+              select: {
+                url: true,
+              },
+            },
+          },
+        },
+      },
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json({ products });
+    return NextResponse.json({
+      products: products.map((product) => {
+        const galleryImages = product.galleryImages.map((image) => image.media.url);
+        const images = galleryImages.length > 0 ? galleryImages : product.images;
+
+        return {
+          ...product,
+          images,
+        };
+      }),
+    });
 
   } catch (error) {
     console.error("Get products error:", error);

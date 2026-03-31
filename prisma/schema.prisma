@@ -123,6 +123,19 @@ model Order {
   @@map("orders")
 }
 
+model VariableCost {
+  id          String   @id @default(cuid())
+  description String
+  amount      Int
+  incurredOn  DateTime
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([incurredOn])
+  @@map("variable_costs")
+}
+
 enum OrderStatus {
   NEW
   CONFIRMED

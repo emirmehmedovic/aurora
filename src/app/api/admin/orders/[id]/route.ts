@@ -24,7 +24,20 @@ export async function GET(
         customer: true,
         items: {
           include: {
-            product: true
+            product: {
+              include: {
+                galleryImages: {
+                  orderBy: [{ isCover: "desc" }, { order: "asc" }],
+                  select: {
+                    media: {
+                      select: {
+                        url: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           }
         },
         returns: true,
@@ -49,7 +62,23 @@ export async function GET(
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ order });
+    return NextResponse.json({
+      order: {
+        ...order,
+        items: order.items.map((item) => {
+          const galleryImages = item.product.galleryImages.map((image) => image.media.url);
+          const images = galleryImages.length > 0 ? galleryImages : item.product.images;
+
+          return {
+            ...item,
+            product: {
+              ...item.product,
+              images,
+            },
+          };
+        }),
+      },
+    });
 
   } catch (error) {
     console.error("Get order error:", error);
