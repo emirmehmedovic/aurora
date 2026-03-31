@@ -30,6 +30,14 @@ interface Campaign {
   createdAt: string;
 }
 
+interface LandingBreakdownItem {
+  campaign: string;
+  page: string;
+  leads: number;
+  confirmed: number;
+  conversionRate: number;
+}
+
 interface ImportInfo {
   lastUploadedAt: string | null;
   lastFilename: string | null;
@@ -48,6 +56,7 @@ export default function CampaignsPage() {
   const [uploading, setUploading] = useState(false);
   const [deletingImports, setDeletingImports] = useState(false);
   const [importInfo, setImportInfo] = useState<ImportInfo | null>(null);
+  const [landingBreakdown, setLandingBreakdown] = useState<LandingBreakdownItem[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // New campaign form
@@ -75,6 +84,7 @@ export default function CampaignsPage() {
         const data = await response.json();
         setCampaigns(data.campaigns);
         setImportInfo(data.importInfo ?? null);
+        setLandingBreakdown(data.landingBreakdown ?? []);
       }
     } catch (error) {
       console.error("Failed to fetch campaigns:", error);
@@ -336,6 +346,85 @@ export default function CampaignsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <AttributionChart />
           <CampaignFunnel />
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+          <div className="p-6 border-b border-gray-100">
+            <h2 className="text-xl font-bold text-gray-800">Landing Breakdown Po Kampanji</h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Prikazane su samo stranice koje počinju sa <code className="rounded bg-gray-100 px-1.5 py-0.5 text-xs">/l/</code>.
+            </p>
+          </div>
+
+          <div className="hidden md:block overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-600">Landing</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-600">Kampanja</th>
+                  <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Leadovi</th>
+                  <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Potvrđeni</th>
+                  <th className="text-right py-4 px-6 text-sm font-semibold text-gray-600">Konverzija</th>
+                </tr>
+              </thead>
+              <tbody>
+                {landingBreakdown.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="py-12 text-center text-gray-500">
+                      Nema landing podataka za kampanje.
+                    </td>
+                  </tr>
+                ) : (
+                  landingBreakdown.map((item) => (
+                    <tr key={`${item.campaign}-${item.page}`} className="border-t border-gray-100 hover:bg-gray-50">
+                      <td className="py-4 px-6">
+                        <code className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700">{item.page}</code>
+                      </td>
+                      <td className="py-4 px-6 text-sm font-medium text-gray-800">{item.campaign}</td>
+                      <td className="py-4 px-6 text-right text-gray-800">{item.leads}</td>
+                      <td className="py-4 px-6 text-right text-gray-800">{item.confirmed}</td>
+                      <td className="py-4 px-6 text-right font-semibold text-gray-800">{item.conversionRate.toFixed(1)}%</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="md:hidden">
+            {landingBreakdown.length === 0 ? (
+              <div className="p-8 text-center text-gray-500">
+                Nema landing podataka za kampanje.
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-100">
+                {landingBreakdown.map((item) => (
+                  <div key={`${item.campaign}-${item.page}`} className="p-4 space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <code className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700">{item.page}</code>
+                      <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
+                        {item.campaign}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3 text-sm">
+                      <div>
+                        <p className="text-xs text-gray-500">Leadovi</p>
+                        <p className="font-semibold text-gray-800">{item.leads}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Potvrđeni</p>
+                        <p className="font-semibold text-gray-800">{item.confirmed}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Konverzija</p>
+                        <p className="font-semibold text-gray-800">{item.conversionRate.toFixed(1)}%</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* CSV Upload Section */}

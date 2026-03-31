@@ -4,6 +4,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 import { sendOrderStatusUpdate } from "@/lib/telegram";
 import { updateCustomerStats } from "@/lib/customerStats";
+import { formatOrderSourceLabel } from "@/lib/order-source";
 
 export async function GET(
   request: NextRequest,
@@ -65,6 +66,7 @@ export async function GET(
     return NextResponse.json({
       order: {
         ...order,
+        source: formatOrderSourceLabel(order.source, order.utmSource, order.utmCampaign),
         items: order.items.map((item) => {
           const galleryImages = item.product.galleryImages.map((image) => image.media.url);
           const images = galleryImages.length > 0 ? galleryImages : item.product.images;

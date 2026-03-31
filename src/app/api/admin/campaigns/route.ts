@@ -11,7 +11,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const [campaigns, latestImport, latestCoveredRowWithEndDate, latestCoveredLegacyRow] = await Promise.all([
+    const [campaigns, latestImport, latestCoveredRowWithEndDate, latestCoveredLegacyRow, leads] = await Promise.all([
       prisma.campaign.findMany({
         orderBy: { createdAt: "desc" },
       }),
@@ -24,6 +24,18 @@ export async function GET() {
       }),
       prisma.adSpendRow.findFirst({
         orderBy: { date: "desc" },
+      }),
+      prisma.lead.findMany({
+        where: {
+          landingPage: {
+            startsWith: "/l/",
+          },
+        },
+        select: {
+          landingPage: true,
+          utmCampaign: true,
+          status: true,
+        },
       }),
     ]);
 
@@ -90,9 +102,41 @@ export async function GET() {
     );
 
     const latestCoveredRow = latestCoveredRowWithEndDate ?? latestCoveredLegacyRow;
+    const landingStats = new Map<string, { campaign: string; page: string; leads: number; confirmed: number }>();
+
+    for (const lead of leads) {
+      const campaign = lead.utmCampaign || "(bez kampanje)";
+      const page = lead.landingPage || "(nepoznat landing)";
+      const key = `${campaign}::${page}`;
+      const existing = landingStats.get(key) ?? {
+        campaign,
+        page,
+        leads: 0,
+        confirmed: 0,
+      };
+
+      existing.leads += 1;
+      if (lead.status === "CONFIRMED") {
+        existing.confirmed += 1;
+      }
+
+      landingStats.set(key, existing);
+    }
+
+    const landingBreakdown = [...landingStats.values()]
+      .map((entry) => ({
+        ...entry,
+        conversionRate: entry.leads > 0 ? (entry.confirmed / entry.leads) * 100 : 0,
+      }))
+      .sort((a, b) => {
+        if (b.confirmed !== a.confirmed) return b.confirmed - a.confirmed;
+        if (b.leads !== a.leads) return b.leads - a.leads;
+        return a.page.localeCompare(b.page);
+      });
 
     return NextResponse.json({
       campaigns: campaignsWithMetrics,
+      landingBreakdown,
       importInfo: {
         lastUploadedAt: latestImport?.uploadedAt.toISOString() ?? null,
         lastFilename: latestImport?.filename ?? null,

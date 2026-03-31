@@ -9,6 +9,7 @@ import { updateCustomerStats } from '@/lib/customerStats';
 import { getStorefrontProductBySlug } from "@/lib/storefront-products";
 import { checkRateLimit, getClientIp } from "@/lib/security";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { formatOrderSourceLabel, formatWebOrderSource } from "@/lib/order-source";
 import { z } from "zod";
 
 const MIN_FORM_FILL_MS = 1000;
@@ -22,6 +23,7 @@ const publicOrderSchema = z.object({
   zipCode: z.string().trim().max(20).optional().or(z.literal("")),
   product: z.string().trim().min(1).max(100),
   notes: z.string().trim().max(1000).optional().or(z.literal("")),
+  sourcePath: z.string().trim().max(200).optional().or(z.literal("")),
   website: z.string().max(0).optional().or(z.literal("")),
   formStartedAt: z.number().int().positive().optional(),
 });
@@ -53,6 +55,7 @@ export async function POST(request: NextRequest) {
       zipCode,
       product,
       notes,
+      sourcePath,
       website,
       formStartedAt,
     } = parsed.data;
@@ -67,6 +70,9 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const landingPage = sourcePath || null;
+    const orderSourceLabel = formatWebOrderSource(sourcePath);
 
     const productInfo = await getStorefrontProductBySlug(product);
     if (!productInfo) {
@@ -135,6 +141,7 @@ export async function POST(request: NextRequest) {
         phone,
         email: email || null,
         source: utmSource,
+        landingPage,
         status: "NEW",
         notes: notes || null,
         utmSource,
@@ -152,6 +159,7 @@ export async function POST(request: NextRequest) {
         orderNumber,
         customerId: customer.id,
         status: "NEW",
+        source: orderSourceLabel,
         totalAmount: Math.round(productInfo.price * 100),
         utmSource,
         utmMedium,
@@ -271,6 +279,7 @@ export async function GET(request: NextRequest) {
       id: order.id,
       orderNumber: order.orderNumber,
       status: order.status,
+      source: formatOrderSourceLabel(order.source, order.utmSource, order.utmCampaign),
       totalAmount: order.totalAmount,
       createdAt: order.createdAt,
       notes: order.notes,

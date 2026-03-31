@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Check, Truck, ShieldCheck, Clock, CreditCard, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { trackInitiateCheckout, trackPurchase, trackLead } from "@/lib/analytics";
@@ -29,6 +30,7 @@ type CheckoutFormProps = {
 };
 
 export default function CheckoutForm({ initialProduct, products }: CheckoutFormProps) {
+  const pathname = usePathname();
   const preferredProduct =
     products.find(
       (product) => product.slug === initialProduct || product.id === initialProduct
@@ -42,6 +44,7 @@ export default function CheckoutForm({ initialProduct, products }: CheckoutFormP
     zipCode: "",
     product: preferredProduct?.slug || products[0]?.slug || "ice-cool-pro",
     notes: "",
+    sourcePath: pathname || "/naruci",
     website: "",
     formStartedAt: Date.now(),
   });

@@ -1100,6 +1100,7 @@ export default function OrdersPage() {
                           <td className="px-6 py-4 cursor-pointer" onClick={() => toggleOrderDetails(order.id)}>
                             <p className="text-sm font-medium text-gray-800">{order.customer.fullName}</p>
                             <p className="text-xs text-gray-500">{order.customer.phone}</p>
+                            <p className="text-xs text-[#563435] mt-1">{order.source || "Direktno / webshop"}</p>
                           </td>
                           <td className="px-6 py-4 text-sm font-bold text-[#563435] cursor-pointer" onClick={() => toggleOrderDetails(order.id)}>
                             {(order.totalAmount / 100).toFixed(2)} KM

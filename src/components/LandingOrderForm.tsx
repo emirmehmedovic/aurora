@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Check, Truck, ShieldCheck, CreditCard, ChevronRight, Clock, Gift, ArrowRight } from "lucide-react";
 import { trackInitiateCheckout, trackPurchase, trackLead, trackFormStart, trackFormAbandon, getUtmParams, trackCtaClick } from "@/lib/analytics";
@@ -21,6 +22,7 @@ interface LandingOrderFormProps {
 export default function LandingOrderForm({ product }: LandingOrderFormProps) {
   const WHATSAPP_PHONE = "38761904759";
   const VIBER_PHONE = "%2B38761904759";
+  const pathname = usePathname();
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -30,6 +32,7 @@ export default function LandingOrderForm({ product }: LandingOrderFormProps) {
     zipCode: "",
     product: product.id,
     notes: "",
+    sourcePath: pathname || "/naruci",
     website: "",
     formStartedAt: Date.now(),
   });
