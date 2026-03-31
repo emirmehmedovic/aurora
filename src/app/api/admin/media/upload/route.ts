@@ -4,6 +4,9 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { prisma } from '@/lib/prisma';
 import { uploadImage } from '@/lib/media';
 
+const MAX_FILES_PER_REQUEST = 10;
+const MAX_REQUEST_SIZE = 25 * 1024 * 1024;
+
 export async function POST(request: NextRequest) {
   try {
     // 1. Check authentication
@@ -28,6 +31,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const contentLength = Number(request.headers.get('content-length') || '0');
+    if (contentLength > MAX_REQUEST_SIZE) {
+      return NextResponse.json(
+        { error: 'Upload request is too large' },
+        { status: 413 }
+      );
+    }
+
     // 3. Parse FormData
     const formData = await request.formData();
     const files = formData.getAll('files') as File[];
@@ -38,6 +49,13 @@ export async function POST(request: NextRequest) {
     if (!files || files.length === 0) {
       return NextResponse.json(
         { error: 'No files provided' },
+        { status: 400 }
+      );
+    }
+
+    if (files.length > MAX_FILES_PER_REQUEST) {
+      return NextResponse.json(
+        { error: `Too many files. Maximum per request is ${MAX_FILES_PER_REQUEST}` },
         { status: 400 }
       );
     }

@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Migration error:', error);
     return NextResponse.json(
-      { error: 'Migration failed', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Migration failed' },
       { status: 500 }
     );
   }

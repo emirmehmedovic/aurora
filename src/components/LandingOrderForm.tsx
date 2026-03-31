@@ -29,7 +29,9 @@ export default function LandingOrderForm({ product }: LandingOrderFormProps) {
     city: "",
     zipCode: "",
     product: product.id,
-    notes: ""
+    notes: "",
+    website: "",
+    formStartedAt: Date.now(),
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -222,6 +224,16 @@ export default function LandingOrderForm({ product }: LandingOrderFormProps) {
 
           {/* Shipping Form */}
           <form onSubmit={handleSubmit} id="landing-checkout-form" className="space-y-4">
+            <input
+              type="text"
+              name="website"
+              value={formData.website}
+              onChange={handleChange}
+              tabIndex={-1}
+              autoComplete="off"
+              className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden"
+              aria-hidden="true"
+            />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Ime i prezime *</label>

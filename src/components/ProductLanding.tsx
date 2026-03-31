@@ -295,7 +295,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
   
   if (!product) return null;
 
-  const orderProductId = product.id || slug || "ice-cool-pro";
+  const orderProductId = product.slug || slug || product.id || "ice-cool-pro";
   const orderHref = `/naruci?product=${orderProductId}`;
 
   const discount = Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100);

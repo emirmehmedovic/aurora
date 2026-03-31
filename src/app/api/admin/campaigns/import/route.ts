@@ -207,10 +207,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Campaign import error:", error);
     return NextResponse.json(
-      {
-        error: "Failed to import file",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "Failed to import file" },
       { status: 500 }
     );
   }
@@ -237,10 +234,7 @@ export async function DELETE() {
   } catch (error) {
     console.error("Delete campaign import data error:", error);
     return NextResponse.json(
-      {
-        error: "Failed to delete import data",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "Failed to delete import data" },
       { status: 500 }
     );
   }

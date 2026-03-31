@@ -12,11 +12,11 @@ import { sendDailySummary } from '@/lib/telegram';
  */
 export async function POST(request: NextRequest) {
   try {
-    // Verify cron secret (optional security)
+    // Require cron secret for every invocation.
     const cronSecret = request.headers.get('x-cron-secret');
     const expectedSecret = process.env.CRON_SECRET;
 
-    if (expectedSecret && cronSecret !== expectedSecret) {
+    if (!expectedSecret || cronSecret !== expectedSecret) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }

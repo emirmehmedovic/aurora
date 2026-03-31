@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
 import { sendOrderNotification } from "@/lib/telegram";
 import { normalizePhone } from '@/lib/phoneUtils';
@@ -6,16 +7,63 @@ import { normalizeNameForMatching } from '@/lib/textUtils';
 import { findDuplicateCustomers } from '@/lib/customerDeduplication';
 import { updateCustomerStats } from '@/lib/customerStats';
 import { getStorefrontProductBySlug } from "@/lib/storefront-products";
+import { checkRateLimit, getClientIp } from "@/lib/security";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { z } from "zod";
+
+const MIN_FORM_FILL_MS = 1000;
+
+const publicOrderSchema = z.object({
+  fullName: z.string().trim().min(2).max(120),
+  phone: z.string().trim().min(6).max(40),
+  email: z.string().trim().email().max(200).optional().or(z.literal("")),
+  address: z.string().trim().min(4).max(200),
+  city: z.string().trim().min(2).max(100),
+  zipCode: z.string().trim().max(20).optional().or(z.literal("")),
+  product: z.string().trim().min(1).max(100),
+  notes: z.string().trim().max(1000).optional().or(z.literal("")),
+  website: z.string().max(0).optional().or(z.literal("")),
+  formStartedAt: z.number().int().positive().optional(),
+});
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { fullName, phone, email, address, city, zipCode, product, notes } = body;
-
-    // Validate required fields
-    if (!fullName || !phone || !address || !city || !product) {
+    const ip = getClientIp(request.headers);
+    const rateLimit = checkRateLimit(`public-order:${ip}`, 12, 10 * 60 * 1000);
+    if (!rateLimit.allowed) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Previše zahtjeva. Pokušajte ponovo kasnije." },
+        { status: 429 }
+      );
+    }
+
+    const body = await request.json();
+    const parsed = publicOrderSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Neispravni podaci forme" }, { status: 400 });
+    }
+
+    const {
+      fullName,
+      phone,
+      email,
+      address,
+      city,
+      zipCode,
+      product,
+      notes,
+      website,
+      formStartedAt,
+    } = parsed.data;
+
+    if (website) {
+      return NextResponse.json({ success: true, message: "Narudžba uspješno kreirana" });
+    }
+
+    if (!formStartedAt || Date.now() - formStartedAt < MIN_FORM_FILL_MS) {
+      return NextResponse.json(
+        { error: "Forma je poslana prebrzo. Pokušajte ponovo." },
         { status: 400 }
       );
     }
@@ -186,6 +234,11 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     // Get recent orders (for admin)
     const dbOrders = await prisma.order.findMany({
       take: 50,

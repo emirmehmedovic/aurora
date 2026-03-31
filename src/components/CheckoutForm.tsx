@@ -29,8 +29,10 @@ type CheckoutFormProps = {
 };
 
 export default function CheckoutForm({ initialProduct, products }: CheckoutFormProps) {
-  const lockedProduct =
-    products.find((product) => product.slug === initialProduct) ?? null;
+  const preferredProduct =
+    products.find(
+      (product) => product.slug === initialProduct || product.id === initialProduct
+    ) ?? products[0] ?? null;
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -38,22 +40,14 @@ export default function CheckoutForm({ initialProduct, products }: CheckoutFormP
     address: "",
     city: "",
     zipCode: "",
-    product: products[0]?.slug || "ice-cool-pro",
-    notes: ""
+    product: preferredProduct?.slug || products[0]?.slug || "ice-cool-pro",
+    notes: "",
+    website: "",
+    formStartedAt: Date.now(),
   });
 
   const [submitted, setSubmitted] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(products[0]);
-
-  useEffect(() => {
-    if (!lockedProduct) return;
-
-    setFormData((current) =>
-      current.product === lockedProduct.slug
-        ? current
-        : { ...current, product: lockedProduct.slug }
-    );
-  }, [lockedProduct]);
+  const [selectedProduct, setSelectedProduct] = useState(preferredProduct ?? products[0]);
 
   useEffect(() => {
     const product = products.find(p => p.slug === formData.product);
@@ -190,17 +184,18 @@ export default function CheckoutForm({ initialProduct, products }: CheckoutFormP
             {products.map((p) => (
               <div 
                 key={p.id}
-                onClick={() => {
-                  if (lockedProduct) return;
-                  handleProductSelect(p.slug);
-                }}
+                onClick={() => handleProductSelect(p.slug)}
                 className={`relative flex items-center p-4 rounded-2xl border-2 transition-all duration-200 ${
                   formData.product === p.slug 
                     ? "border-[#563435] bg-white shadow-md" 
                     : "border-transparent bg-white/50 hover:bg-white hover:border-gray-200"
-                } ${lockedProduct && formData.product !== p.slug ? "opacity-45 blur-[1px] saturate-50" : ""} ${
-                  lockedProduct ? "cursor-default" : "cursor-pointer"
-                }`}
+                } ${
+                  preferredProduct &&
+                  formData.product === preferredProduct.slug &&
+                  formData.product !== p.slug
+                    ? "opacity-70 saturate-75"
+                    : ""
+                } cursor-pointer`}
               >
                 <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
                   <Image src={p.images[0]} alt={p.name} fill className="object-cover" />
@@ -227,9 +222,9 @@ export default function CheckoutForm({ initialProduct, products }: CheckoutFormP
               </div>
             ))}
           </div>
-          {lockedProduct && (
+          {preferredProduct && (
             <p className="mt-4 text-sm text-gray-500">
-              Model je automatski odabran sa prethodne stranice.
+              Model sa prethodne stranice je preselektovan, ali možete odabrati i drugi.
             </p>
           )}
         </div>
@@ -241,6 +236,16 @@ export default function CheckoutForm({ initialProduct, products }: CheckoutFormP
             Podaci za dostavu
           </h3>
           <form onSubmit={handleSubmit} id="checkout-form" className="space-y-5">
+            <input
+              type="text"
+              name="website"
+              value={formData.website}
+              onChange={handleChange}
+              tabIndex={-1}
+              autoComplete="off"
+              className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden"
+              aria-hidden="true"
+            />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Ime i prezime *</label>

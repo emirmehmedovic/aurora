@@ -12,7 +12,9 @@ export default function KontaktPage() {
     email: "",
     phone: "",
     subject: "",
-    message: ""
+    message: "",
+    website: "",
+    formStartedAt: Date.now(),
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -157,6 +159,16 @@ export default function KontaktPage() {
               <div className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-3xl p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Pošaljite nam poruku</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  <input
+                    type="text"
+                    name="website"
+                    value={formData.website}
+                    onChange={handleChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden"
+                    aria-hidden="true"
+                  />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-semibold text-gray-800 mb-2">
