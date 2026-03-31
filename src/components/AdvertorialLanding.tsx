@@ -94,6 +94,8 @@ export interface AdvertorialContent {
   specs: LandingSpec[];
   closingTitle: string;
   closingText: string;
+  /** Optional disclosure note rendered below the byline */
+  disclosure?: string;
 }
 
 interface AdvertorialProps {
@@ -393,6 +395,13 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
             </p>
           </div>
         </div>
+
+        {/* Disclosure note */}
+        {c.disclosure && (
+          <div className="mb-6 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 leading-relaxed">
+            <span className="font-semibold">Napomena: </span>{c.disclosure}
+          </div>
+        )}
 
         {/* Hero article image */}
         {c.heroImageLeftSrc || c.heroImageRightSrc ? (

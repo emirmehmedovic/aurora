@@ -19,8 +19,8 @@ import testimonial9Image from "../../../../testimonials/9.png";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Prestala sam ići u salon i uštedila 1.440 KM — evo kako | Aurora Style",
-  description: "Finansijska analitičarka iz Sarajeva izračunala je da godišnje troši 1.440 KM na epilaciju u salonu. Evo šta se desilo kad je promijenila pristup.",
+  title: "1.440 KM godišnje ili 175 KM jednom — šta se desi kad to izračunaš | Aurora Style",
+  description: "Jedna od naših kupaca izračunala je da godišnje troši 1.440 KM na epilaciju u salonu. Evo šta se desilo kad je promijenila pristup.",
   keywords: "IPL aparat za kuću, prestati ići u salon, epilacija kod kuće, ICE COOL PRO, uštedovine na epilaciji, laser epilacija kod kuće BiH",
   alternates: {
     canonical: "https://aurorashop.ba/l/kako-sam-prestala-ici-u-salon",
@@ -31,30 +31,30 @@ const proContent: AdvertorialContent = {
   publicationLabel: "Aurora Style · Partnerski sadržaj",
   articleCategory: "Ljepota & Wellness",
   articleHeadline:
-    "Izračunala sam da sam prošle godine dala 1.440 KM za epilaciju u salonu. Evo šta se desilo kad sam prestala.",
+    "1.440 KM godišnje za epilaciju u salonu — ili 175 KM jednom. Šta se desi kad to jednom izračunaš.",
   articleDeck:
-    "Finansijska analitičarka iz Sarajeva otkrila je da je odlazak u salon koštao više od godišnjeg servisa auta. Pa je promijenila pristup — i nije se vratila.",
-  authorName: "Amra Hadžić",
-  authorTitle: "31 god. · Sarajevo",
+    "Jedna od naših kupaca otkrila je da je odlazak u salon koštao više od godišnjeg servisa auta. Pa je promijenila pristup — i nije se vratila.",
+  authorName: "Aurora Style",
+  authorTitle: "Redakcija",
   publishDate: "28. mart 2026.",
   readingTime: "4 minute čitanja",
   heroImageDesc:
-    "Amra kod kuće — glatke noge nakon 3 mjeseca korištenja ICE COOL PRO, bez posjete salonu",
+    "Glatke noge nakon 3 mjeseca korištenja ICE COOL PRO kod kuće, bez posjete salonu",
   heroImageLeftSrc: heroLeftImage.src,
   heroImageLeftAlt:
-    "Brijanje noge prije tretmana kod kuće kao prvi korak prije IPL epilacije",
+    "Brijanje noge prije tretmana — prvi korak pripreme za IPL epilaciju kod kuće",
   heroImageRightSrc: heroRightImage.src,
   heroImageRightAlt:
-    "Amra drži ICE COOL PRO i telefon kod kuće kao selfie trenutak nakon prelaska sa salona na kućni tretman",
+    "ICE COOL PRO u ruci — kućni IPL tretman kao alternativa odlascima u salon",
   intro:
-    "Bio je decembar. Pregledavala sam godišnje troškove — profesionalna navika. Onda sam naišla na jednu stavku koja me je ostavila bez teksta: epilacija u salonu, 1.440 konvertibilnih maraka. Za godinu dana. Za noge i pazuhe.",
+    "Zbrojite jednom koliko godišnje date za epilaciju u salonu. Većina žena koje to uradi ostane bez teksta. Prosjek je 1.440 KM godišnje — za noge i pazuhe. Cifra dolazi polako, posjeta po posjeta, i rijetko ko je sabere dok ne mora.",
   sections: [
     {
-      heading: "Svake godine sam davala 1.440 KM — i problem se nikad nije riješio",
+      heading: "Svake godine 1.440 KM — i problem se nikad nije riješio",
       paragraphs: [
-        "Dvanaest posjeta. Svaka po 100–120 KM. Sat vremena u salonu, zakazivanje unaprijed, vožnja kroz sarajevske gužve — i dlačice opet vidljive za dvije i po sedmice.",
-        "Kao finansijska analitičarka, znam razliku između troška i investicije. Trošak koji se vraća svakog mjeseca nije trošak — to je pretplata. Samo što ovu niko nije transparentno najavljivao. Skupljala se tiho, sesija po sesija.",
-        "Te večeri sam napravila Excel. Pet godina: oko 7.000 KM. Na samo jednu stvar koja ne rješava problem, samo ga odlaže za tri sedmice.",
+        "Dvanaest posjeta. Svaka po 100–120 KM. Sat vremena u salonu, zakazivanje unaprijed, gužve — i dlačice opet vidljive za dvije i po sedmice.",
+        "Trošak koji se vraća svakog mjeseca nije trošak — to je pretplata. Samo što ovu niko nije transparentno najavljivao. Skuplja se tiho, sesija po sesija.",
+        "Uradite proračun za pet godina: oko 7.000 KM. Na jednu jedinu stvar koja ne rješava problem — samo ga odlaže za sljedeće tri sedmice.",
       ],
       imagePlaceholder:
         "Kalendar s 12 zakazanih termina u salonu — vizualizacija ponavljajućeg godišnjeg troška, simbolični prikaz",
@@ -65,28 +65,28 @@ const proContent: AdvertorialContent = {
         "1.440 KM godišnje. Za nešto što ne rješava problem — samo ga odlaže na sljedeće tri sedmice.",
     },
     {
-      heading: "Koleginica koja je prestala ići u salon — i nije se pokajala",
+      heading: "Šta kažu kupci koji su prestali ići u salon",
       paragraphs: [
-        "U januaru sam u grupnom chatu s kolegicama vidjela fotografiju nekog uređaja i poruku: 'Koja je ovo uštedovina, bolan.' Ispod — cifra: 175 KM. Pomislila sam: još jedan gadget koji ne radi.",
-        "Ali Jasmina je finansijska direktorica. Pedantna i racionalna — ne kupuje lako. Pitala sam je privatno. Rekla mi je: 'Tri i pol mjeseca imam ICE COOL PRO. Pazuhe gotovo nemaju dlačica. Noge brijam jednom u tri sedmice umjesto svaki drugi dan. Napravi matematiku.'",
-        "Napravila sam. Tri više godine u salonu: oko 4.300 KM. Ili 175 KM jednom.",
+        "Skoro svaka kupac koja nam piše počinje isto: 'Bila sam skeptična. Pomislila sam — još jedan gadget koji ne radi.' To je gotovo uvijek prva reakcija.",
+        "Ono što ih promijeni su konkretne cifre. Kupci koji koriste ICE COOL PRO tri i više mjeseci redovno prijavljuju: pazuhe gotovo bez dlačica, noge glatke sedmicama umjesto danima. Jedna nam je napisala: 'Napravi matematiku — tri više godine u salonu su 4.300 KM. Ili 175 KM jednom.'",
+        "Matematika je uvijek ista. Mijenja se samo trenutak kad je neko napravi.",
       ],
       calloutAfter: true,
     },
     {
-      heading: "Prve sedmice su bile drukčije nego što sam očekivala",
+      heading: "Šta se dešava u prvim sedmicama — iskustva kupaca",
       paragraphs: [
-        "Prvih deset dana — ništa dramatično. Koristila sam jednom sedmično, prema uputstvu. Hlađenje me je ugodno iznenadilo — na punom intenzitetu osjeti se samo blaga toplina.",
-        "Treće sedmice pazuhe su bile bez dlačice. Četvrte — noge glatke do kraja sedmice bez brijanja. Nakon dva i po mieseca odlazak u salon mi je doslovno ispao iz glave.",
-        "Prošlog tjedna koleginica me pitala da li sam promijenila estetičara jer mi koža izgleda bolje. Rekla sam joj istinu.",
+        "Prvih deset dana — ništa dramatično. Kupci koriste jednom sedmično prema uputstvu. Ono što iznenadi gotovo svakoga je hlađenje — na punom intenzitetu osjeti se samo blaga toplina, bez neugodnosti koje su očekivali.",
+        "Negdje između treće i četvrte sedmice počinju stizati poruke. Pazuhe bez dlačice. Noge glatke do kraja sedmice bez brijanja. Nakon dva do tri mjeseca, odlazak u salon jednostavno — ispadne iz glave.",
+        "Jedna kupac nam je napisala da ju je koleginica pitala da li je promijenila estetičara jer joj koža izgleda bolje. Nije. Samo je prestala ići.",
       ],
       imagePlaceholder:
-        "Amra koristi ICE COOL PRO na nogama kod kuće — prirodna fotografija bez salona, ugodan tretman",
+        "Korištenje ICE COOL PRO na nogama kod kuće — prirodan, ugodan tretman bez salona",
       imageSrc: amraHomeImage.src,
       imageAlt:
-        "Amra koristi ICE COOL PRO na nogama kod kuće u opuštenom ambijentu",
+        "Korištenje ICE COOL PRO na nogama kod kuće u opuštenom ambijentu",
       highlight:
-        "Da sam znala za ovo ranije, bila bih sačuvala više od 3.000 KM u zadnjih pet godina. I ne bih gubila sat vremena svake tri sedmice.",
+        "Kupci koji su počeli ranije uštedili su više od 3.000 KM u pet godina. I više ne gube sat vremena svake tri sedmice.",
     },
   ],
   callout: {
@@ -213,8 +213,8 @@ export default async function KakoSamPrestalaIciUSalonPage() {
     headline: proContent.articleHeadline,
     description: proContent.articleDeck,
     author: {
-      "@type": "Person",
-      name: proContent.authorName,
+      "@type": "Organization",
+      name: "Aurora Shop",
     },
     publisher: {
       "@type": "Organization",
