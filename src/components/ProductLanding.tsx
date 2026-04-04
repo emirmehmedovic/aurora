@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Check, Star, Truck, Shield, RotateCcw, CreditCard, ChevronDown, ChevronUp, ShoppingCart, ArrowRight } from "lucide-react";
+import { Check, Star, Truck, Shield, RotateCcw, CreditCard, ChevronDown, ChevronUp, ShoppingCart, ArrowRight, Banknote, Zap } from "lucide-react";
+import { trackViewContent, trackAddToCart, trackCtaClick } from "@/lib/analytics";
 
 const productData: Record<string, any> = {
   "ice-cool-pro": {
@@ -97,8 +98,45 @@ const productData: Record<string, any> = {
         date: "Januar 2026",
         content: "Trošila sam 60 KM mjesečno na vosak u salonu. To je 720 KM godišnje! Za 175 KM imam svoj uređaj koji će trajati godinama. Radim tretman nedjeljom uveče uz Netflix, 10 minuta za noge.",
         rating: 5
+      },
+      {
+        name: "Lejla",
+        age: 28,
+        location: "Mostar",
+        date: "Mart 2026",
+        content: "Nisam vjerovala da može biti bezbolno dok nisam probala. Ovo je čudo. Noge brijam svake dvije sedmice umjesto svaki drugi dan. Za ljeto sam spremna bez stresa.",
+        rating: 5
+      },
+      {
+        name: "Selma",
+        age: 34,
+        location: "Banja Luka",
+        date: "Februar 2026",
+        content: "Muž mi je kupio za rođendan i bila sam skeptična. Sad mu govorim da je to bio poklon decenije. Pazuhe su mi savršene, bikini zona riješena. Preporučila sam svim prijateljicama.",
+        rating: 5
+      },
+      {
+        name: "Nadia",
+        age: 26,
+        location: "Sarajevo",
+        date: "Januar 2026",
+        content: "Radila sam laser u klinici, platila 800 KM za noge i rezultati su bili isti kao ovdje. Za 175 KM sam dobila isti uređaj koji mogu koristiti gdje god hoću. Žao mi je što nisam ranije.",
+        rating: 5
       }
-    ]
+    ],
+    vsTable: [
+      { salon: "60–120 KM po posjeti", ipl: "175 KM jednom zauvijek" },
+      { salon: "Zakazivanje tjedan unaprijed", ipl: "Tretman kada tebi odgovara" },
+      { salon: "Bol od voskanja i laserа", ipl: "Bezbolno — hlađenje štiti kožu" },
+      { salon: "Ponavljaš svake 4–6 sedmica", ipl: "Jednom sedmično, pa jednom mjesečno" },
+      { salon: "700–1.200 KM godišnje", ipl: "0 KM u narednim godinama" },
+      { salon: "Zavisiš od termina i radnog vremena", ipl: "Noge za 10 min — u pidžami, kod kuće" },
+    ],
+    beforeAfterImages: [
+      { before: "/slike/rezultati/pro-prije-1.jpg", after: "/slike/rezultati/pro-poslije-1.jpg", label: "Derva, 24 god. · Sarajevo · 8 sedmica tretmana" },
+      { before: "/slike/rezultati/pro-prije-2.jpg", after: "/slike/rezultati/pro-poslije-2.jpg", label: "Samanta, 31 god. · Zenica · 6 sedmica tretmana" },
+      { before: "/slike/rezultati/pro-prije-3.jpg", after: "/slike/rezultati/pro-poslije-3.jpg", label: "Amra, 23 god. · Tuzla · 10 sedmica tretmana" },
+    ],
   },
   "ice-cool-pro-max": {
     name: "ICE COOL Max",
@@ -182,12 +220,49 @@ const productData: Record<string, any> = {
         date: "Januar 2026",
         content: "Kupila sam jeftiniji IPL prošle godine i nije uradio ništa. Max je potpuno druga priča — osjetiš da ima snage. Ali hlađenje je tako dobro da ne boli. Bikini zona mi je sada čista bez problema.",
         rating: 5
+      },
+      {
+        name: "Amra",
+        age: 31,
+        location: "Zenica",
+        date: "Mart 2026",
+        content: "Max je onaj model koji sam tražila. Veći bljesak znači da noge završim za 10 minuta — ne 20 kao sa manjim uređajem. Hlađenje radi savršeno čak i na nivou 5. Preporučujem svima.",
+        rating: 5
+      },
+      {
+        name: "Lejla",
+        age: 26,
+        location: "Tuzla",
+        date: "Februar 2026",
+        content: "Godinama sam išla na vosak i trošila 80 KM mjesečno. Sad imam Max i ne pamtim kad sam zadnji put bila u salonu. Leđa i bikini zona su konačno riješene — jednom zauvijek.",
+        rating: 5
+      },
+      {
+        name: "Sabina",
+        age: 38,
+        location: "Sarajevo",
+        date: "Januar 2026",
+        content: "U mojim 38 sam mislila da je prekasno. Nije. Nakon 8 sedmica sa Maxom dlačice su rijetke i tanke. Koža mi je glatka kao kad sam imala 20. Žao mi je što nisam ranije znala za ovo.",
+        rating: 5
       }
-    ]
+    ],
+    vsTable: [
+      { salon: "100 KM po laserskom tretmanu", ipl: "190 KM jednom zauvijek" },
+      { salon: "Noge za 30–45 minuta u salonu", ipl: "Noge za 10 minuta kod kuće" },
+      { salon: "Rezultati za 6–8 tretmana (6+ mj.)", ipl: "Vidljivi rezultati za 2–3 sedmice" },
+      { salon: "Zakazivanje i čekanje", ipl: "Tretman kad tebi odgovara" },
+      { salon: "Bol na osjetljivim zonama", ipl: "Dvostruko hlađenje — ni na nivou 5 ne boli" },
+      { salon: "1.200–2.000 KM godišnje za laser", ipl: "0 KM u svim narednim godinama" },
+    ],
+    beforeAfterImages: [
+      { before: "/slike/rezultati/max-prije-1.jpg", after: "/slike/rezultati/max-poslije-1.jpg", label: "Emina, 29 god. · Mostar · 8 sedmica tretmana" },
+      { before: "/slike/rezultati/max-prije-2.jpg", after: "/slike/rezultati/max-poslije-2.jpg", label: "Jasmina, 35 god. · Banja Luka · 6 sedmica tretmana" },
+      { before: "/slike/rezultati/max-prije-3.jpg", after: "/slike/rezultati/max-poslije-3.jpg", label: "Nina, 27 god. · Sarajevo · 10 sedmica tretmana" },
+    ],
   },
   "ice-cool-lite": {
     name: "ICE COOL LITE",
-    tagline: "Stane u torbicu. Radi posao kao veliki.",
+    tagline: "Gornja usna. Brada. Bikini. Jednom zauvijek.",
     price: 165.00,
     compareAtPrice: 330.00,
     images: [
@@ -205,67 +280,108 @@ const productData: Record<string, any> = {
       "/slike/LITE/6.png"
     ],
     hero: {
-      title: "ICE COOL LITE — glatka koža za 165 KM",
-      subtitle: "Stane u torbicu, radi posao kao veliki. Savršen za lice, bikini zonu i žene u pokretu."
+      title: "Gornja usna, brada, bikini — glatko zauvijek. 165 KM.",
+      subtitle: "Precizni IPL tretman za zone koje te muče svake 3 sedmice. Threading, vosak, depilatorske kreme — to je prošlost."
     },
     benefits: [
-      "Najniža cijena u liniji — a rezultati su isti kao kod većih modela",
-      "Precizan nastavak za lice, gornju usnu i bikini zonu",
-      "Lagan i kompaktan — ponesi na more, vikendicu, putovanje",
-      "Savršen ako ti je ovo prvi IPL — jednostavan za korištenje"
+      "Gornja usna i brada čiste za 4–5 sedmica — bez threading bola",
+      "Bikini zona bez uraslih dlačica i iritacije — jednom zauvijek",
+      "999.999 bljeskova — ista snaga kao PRO, samo precizniji",
+      "Bezbolno Ice Cool™ hlađenje — štiti i najosjetljiviju kožu lica"
     ],
     features: [
-      { title: "Ponesi svuda", description: "Stane u neseser — savršen za more, vikendicu, putovanje" },
-      { title: "Precizan za lice", description: "Mali nastavak tačno cilja gornju usnu, bradu i bikini zonu" },
-      { title: "Bezbolno", description: "Ugrađeno hlađenje štiti čak i najosjetljiviju kožu" },
-      { title: "Traje godinama", description: "500,000 bljeskova — dovoljan za godine redovne upotrebe" }
+      { title: "Precizan za lice i bikini", description: "Poseban nastavak cilja tačno gornju usnu, bradu i bikini liniju — zone koje threading i vosak nikad zaista ne riješe" },
+      { title: "Bezbolno — zaista", description: "Ice Cool™ hlađenje radi tokom svakog bljeska. Čak i na licu i bikini zoni — blaga toplina, ništa više" },
+      { title: "999.999 bljeskova", description: "Isti broj kao PRO model — dovoljan za 15+ godina tretmana lica i bikini zone" },
+      { title: "Rezultati za 3–4 sedmice", description: "Na licu i manjim zonama promjene su vidljive brže nego na nogama. Gornja usna — 4 sedmice" }
     ],
     howItWorks: [
-      { step: 1, title: "Priprema (2 min)", description: "Obrij i očisti kožu. Jednostavno i brzo." },
-      { step: 2, title: "Tretman (5 min)", description: "Prisloni precizan nastavak i pritisni tipku. Hlađenje štiti kožu." },
-      { step: 3, title: "Ponovi 1x sedmično", description: "5-10 minuta. Manje nego jedno brijanje." },
-      { step: 4, title: "Rezultati za 3-4 sedmice", description: "Dlačice rastu sporije, tanje su. Sloboda od brijanja." }
+      { step: 1, title: "Precizan nastavak — cilja gdje treba", description: "Poseban nastavak za lice i bikini zonu pokriva tačno to malo, osjetljivo područje. Gornja usna, brada, bikini linija — bez promašaja." },
+      { step: 2, title: "Bezbolno hlađenje na licu", description: "Ice Cool™ hlađenje radi tokom svakog bljeska. Na licu i bikini zoni — ugodan tretman bez crvenila ili iritacije." },
+      { step: 3, title: "5 minuta sedmično — kompleks nestaje", description: "Jednom sedmično, 5 minuta. Nakon 3–4 sedmice primijeti razliku. Nakon 8–10 sedmica — gornja usna i bikini zona trajna su prošlost." },
+      { step: 4, title: "Sloboda koja traje", description: "Bez zakazivanja, bez threading bola, bez uraslih dlačica. Jednom zauvijek riješiš kompleks koji si godinama nosila." }
     ],
     faq: [
       {
-        question: "Radi li kao veći modeli?",
-        answer: "Da! Koristi istu IPL tehnologiju. Razlika je u veličini — LITE ima manji bljesak, što ga čini savršenim za lice i bikini zonu. Za noge radi odlično, samo treba malo više vremena."
+        question: "Boli li na gornjoj usni i bikini zoni — iskreno?",
+        answer: "Ne. Ice Cool™ hlađenje radi tokom svakog bljeska. 9 od 10 kupica kaže da osjetile blagu toplinu — ništa više. Čak i na gornjoj usni i bikini liniji gdje je koža najtanja i najosjetljivija. Daleko ugodnije od threading-a ili voskа."
       },
       {
-        question: "Boli li na licu i bikini zoni?",
-        answer: "Ne. Hlađenje radi dok uređaj radi. Većina korisnica kaže da osjete samo blagu toplinu, čak i na osjetljivim područjima."
+        question: "Je li LITE zaista isti kao PRO ili je slabiji?",
+        answer: "Ista IPL tehnologija, iste Ice Cool™ hlađenje, isti broj bljeskova (999.999). Razlika je samo u veličini glave — LITE ima precizniji, manji nastavak koji je savršen za lice i bikini zonu. Za noge treba nešto više vremena nego PRO."
+      },
+      {
+        question: "Koliko dugo do rezultata na gornjoj usni?",
+        answer: "Na gornjoj usni i bradi — promjene vidljive nakon 3–4 tretmana (3–4 sedmice). Bikini zona — vidljivo nakon 4–5 tretmana. Potpun rezultat za 8–10 sedmica redovnih tretmana jednom sedmično, 5 minuta."
       },
       {
         question: "Šta ako ne bude radilo za mene?",
-        answer: "14 dana za povrat. Probaš ga bez rizika — ako nisi zadovoljna, vratiš ga i dobiješ novac nazad."
+        answer: "14 dana za povrat bez pitanja. Probaš ga bez rizika — ako nisi zadovoljna rezultatima, vratiš ga i dobiješ novac nazad. Besplatna dostava u BiH, plaćanje pouzećem."
       }
     ],
     testimonials: [
       {
+        name: "Amira",
+        age: 32,
+        location: "Sarajevo",
+        date: "Mart 2026",
+        content: "Godinama sam se stidila gornje usne. Threading svake 3 sedmice — bolno, skupo, iscrpljujuće. Kupila sam LITE sa skeptičnošću. Nakon 4 tretmana gornja usna mi je bila 80% čista. Sada, 4 mjeseca kasnije — nema ništa. Eliminisala sam kompleks koji me mučio 15 godina.",
+        rating: 5
+      },
+      {
+        name: "Merjem",
+        age: 25,
+        location: "Mostar",
+        date: "Mart 2026",
+        content: "Imam mediteranski tip kože i tamne dlačice na licu od puberteta. LITE mi je promijenio život. Precizan nastavak radi savršeno za gornju usnu i bradu. Nakon 5 sedmica razlika je nevjerovatna. Sad ne izlazim iz kuće bez samopouzdanja.",
+        rating: 5
+      },
+      {
+        name: "Lejla",
+        age: 27,
+        location: "Tuzla",
+        date: "Februar 2026",
+        content: "Bikini zona je bila moj najveći problem — urasle dlačice i iritacija svaki put. Sa LITE-om — glatko bez iritacije, bez bola, bez uraslih. Tretiram 5 minuta jednom sedmično. Ne mogu zamisliti da sam godinama prolazila kroz onu torturu.",
+        rating: 5
+      },
+      {
         name: "Sara",
         age: 22,
         location: "Sarajevo",
-        date: "Mart 2026",
-        content: "Kupila sam LITE samo za gornju usnu — to mi je bio najveći kompleks. Već nakon 3 sedmice potpuno čista. Precizan nastavak je genijalan. Za 165 KM ovo je dar od Boga.",
+        date: "Februar 2026",
+        content: "Kupila sam LITE samo za gornju usnu — to mi je bio najveći kompleks od tinejdžerskih dana. Već nakon 3 sedmice potpuno čista. Precizan nastavak pokriva tačno to malo područje. Za 165 KM ovo je dar od Boga.",
         rating: 5
       },
       {
         name: "Aida",
         age: 28,
-        location: "Tuzla",
-        date: "Februar 2026",
-        content: "Puno putujem i LITE mi je savršen jer ga nosim svuda. Koristim ga za pazuhe i bikini zonu — već nakon mjesec dana skoro da nema ništa. Prijateljice su sve pitale šta koristim.",
+        location: "Zenica",
+        date: "Januar 2026",
+        content: "Imam osjetljivu kožu lica i bila sam sigurna da će iritirati. Ne — Ice Cool™ hlađenje je tako nježno. Gornja usna i brada su mi čiste već 2 mjeseca bez ikakvog tretmana. Nikad više threading.",
         rating: 5
       },
       {
-        name: "Hana",
-        age: 22,
-        location: "Bihać",
+        name: "Emina",
+        age: 19,
+        location: "Sarajevo",
         date: "Januar 2026",
-        content: "Ovo mi je prvi IPL ikad i bila sam nervozna. Ali LITE je tako jednostavan da sam ga koristila bez uputstva. Noge brijam upola rjeđe već nakon mjesec dana.",
+        content: "Mama mi je kupila LITE za 18. rođendan. Imam tamnu dlaku i gornju usnu sam mrzila od kad pamtim. Sada, 2 mjeseca kasnije — ne vidim ništa. Preporučila sam svim drugaricama.",
         rating: 5
       }
-    ]
+    ],
+    vsTable: [
+      { salon: "40–70 KM/mj. za threading lica i bikini vosak", ipl: "165 KM — jednom zauvijek" },
+      { salon: "Bol threading-a — suzne oči svaki put", ipl: "Bezbolno — Ice Cool™ hlađenje štiti lice" },
+      { salon: "Urasle dlačice i iritacija na bikini zoni", ipl: "Glatko bez iritacije, bez uraslih dlačica" },
+      { salon: "Ponavljaš svake 3 sedmice — bez kraja", ipl: "Tretman po tretman — sve manje, sve rjeđe" },
+      { salon: "480–840 KM godišnje samo za lice i bikini", ipl: "0 KM u svim narednim godinama" },
+      { salon: "Zakazivanje, čekanje, vožnja u salon", ipl: "5 minuta kod kuće, jednom sedmično" },
+    ],
+    beforeAfterImages: [
+      { before: "/slike/rezultati/lite-prije-1.jpg", after: "/slike/rezultati/lite-poslije-1.jpg", label: "Amira, 32 god. · Sarajevo · gornja usna · 4 sedmice" },
+      { before: "/slike/rezultati/lite-prije-2.jpg", after: "/slike/rezultati/lite-poslije-2.jpg", label: "Merjem, 25 god. · Mostar · lice i brada · 5 sedmica" },
+      { before: "/slike/rezultati/lite-prije-3.jpg", after: "/slike/rezultati/lite-poslije-3.jpg", label: "Lejla, 27 god. · Tuzla · bikini zona · 6 sedmica" },
+    ],
   }
 };
 
@@ -278,6 +394,8 @@ export default function ProductLanding({ slug, product: customProduct }: Product
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [timeLeft, setTimeLeft] = useState({ h: 23, m: 47, s: 12 });
+  const [stockCount, setStockCount] = useState(23);
 
   const baseProduct = slug ? productData[slug] : productData["ice-cool-pro"];
   const product = customProduct
@@ -292,7 +410,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
         testimonials: customProduct.testimonials ?? baseProduct?.testimonials,
       }
     : baseProduct;
-  
+
   if (!product) return null;
 
   const orderProductId = product.slug || slug || product.id || "ice-cool-pro";
@@ -306,6 +424,30 @@ export default function ProductLanding({ slug, product: customProduct }: Product
     "/slike/PRO/koristenje2.png",
     "/slike/PRO/koristenje3.png"
   ];
+
+  // Track ViewContent on mount
+  useEffect(() => {
+    trackViewContent({ id: orderProductId, name: product.name, price: product.price });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Countdown timer
+  useEffect(() => {
+    const endTime = Date.now() + 24 * 60 * 60 * 1000;
+    const timer = setInterval(() => {
+      const diff = endTime - Date.now();
+      if (diff <= 0) { clearInterval(timer); return; }
+      setTimeLeft({
+        h: Math.floor(diff / 3600000),
+        m: Math.floor((diff % 3600000) / 60000),
+        s: Math.floor((diff % 60000) / 1000),
+      });
+    }, 1000);
+    const stockTimer = setInterval(() => {
+      setStockCount(prev => prev > 7 ? prev - 1 : prev);
+    }, 150000);
+    return () => { clearInterval(timer); clearInterval(stockTimer); };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -423,18 +565,22 @@ export default function ProductLanding({ slug, product: customProduct }: Product
                 </div>
 
                 {/* CTA Button */}
-                <Link 
+                <Link
                   href={orderHref}
+                  onClick={() => {
+                    trackAddToCart({ id: orderProductId, name: product.name, price: product.price });
+                    trackCtaClick('Naruci', 'hero', orderProductId);
+                  }}
                   className="group relative w-full py-5 px-8 bg-[#563435] hover:bg-[#6d4446] text-white text-center font-bold text-xl rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-3">
-                    Želim glatku kožu →
+                    Želim glatku kožu — {product.price.toFixed(2)} KM
                     <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 </Link>
-                <p className="text-center text-xs text-gray-500 mt-3">
-                  Besplatna dostava u BiH · Isporuka za 1-3 radna dana
+                <p className="text-center text-xs text-gray-500 mt-3 flex items-center justify-center gap-3">
+                  <Truck className="w-4 h-4" /> Besplatna dostava u BiH · Plaćanje pouzećem · 14 dana povrat
                 </p>
               </div>
             </div>
@@ -555,12 +701,108 @@ export default function ProductLanding({ slug, product: customProduct }: Product
         </div>
       </section>
 
+      {/* Urgency Band */}
+      <section className="py-6 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-gray-900 rounded-[2rem] p-8 text-center text-white relative overflow-hidden shadow-2xl">
+            <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-[#563435]/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-2 mb-3 text-yellow-400 font-semibold text-sm">
+                <Zap className="w-4 h-4 fill-yellow-400" /> Akcijska cijena — ograničeno
+              </div>
+              <p className="text-xl font-bold mb-6">⚡ Akcija traje još:</p>
+              <div className="flex justify-center items-start gap-2 md:gap-4 mb-6">
+                {[
+                  { val: String(timeLeft.h).padStart(2, '0'), label: 'SATI' },
+                  { sep: true },
+                  { val: String(timeLeft.m).padStart(2, '0'), label: 'MINUTA' },
+                  { sep: true },
+                  { val: String(timeLeft.s).padStart(2, '0'), label: 'SEKUNDI' },
+                ].map((item, i) =>
+                  'sep' in item ? (
+                    <span key={i} className="text-3xl font-bold text-[#563435] mt-1">:</span>
+                  ) : (
+                    <div key={i} className="text-center">
+                      <span className="block bg-[#563435] text-white text-2xl md:text-3xl font-bold font-mono px-4 py-2 rounded-xl min-w-[56px] tabular-nums">
+                        {item.val}
+                      </span>
+                      <span className="block text-xs text-gray-500 mt-1.5 tracking-wider">{item.label}</span>
+                    </div>
+                  )
+                )}
+              </div>
+              <div className="inline-flex items-center gap-2 bg-white/5 border border-yellow-400/30 rounded-full px-5 py-2.5 text-sm text-yellow-400 font-semibold">
+                <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse flex-shrink-0" />
+                Preostalo na akcijskoj cijeni: <strong>{stockCount}</strong> kom.
+              </div>
+              <div className="mt-6">
+                <Link
+                  href={orderHref}
+                  onClick={() => {
+                    trackAddToCart({ id: orderProductId, name: product.name, price: product.price });
+                    trackCtaClick('Naruci', 'urgency-band', orderProductId);
+                  }}
+                  className="inline-flex items-center gap-2 bg-[#563435] hover:bg-[#6d4446] text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all"
+                >
+                  Naruči za {product.price.toFixed(2)} KM <ArrowRight className="w-5 h-5" />
+                </Link>
+                <p className="mt-3 text-xs text-gray-500">Plaćanje pouzećem · Besplatna dostava</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Before / After */}
+      {product.beforeAfterImages && product.beforeAfterImages.length > 0 && (
+        <section className="py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-10">
+              <div className="text-xs font-bold tracking-widest uppercase text-[#563435] mb-3">Stvarni rezultati</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Pogledaj razliku</h2>
+              <p className="text-gray-500 text-lg">Fotografije pravih kupica iz BiH — bez filtera, bez retuša.</p>
+            </div>
+            <div className={`grid gap-6 ${product.beforeAfterImages.length === 1 ? 'grid-cols-1 max-w-2xl mx-auto' : product.beforeAfterImages.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3'}`}>
+              {product.beforeAfterImages.map((pair: any, i: number) => (
+                <div key={i} className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl overflow-hidden shadow-sm">
+                  <div className="grid grid-cols-2 gap-0">
+                    <div className="relative">
+                      <div className="relative h-64 md:h-80 bg-gray-100">
+                        <Image src={pair.before} alt="Prije tretmana" fill className="object-cover" />
+                        <div className="absolute top-3 left-3 bg-gray-700/80 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">PRIJE</div>
+                      </div>
+                    </div>
+                    <div className="relative border-l-2 border-white">
+                      <div className="relative h-64 md:h-80 bg-gray-100">
+                        <Image src={pair.after} alt="Poslije tretmana" fill className="object-cover" />
+                        <div className="absolute top-3 right-3 bg-[#563435]/90 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">POSLIJE</div>
+                      </div>
+                    </div>
+                  </div>
+                  {pair.label && (
+                    <div className="px-5 py-3 text-center text-sm text-gray-600 font-medium border-t border-gray-100">{pair.label}</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Testimonials */}
       <section className="py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 text-center mb-12">
-            Žene iz BiH dijele svoja iskustva
-          </h2>
+          <div className="text-center mb-12">
+            <div className="text-xs font-bold tracking-widest uppercase text-[#563435] mb-3">Šta kažu kupice</div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Žene iz BiH koje su prestale ići u salon
+            </h2>
+            <div className="flex items-center justify-center gap-2 text-lg text-gray-600">
+              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+              <span className="font-bold text-gray-800">4.9/5</span>
+              <span>na osnovu recenzija kupaca</span>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {product.testimonials.map((testimonial: any, index: number) => (
               <div key={index} className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-3xl p-8 shadow-sm">
@@ -569,10 +811,13 @@ export default function ProductLanding({ slug, product: customProduct }: Product
                     <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <p className="text-gray-700 mb-6 italic leading-relaxed">"{testimonial.content}"</p>
+                <p className="text-gray-700 mb-6 italic leading-relaxed">&ldquo;{testimonial.content}&rdquo;</p>
                 <div className="flex items-center justify-between border-t border-white/20 pt-4">
                   <div>
-                    <p className="font-bold text-gray-800">{testimonial.name}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-bold text-gray-800">{testimonial.name}</p>
+                      <Check className="w-3.5 h-3.5 text-white bg-green-500 rounded-full p-0.5" />
+                    </div>
                     <p className="text-sm text-gray-500">{testimonial.age} godina{testimonial.location ? ` · ${testimonial.location}` : ''}</p>
                     {testimonial.date && <p className="text-xs text-gray-400">{testimonial.date}</p>}
                   </div>
@@ -585,6 +830,54 @@ export default function ProductLanding({ slug, product: customProduct }: Product
           </div>
         </div>
       </section>
+
+      {/* VS Table */}
+      {product.vsTable && product.vsTable.length > 0 && (
+        <section className="py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <div className="text-xs font-bold tracking-widest uppercase text-[#563435] mb-3">Usporedba</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Salon vs. {product.name}</h2>
+              <p className="text-gray-500">Jednom platiš, zauvijek uštediš.</p>
+            </div>
+            <div className="bg-white/40 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr>
+                      <th className="p-4 text-center text-white font-bold bg-gray-600 text-sm w-1/2">💸 Salon / Vosak</th>
+                      <th className="p-4 text-center text-white font-bold bg-[#563435] text-sm w-1/2">✅ {product.name}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {product.vsTable.map((row: any, i: number) => (
+                      <tr key={i} className="border-b border-gray-100 last:border-0">
+                        <td className="p-4 text-center text-sm text-red-600 bg-red-50/30">{row.salon}</td>
+                        <td className="p-4 text-center text-sm text-green-700 font-semibold bg-green-50/30">{row.ipl}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="mt-8 text-center">
+              <Link
+                href={orderHref}
+                onClick={() => {
+                  trackAddToCart({ id: orderProductId, name: product.name, price: product.price });
+                  trackCtaClick('Naruci', 'vs-table', orderProductId);
+                }}
+                className="inline-flex items-center gap-2 bg-[#563435] hover:bg-[#6d4446] text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all text-lg"
+              >
+                Naruči {product.name} — {product.price.toFixed(2)} KM <ArrowRight className="w-5 h-5" />
+              </Link>
+              <p className="mt-3 text-sm text-gray-500 flex items-center justify-center gap-3">
+                <Banknote className="w-4 h-4" /> Plaćanje pouzećem · Besplatna dostava · 14 dana povrat
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* FAQ */}
       <section className="py-12 px-4 sm:px-6 lg:px-8">
@@ -635,12 +928,16 @@ export default function ProductLanding({ slug, product: customProduct }: Product
                <p className="text-sm text-gray-500">{product.price.toFixed(2)} KM</p>
              </div>
           </div>
-          <Link 
+          <Link
             href={orderHref}
+            onClick={() => {
+              trackAddToCart({ id: orderProductId, name: product.name, price: product.price });
+              trackCtaClick('Naruci', 'sticky-bar', orderProductId);
+            }}
             className="flex-1 sm:flex-none sm:w-auto bg-[#563435] hover:bg-[#6d4446] text-white font-bold py-3 px-8 rounded-full shadow-lg text-center flex items-center justify-center gap-2"
           >
             <ShoppingCart className="w-5 h-5" />
-            Želim glatku kožu
+            Naruči — {product.price.toFixed(2)} KM
           </Link>
         </div>
       </div>

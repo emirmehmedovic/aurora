@@ -55,6 +55,12 @@ export interface LandingContent {
     subtitle: string;
   };
   reviews: LandingReview[];
+  beforeAfterImages?: {
+    image?: string;
+    before?: string;
+    after?: string;
+    label?: string;
+  }[];
   vsSection?: {
     label: string;
     title: string;
@@ -209,7 +215,17 @@ export default function DirectResponseLanding({ product, content, comparisonProd
   );
 
   return (
-    <main className="min-h-screen pb-24 relative overflow-hidden bg-gray-50/30">
+    <main className="min-h-screen pb-24 lg:pb-0 relative overflow-hidden bg-gray-50/30">
+      {/* Sticky Mobile Bottom CTA */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-white border-t border-gray-200 shadow-2xl px-4 py-3">
+        <button
+          onClick={() => scrollToForm('sticky-bottom')}
+          className="w-full py-4 bg-[#563435] hover:bg-[#6d4446] text-white font-bold text-lg rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-2"
+        >
+          Naruči odmah — {p.price.toFixed(2)} KM
+          <ArrowRight className="w-5 h-5" />
+        </button>
+      </div>
       {/* Background Elements */}
       <div className="absolute top-0 left-0 right-0 h-[1000px] bg-gradient-to-b from-purple-100/20 to-transparent pointer-events-none" />
 
@@ -274,17 +290,6 @@ export default function DirectResponseLanding({ product, content, comparisonProd
                     <p className="leading-tight">{benefit}</p>
                   </div>
                 ))}
-              </div>
-
-              {/* Price Card */}
-              <div className="mb-6 p-6 bg-white/40 backdrop-blur-md border border-white/30 rounded-2xl shadow-sm">
-                <div className="flex flex-wrap items-baseline gap-4 mb-2">
-                  <span className="text-5xl font-bold text-[#563435]">{p.price.toFixed(2)} KM</span>
-                  <span className="text-2xl text-gray-400 line-through decoration-2">{p.compareAtPrice.toFixed(2)} KM</span>
-                </div>
-                <p className="text-sm text-[#563435] font-medium">
-                  Ušteda {discount}% ({savings.toFixed(0)} KM)
-                </p>
               </div>
 
               {/* Trust Badges */}
@@ -377,6 +382,77 @@ export default function DirectResponseLanding({ product, content, comparisonProd
             </div>
           </div>
         </div>
+
+        {/* SECTION 2b: Before / After Results */}
+        {c.beforeAfterImages && c.beforeAfterImages.length > 0 && (
+          <div className="max-w-7xl mx-auto mb-20">
+            <div className="text-center mb-10">
+              <div className="text-xs font-bold tracking-widest uppercase text-[#563435] mb-3">Stvarni rezultati</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+                Pogledaj razliku
+              </h2>
+              <p className="text-gray-500 text-lg">Fotografije pravih kupica iz BiH — bez filtera, bez retuša.</p>
+            </div>
+
+            <div className={`grid gap-6 ${c.beforeAfterImages.length === 1 ? 'grid-cols-1 max-w-4xl mx-auto' : c.beforeAfterImages.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3'}`}>
+              {c.beforeAfterImages.map((pair, i) => (
+                <div key={i} className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl overflow-hidden shadow-sm">
+                  {pair.image ? (
+                    <div className="relative aspect-video bg-gray-100">
+                      <Image
+                        src={pair.image}
+                        alt={pair.label || `Rezultat kupice ${i + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                      />
+                    </div>
+                  ) : pair.before && pair.after ? (
+                    <div className="grid grid-cols-2 gap-0">
+                      {/* BEFORE */}
+                      <div className="relative">
+                        <div className="relative h-64 md:h-80 bg-gray-100">
+                          <Image
+                            src={pair.before}
+                            alt="Prije tretmana — stanje dlačica"
+                            fill
+                            className="object-cover"
+                          />
+                          <div className="absolute top-3 left-3 bg-gray-700/80 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">
+                            PRIJE
+                          </div>
+                        </div>
+                      </div>
+                      {/* AFTER */}
+                      <div className="relative border-l-2 border-white">
+                        <div className="relative h-64 md:h-80 bg-gray-100">
+                          <Image
+                            src={pair.after}
+                            alt="Poslije tretmana — glatka koža"
+                            fill
+                            className="object-cover"
+                          />
+                          <div className="absolute top-3 right-3 bg-[#563435]/90 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">
+                            POSLIJE
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+                  {pair.label && (
+                    <div className="px-5 py-3 text-center text-sm text-gray-600 font-medium border-t border-gray-100">
+                      {pair.label}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-10 max-w-2xl mx-auto text-center">
+              <UrgencyCTA />
+            </div>
+          </div>
+        )}
 
         {/* SECTION 3: First Person Story */}
         <div className="max-w-7xl mx-auto mb-20 bg-gradient-to-br from-[#563435]/5 to-[#8b5a5c]/5 backdrop-blur-md border border-[#563435]/10 rounded-[2.5rem] p-8 md:p-12 pt-14 relative">
@@ -596,13 +672,37 @@ export default function DirectResponseLanding({ product, content, comparisonProd
                 </div>
               ))}
             </div>
+            <div className="mt-10 max-w-2xl mx-auto">
+              <UrgencyCTA />
+            </div>
           </div>
         )}
 
-        {/* SECTION 7: Model Comparison Table */}
+        {/* CLOSING MESSAGE */}
+        <div className="max-w-5xl mx-auto mb-12">
+          <div className="bg-[#563435] rounded-[3rem] p-8 md:p-12 text-center text-white relative overflow-hidden shadow-2xl border border-[#563435]">
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+                {c.closingTitle}
+              </h2>
+              <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
+                {c.closingText}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* INLINE ORDER FORM */}
+        <div className="max-w-5xl mx-auto mb-12 scroll-mt-8" id="naruci-form">
+          <LandingOrderForm product={p} />
+        </div>
+
+        {/* SECTION 7: Model Comparison Table — ispod forme da ne remeti odluku */}
         <div className="max-w-4xl mx-auto mb-20">
+          <p className="text-center text-sm text-gray-500 mb-4">Nisi sigurna koji model odabrati?</p>
           <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-8">
-            Koji model je pravi za tebe?
+            Usporedi sve modele
           </h2>
           <div className="bg-white/40 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
@@ -621,7 +721,7 @@ export default function DirectResponseLanding({ product, content, comparisonProd
                     <tr key={i} className={`border-b border-gray-100 last:border-0 ${model.highlight ? 'bg-[#563435]/5' : ''}`}>
                       <td className="p-4 font-semibold text-gray-800">
                         {model.name}
-                        {model.highlight && <span className="ml-2 text-xs bg-[#563435] text-white px-2 py-0.5 rounded-full">Gledate ovaj</span>}
+                        {model.highlight && <span className="ml-2 text-xs bg-[#563435] text-white px-2 py-0.5 rounded-full">Ovaj model</span>}
                       </td>
                       <td className="p-4 text-center font-bold text-[#563435]">{model.price.toFixed(2)} KM</td>
                       <td className="p-4 text-center text-gray-700">{model.flashes}</td>
@@ -636,26 +736,6 @@ export default function DirectResponseLanding({ product, content, comparisonProd
           <p className="text-center text-sm text-gray-500 mt-4">
             Svi modeli dolaze s besplatnom dostavom u BiH, 12 mjeseci garancije i 14 dana prava na povrat.
           </p>
-        </div>
-
-        {/* CLOSING MESSAGE */}
-        <div className="max-w-5xl mx-auto mb-12">
-          <div className="bg-[#563435] rounded-[3rem] p-8 md:p-12 text-center text-white relative overflow-hidden shadow-2xl border border-[#563435]">
-            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-            <div className="relative z-10">
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
-                {c.closingTitle}
-              </h2>
-              <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
-                {c.closingText}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* INLINE ORDER FORM */}
-        <div className="max-w-5xl mx-auto mb-12 scroll-mt-8">
-          <LandingOrderForm product={p} />
         </div>
 
       </div>

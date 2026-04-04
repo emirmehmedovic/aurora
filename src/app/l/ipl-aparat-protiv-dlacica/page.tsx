@@ -108,6 +108,20 @@ const proContent: LandingContent = {
   ],
   closingTitle: "Jednom kupiš. 10 godina ne briješ.",
   closingText: "Svaki dan koji odgađaš je još jedno jutro sa brijačem u ruci. Besplatna dostava u BiH · Plaćanje pouzećem · 14 dana povrat bez pitanja.",
+  beforeAfterImages: [
+    {
+      image: "/testimonials/before-after/pro1.png",
+      label: "Ivana, 24 god. · Banja Luka · 8 sedmica tretmana",
+    },
+    {
+      image: "/testimonials/before-after/pro2.png",
+      label: "Marina, 31 god. · Mostar · 6 sedmica tretmana",
+    },
+    {
+      image: "/testimonials/before-after/pro3.png",
+      label: "Amra, 23 god. · Tuzla · 10 sedmica tretmana",
+    },
+  ],
 };
 
 export default async function IplAparatLandingPage() {

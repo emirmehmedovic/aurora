@@ -228,6 +228,7 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
   const [timeLeft, setTimeLeft] = useState({ h: 23, m: 47, s: 12 });
   const [stockCount, setStockCount] = useState(19);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activeCalloutImageIndex, setActiveCalloutImageIndex] = useState(0);
 
   const p = product;
   const c = content;
@@ -235,7 +236,9 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
   const savings = p.compareAtPrice - p.price;
   const discount = Math.round((savings / p.compareAtPrice) * 100);
 
-  const productImage = (p.images && p.images.length > 0) ? p.images[0] : (p.image || "/slike/PRO/cover-image.png");
+  const productImages =
+    p.images && p.images.length > 0 ? p.images : [p.image || "/slike/PRO/cover-image.png"];
+  const productImage = productImages[activeCalloutImageIndex] || productImages[0];
 
   const allModels = (comparisonProducts && comparisonProducts.length > 0
     ? comparisonProducts
@@ -475,13 +478,64 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
                 <div className="p-6 md:p-8">
                   <div className="flex flex-col md:flex-row gap-6 items-start">
                     {/* Product image */}
-                    <div className="relative w-full md:w-48 h-48 flex-shrink-0 rounded-2xl overflow-hidden bg-gray-100">
-                      <Image
-                        src={productImage}
-                        alt={p.name}
-                        fill
-                        className="object-cover"
-                      />
+                    <div className="w-full md:w-56 flex-shrink-0">
+                      <div className="md:hidden -mx-1 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-3">
+                        <div className="flex gap-3 px-1">
+                          {productImages.map((image, idx) => (
+                            <button
+                              key={`${image}-${idx}`}
+                              type="button"
+                              onClick={() => setActiveCalloutImageIndex(idx)}
+                              className="relative min-w-[85%] snap-center overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 shadow-sm"
+                            >
+                              <div className="relative h-80">
+                                <Image
+                                  src={image}
+                                  alt={`${p.name} slika ${idx + 1}`}
+                                  fill
+                                  className="object-cover object-center"
+                                  sizes="85vw"
+                                />
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="hidden md:block relative w-full h-72 rounded-2xl overflow-hidden bg-gray-100">
+                        <Image
+                          src={productImage}
+                          alt={p.name}
+                          fill
+                          className="object-cover object-center"
+                          sizes="224px"
+                        />
+                      </div>
+
+                      {productImages.length > 1 && (
+                        <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1">
+                          {productImages.map((image, idx) => (
+                            <button
+                              key={`${image}-thumb-${idx}`}
+                              type="button"
+                              onClick={() => setActiveCalloutImageIndex(idx)}
+                              className={`relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border-2 transition-all ${
+                                activeCalloutImageIndex === idx
+                                  ? "border-[#563435] shadow-md"
+                                  : "border-gray-200 opacity-80 hover:opacity-100"
+                              }`}
+                            >
+                              <Image
+                                src={image}
+                                alt={`${p.name} thumbnail ${idx + 1}`}
+                                fill
+                                className="object-cover"
+                                sizes="64px"
+                              />
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                     <div className="flex-1">
                       <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-1">

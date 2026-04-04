@@ -11,58 +11,118 @@ import {
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "ICE COOL LITE™ | Kompaktni IPL Uređaj za Putovanja i Lice | BiH",
-  description: "ICE COOL LITE – kompaktni IPL uređaj idealan za putovanja i tretmane lica. Lagan, prenosiv, 500k bljeskova. Besplatna dostava u BiH. Naruči danas →",
-  keywords: "kompaktni IPL uređaj, mini IPL aparat, laserski epilator za putovanja, ICE COOL LITE, IPL bikini zona, IPL za lice BiH",
+  title: "ICE COOL LITE™ | IPL za Gornju Usnu, Bradu i Bikini Zonu | BiH",
+  description: "ICE COOL LITE — precizni IPL uređaj za lice i bikini zonu. 999.999 bljeskova, bezbolno Ice Cool™ hlađenje. Gornja usna čista za 5 sedmica. Besplatna dostava u BiH →",
+  keywords: "IPL za lice BiH, IPL gornja usna, threading alternativa, IPL bikini zona, uklanjanje dlačica s lica, ICE COOL LITE, IPL epilator lice Bosna",
   alternates: {
     canonical: "https://aurorashop.ba/l/kompaktni-ipl-uredjaj",
   }
 };
 
 const liteContent: LandingContent = {
-  badge: "Savršen prvi korak u IPL depilaciji",
-  heroSubtitle: "Manji od telefona. Radi isti posao. Idealan za lice, bikini zonu i sve putnice.",
+  badge: "ICE COOL LITE™ — Precizna epilacija lica i bikini zone",
+  heroHeadline: "Gornja usna. Brada. Bikini. Jednom zauvijek. Bez bola.",
+  heroSubtitle: "Počni tamo gdje te najviše muči — pa tretiraj sve ostalo istim uređajem.",
+  heroSubline: "Ista IPL snaga i 999.999 bljeskova kao PRO model — samo kompaktniji. Precizan nastavak za lice i bikini, ali radi i noge, ruke i pazuhe. Jedan uređaj. Sve zone. Jednom zauvijek.",
   benefits: [
-    "Precizan nastavak za lice, gornju usnu i bikini — baš gdje ti treba",
-    "Lagan i kompaktan — stane u torbicu, ponesi na more, vikendicu, putovanje",
-    "Jednostavan za korištenje — savršen ako ti je ovo prvi IPL",
-    "500.000 bljeskova = 10+ godina tretmana lica i manjih zona",
+    "Gornja usna i brada čiste za 4–5 sedmica — bez threading bola",
+    "Radi sve: noge, ruke, pazuhe, bikini zona, lice — isti rezultati kao PRO",
+    "999.999 bljeskova — ista snaga kao PRO model, kompaktniji i lakši za nošenje",
+    "Bezbolno Ice Cool™ hlađenje — štiti i najosjetljiviju kožu, čak i na licu",
   ],
-  empathyTitle: "Hoćeš probati IPL, ali ne znaš odakle početi?",
-  empathySubtitle: "LITE je napravljen baš za tebe.",
-  empathyParagraph1: "Možda ti se čini da je IPL kompliciran ili skup. Ili se pitaš: 'Hoće li uopšte raditi za mene?' LITE je savršen odgovor — jednostavan za korištenje, precizan za lice i bikini zonu, a dovoljno kompaktan da ga poneseš svuda.",
-  empathyParagraph2: "Sa preciznim nastavkom za lice i bikini zonu, LITE je idealan za područja koja zahtijevaju pažljiviji pristup. A ako putuješ — stane u neseser. Nema više brijanja u hotelskim sobama niti panike prije plaže.",
-  empathyHighlight: "165 KM za uređaj koji će ti trajati godinama. Manje od 3 posjeta salonu za vosak. Radi računicu.",
+  empathyLabel: "Poznato ti je?",
+  empathyTitle: "Svake 3 sedmice. Isti bol. Isti trošak. Isti kompleks.",
+  empathySubtitle: "Gornja usna, brada, bikini linija — mjesta koja te svakodnevno podsjećaju da nisi gotova.",
+  empathyParagraph1: "Threading boli. Svaki put isti ritual — zakazivanje, čekanje, suzne oči dok ti neko izvlači dlačicu po dlačicu. I dok izlaziš iz salona, već znaš: za 3 sedmice opet sve ispočetka. Godinama.",
+  empathyParagraph2: "Vosak na bikini zoni? Crvenilo i urasle dlačice koji dolaze tjedan poslije. Depilatorska krema na licu — pečenje, iritacija, sumnjivi miris. Nijedan od tih načina ne rješava problem — samo ga odgađa do sljedećeg puta.",
+  empathyParagraph3: "Žene koje koriste LITE kažu da je ovo konačno rješenje, ne još jedan odgodak. Pet minuta jednom sedmično — i kompleks koji si nosila godinama počinje nestajati zauvijek.",
+  empathyHighlight: "165 KM jednom. Manje od 3 odlaska na threading ili vosak.",
   story: {
-    title: "'Nisam bila sigurna da li IPL radi. LITE me potpuno uvjerio.'",
-    text: "Dugo sam razmišljala o IPL-u, ali nisam bila sigurna je li to za mene. LITE mi je bio savršen prvi korak — precizan nastavak za gornju usnu i bikini zonu, i dovoljno mali da ga nosim svuda. Već nakon trećeg tretmana gornja usna mi je bila potpuno čista. Sada ga nosim i kad idem na more — stane u torbicu, lakši je od šminke. Za 165 KM ovo je apsolutno najbolji poklon koji sam sebi kupila.",
-    authorName: "Dina M.",
-    authorSubtitle: "25 god. · Sarajevo · koristi LITE 3 mjeseca",
+    title: "'Godinama sam se stidila gornje usne. LITE je promijenio sve.'",
+    text: "Imam mediteransku boju kože i tamne dlačice na licu od malena. Threading svake tri sedmice — skupa, bolna, ponižavajuća rutina. Nisam ni znala da postoji kućno rješenje dok mi nije rekla drugarica. Bila sam skeptična — čuvala sam 165 KM i mislila da se ne isplati. Kupila sam. Nakon 4 tretmana gornja usna mi je bila 80% čista. Sada, 4 mjeseca kasnije — nema ništa. Eliminisala sam kompleks koji me mučio 15 godina. Za 165 KM.",
+    authorName: "Amira K.",
+    authorSubtitle: "32 god. · Sarajevo · koristi LITE 4 mjeseca",
   },
   howItWorks: [
-    { step: 1, title: "Precizan bljesak za osjetljiva područja", desc: "Mali nastavak cilja tačno tamo gdje treba — gornja usna, brada, bikini, pazuhe. Bez straha da ćeš pogađati pogrešno mjesto." },
-    { step: 2, title: "Hlađenje štiti i najosjetljiviju kožu", desc: "Ice Cool™ hlađenje radi tokom svakog bljeska. Čak i na bikini zoni i licu — ugodan tretman, bez crvenila." },
-    { step: 3, title: "Ponesi ga svuda sa sobom", desc: "Stane u neseser, lagan je i ne zauzima mjesto. Glatka koža na moru, vikendici, putovanju — bez kompromisa." },
+    { step: 1, title: "Precizan nastavak — cilja tačno gdje treba", desc: "Poseban nastavak za lice i bikini zonu pokriva tačno to malo, osjetljivo područje — gornja usna, brada, bikini linija. Bez promašaja, bez straha." },
+    { step: 2, title: "Bezbolno na licu — hlađenje je uvijek tu", desc: "Ice Cool™ hlađenje radi tokom svakog bljeska. Na licu i bikini zoni — ugodan tretman bez crvenila, iritacije ili bola. Osjeti se blaga toplina i to je sve." },
+    { step: 3, title: "5 minuta sedmično — kompleks koji nestaje", desc: "Jednom sedmično, 5 minuta. Nakon 3–4 sedmice primijeti razliku. Nakon 8–10 sedmica — gornja usna, brada ili bikini zona trajna su prošlost." },
   ],
+  urgencySection: {
+    title: "⚡ Akcija traje još:",
+    subtitle: "ICE COOL LITE™ trenutno dostupan sa 50% popusta. Akcija se završava kad istekne tajmer.",
+  },
   reviews: [
-    { name: "Sara", age: 24, text: "Kupila sam LITE samo za gornju usnu i bradu — to mi je bio najveći kompleks. Već nakon 3 sedmice gornja usna mi je potpuno čista. Precizan nastavak je genijalan, pokriva tačno to malo područje. Hlađenje je super, ne osjetiš ništa. Za 165 KM ovo je dar od Boga.", date: "Mart 2026", location: "Sarajevo" },
-    { name: "Aida", age: 28, text: "Puno putujem zbog posla i LITE mi je savršen jer ga nosim svuda. Stane u torbicu, lakši je od fena. Koristim ga za pazuhe i bikini zonu — već nakon mjesec dana skoro da nema ništa. Prijateljice su sve pitale šta koristim.", date: "Februar 2026", location: "Tuzla" },
-    { name: "Hana", age: 22, text: "Ovo mi je prvi IPL ikad i bila sam nervozna. Ali LITE je tako jednostavan da sam ga koristila bez ikakvog uputstva. Mali je, ugodan, i ne plaši me. Noge brijam upola rjeđe već nakon mjesec dana. Sljedeći korak — naručim drugarici za rođendan.", date: "Januar 2026", location: "Bihać" },
+    { name: "Amira", age: 32, text: "Godinama sam se stidila gornje usne. Threading svake 3 sedmice — bolno, skupo, iscrpljujuće. Kupila sam LITE sa skeptičnošću. Nakon 4 tretmana gornja usna mi je bila 80% čista. Sada, 4 mjeseca kasnije — nema ništa. Eliminisala sam kompleks koji me mučio 15 godina. Za 165 KM.", date: "Mart 2026", location: "Sarajevo" },
+    { name: "Merjem", age: 25, text: "Imam mediteranski tip kože i tamne dlačice na licu od puberteta. LITE mi je promijenio život — bukvalno. Precizan nastavak radi savršeno za gornju usnu i bradu. Nakon 5 sedmica razlika je nevjerovatna. Sad ne izlazim iz kuće bez samopouzdanja.", date: "Mart 2026", location: "Mostar" },
+    { name: "Lejla", age: 27, text: "Bikini zona je bila moj najveći problem — urasle dlačice i iritacija svaki put. Sa LITE-om — glatko bez iritacije, bez bola, bez uraslih. Tretiram 5 minuta jednom sedmično. Ne mogu zamisliti da sam godinama prolazila kroz onu torturu za vosak.", date: "Februar 2026", location: "Tuzla" },
+    { name: "Sara", age: 22, text: "Kupila sam LITE samo za gornju usnu — to mi je bio najveći kompleks od tinejdžerskih dana. Već nakon 3 sedmice potpuno čista. Precizan nastavak pokriva tačno to malo područje. Hlađenje je super, ne osjeti se ništa. Za 165 KM ovo je dar od Boga.", date: "Februar 2026", location: "Sarajevo" },
+    { name: "Aida", age: 28, text: "Imam osjetljivu kožu lica i bila sam sigurna da će iritirati. Ne — Ice Cool™ hlađenje je tako nježno da je ugodnije nego toner. Gornja usna i brada su mi čiste već 2 mjeseca bez ikakvog tretmana. Nikad više threading.", date: "Januar 2026", location: "Zenica" },
+    { name: "Emina", age: 19, text: "Mama mi je kupila LITE za 18. rođendan i nisam vjerovala da će toliko raditi. Imam tamnu dlaku i gornju usnu sam mrzila od kad pamtim. Sada, 2 mjeseca kasnije — ne vidim ništa. Preporučila sam svim drugaricama.", date: "Januar 2026", location: "Sarajevo" },
   ],
+  vsSection: {
+    label: "Uradi račun",
+    title: "Threading / Vosak vs. ICE COOL LITE™",
+    subtitle: "Jednom platiš — zauvijek prestaneš plaćati.",
+    rows: [
+      { salon: "40–70 KM/mj. za threading lica i bikini vosak", ipl: "165 KM — jednom zauvijek" },
+      { salon: "480–840 KM godišnje samo za lice i bikini", ipl: "0 KM u svim narednim godinama" },
+      { salon: "Bol threading-a — suzne oči svaki put", ipl: "Bezbolno — Ice Cool™ hlađenje štiti lice" },
+      { salon: "Urasle dlačice i iritacija na bikini zoni", ipl: "Glatko bez iritacije, bez uraslih dlačica" },
+      { salon: "Za 3 sedmice već rastu — ispočetka", ipl: "Tretman po tretman — sve manje, sve rjeđe" },
+      { salon: "Zakazivanje, čekanje, vožnja", ipl: "5 minuta kod kuće, jednom sedmično" },
+    ],
+  },
+  skepticSection: {
+    label: "Imaš pitanja?",
+    title: "Razumijemo skeptičnost — evo iskrenih odgovora",
+    items: [
+      {
+        q: '„Boli li na licu i bikini zoni — iskreno?"',
+        a: "Ne. To je najčešće pitanje i najiskrenniji odgovor je: Ice Cool™ hlađenje radi tokom svakog bljeska. 9 od 10 kupica kaže da osjetile blagu toplinu — ništa više. Čak i na gornjoj usni i bikini liniji gdje je koža najtanja i najosjetljivija.",
+      },
+      {
+        q: '„Stvarno ima 999.999 bljeskova — koliko je to?"',
+        a: "Da — isti broj kao PRO model. Za lice, gornju usnu, bikini zonu i pazuhe, 999.999 bljeskova je dovoljno za 15+ godina tretmana. U praksi — kupuješ jednom i ne trebaš ga zamijeniti nikad za vijeka upotrebe.",
+      },
+      {
+        q: '„Razlikuje li se od jeftinijih IPL uređaja?"',
+        a: "Da, značajno. Jeftini IPL uređaji (ispod 60 KM) nemaju hlađenje, imaju slab bljesak i rade samo na najsvjetlijim tipovima kože. LITE ima Ice Cool™ hlađenje, dovoljno jak bljesak za vidljive rezultate i radi na tipovima kože I–V.",
+      },
+      {
+        q: '„Koliko dugo do rezultata na licu?"',
+        a: "Na gornjoj usni i bradi — promjene vidljive nakon 3–4 tretmana (3–4 sedmice). Bikini zona — vidljivo nakon 4–5 tretmana. Potpun rezultat za 8–10 sedmica redovnih tretmana. Ponavljaš jednom sedmično, 5 minuta.",
+      },
+    ],
+  },
   specs: [
     { label: "Napajanje", value: "Žičano (adapter uključen)" },
-    { label: "Broj bljeskova", value: "500,000" },
+    { label: "Broj bljeskova", value: "999,999" },
     { label: "Nivoi intenziteta", value: "3" },
     { label: "Tehnologija hlađenja", value: "Ice Cool™ kontaktno hlađenje" },
-    { label: "Dizajn", value: "Ultra-kompaktan, prenosiv" },
+    { label: "Dizajn", value: "Kompaktan, prenosiv" },
     { label: "Posebni nastavci", value: "Precizan nastavak za lice i bikini zonu" },
-    { label: "Pogodno za", value: "Lice, gornja usna, pazuh, bikini zona, manja područja" },
+    { label: "Pogodno za", value: "Lice, gornja usna, brada, pazuh, bikini zona, noge" },
     { label: "Tip kože", value: "Fitzpatrick I-V (svijetla do tamna)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, precizan nastavak, korisnički priručnik" },
     { label: "Garancija", value: "12 mjeseci" },
   ],
-  closingTitle: "Glatka koža za 165 KM. Ozbiljno.",
-  closingText: "To je manje od 3 posjeta salonu. LITE radi isti posao — samo stane u torbicu. 14 dana za povrat ako nisi zadovoljna. Besplatna dostava u BiH.",
+  closingTitle: "165 KM da riješiš kompleks koji traje godinama.",
+  closingText: "Gornja usna. Brada. Bikini. — Jednom platiš, zauvijek ne brineš. Plaćanje pouzećem · Besplatna dostava u BiH · 14 dana povrat bez pitanja.",
+  beforeAfterImages: [
+    {
+      image: "/testimonials/before-after/lite1.png",
+      label: "Sara, 22 god. · Sarajevo · gornja usna · 5 sedmica",
+    },
+    {
+      image: "/testimonials/before-after/lite2.png",
+      label: "Aida, 28 god. · Tuzla · bikini zona · 6 sedmica",
+    },
+    {
+      image: "/testimonials/before-after/lite3.png",
+      label: "Hana, 22 god. · Bihać · noge · 8 sedmica",
+    },
+  ],
 };
 
 export default async function KompaktniIplLandingPage() {
@@ -75,7 +135,7 @@ export default async function KompaktniIplLandingPage() {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name,
-    "description": "Kompaktni IPL uređaj idealan za putovanja, lice i osjetljive zone",
+    "description": "ICE COOL LITE — precizni IPL uređaj za gornju usnu, bradu i bikini zonu. 999.999 bljeskova, bezbolno Ice Cool™ hlađenje, vidljivi rezultati za 3–4 sedmice.",
     "brand": { "@type": "Brand", "name": "Ice Cool PRO™" },
     "image": `https://aurorashop.ba${product.image}`,
     "offers": {

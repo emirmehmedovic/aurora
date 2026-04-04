@@ -45,6 +45,11 @@ export default function LandingOrderForm({ product }: LandingOrderFormProps) {
   const productImage = product.image || (product.images && product.images[0]) || "/slike/PRO/cover-image.png";
   const discount = Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100);
 
+  // Track InitiateCheckout on mount (when user sees the order form)
+  useEffect(() => {
+    trackInitiateCheckout(product.price);
+  }, [product.price]);
+
   // Track form abandonment on page leave
   const handleBeforeUnload = useCallback(() => {
     if (formStarted && !submitted && lastFieldRef.current) {
@@ -62,8 +67,6 @@ export default function LandingOrderForm({ product }: LandingOrderFormProps) {
     setIsSubmitting(true);
 
     try {
-      trackInitiateCheckout(product.price);
-
       // Append UTM params to order data
       const utms = getUtmParams();
       const orderData = { ...formData, ...utms };
