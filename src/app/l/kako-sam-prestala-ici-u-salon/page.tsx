@@ -8,7 +8,6 @@ import {
   getStorefrontProducts,
 } from "@/lib/storefront-products";
 import heroRightImage from "../../../../noviland/16.png";
-import heroLeftImage from "../../../../noviland/5.png";
 import calendarImage from "../../../../noviland/Dizajn bez naslova.png";
 import amraHomeImage from "../../../../noviland/Bez naslova (Objava na Facebooku) (1).png";
 import testimonial3Image from "../../../../testimonials/3.png";
@@ -40,7 +39,7 @@ const proContent: AdvertorialContent = {
   readingTime: "4 minute čitanja",
   heroImageDesc:
     "Glatke noge nakon 3 mjeseca korištenja ICE COOL PRO kod kuće, bez posjete salonu",
-  heroImageLeftSrc: heroLeftImage.src,
+  heroImageLeftSrc: "/testimonials/before-after/38ee2877-cf14-4710-9da0-cb6324e91ba9.jpg",
   heroImageLeftAlt:
     "Brijanje noge prije tretmana — prvi korak pripreme za IPL epilaciju kod kuće",
   heroImageRightSrc: heroRightImage.src,

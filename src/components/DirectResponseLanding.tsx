@@ -107,6 +107,7 @@ export default function DirectResponseLanding({ product, content, comparisonProd
   const WHATSAPP_PHONE = "38761904759";
   const VIBER_PHONE = "%2B38761904759";
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [specsOpen, setSpecsOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ h: 23, m: 47, s: 12 });
   const [stockCount, setStockCount] = useState(23);
@@ -385,7 +386,7 @@ export default function DirectResponseLanding({ product, content, comparisonProd
 
         {/* SECTION 2b: Before / After Results */}
         {c.beforeAfterImages && c.beforeAfterImages.length > 0 && (
-          <div className="max-w-7xl mx-auto mb-20">
+          <div className="max-w-4xl mx-auto mb-20">
             <div className="text-center mb-10">
               <div className="text-xs font-bold tracking-widest uppercase text-[#563435] mb-3">Stvarni rezultati</div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
@@ -394,57 +395,85 @@ export default function DirectResponseLanding({ product, content, comparisonProd
               <p className="text-gray-500 text-lg">Fotografije pravih kupica iz BiH — bez filtera, bez retuša.</p>
             </div>
 
-            <div className={`grid gap-6 ${c.beforeAfterImages.length === 1 ? 'grid-cols-1 max-w-4xl mx-auto' : c.beforeAfterImages.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3'}`}>
-              {c.beforeAfterImages.map((pair, i) => (
-                <div key={i} className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl overflow-hidden shadow-sm">
-                  {pair.image ? (
-                    <div className="relative aspect-video bg-gray-100">
+            <div className="bg-white/40 backdrop-blur-md border border-white/20 rounded-[2rem] overflow-hidden shadow-sm">
+              {c.beforeAfterImages[activeResultIndex]?.image ? (
+                <div className="relative aspect-video bg-gray-100">
+                  <Image
+                    src={c.beforeAfterImages[activeResultIndex].image!}
+                    alt={c.beforeAfterImages[activeResultIndex].label || `Rezultat kupice ${activeResultIndex + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 900px"
+                  />
+                </div>
+              ) : c.beforeAfterImages[activeResultIndex]?.before && c.beforeAfterImages[activeResultIndex]?.after ? (
+                <div className="grid grid-cols-2 gap-0">
+                  <div className="relative">
+                    <div className="relative h-72 md:h-[28rem] bg-gray-100">
                       <Image
-                        src={pair.image}
-                        alt={pair.label || `Rezultat kupice ${i + 1}`}
+                        src={c.beforeAfterImages[activeResultIndex].before!}
+                        alt="Prije tretmana — stanje dlačica"
                         fill
                         className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                       />
-                    </div>
-                  ) : pair.before && pair.after ? (
-                    <div className="grid grid-cols-2 gap-0">
-                      {/* BEFORE */}
-                      <div className="relative">
-                        <div className="relative h-64 md:h-80 bg-gray-100">
-                          <Image
-                            src={pair.before}
-                            alt="Prije tretmana — stanje dlačica"
-                            fill
-                            className="object-cover"
-                          />
-                          <div className="absolute top-3 left-3 bg-gray-700/80 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">
-                            PRIJE
-                          </div>
-                        </div>
-                      </div>
-                      {/* AFTER */}
-                      <div className="relative border-l-2 border-white">
-                        <div className="relative h-64 md:h-80 bg-gray-100">
-                          <Image
-                            src={pair.after}
-                            alt="Poslije tretmana — glatka koža"
-                            fill
-                            className="object-cover"
-                          />
-                          <div className="absolute top-3 right-3 bg-[#563435]/90 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">
-                            POSLIJE
-                          </div>
-                        </div>
+                      <div className="absolute top-3 left-3 bg-gray-700/80 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">
+                        PRIJE
                       </div>
                     </div>
-                  ) : null}
-                  {pair.label && (
-                    <div className="px-5 py-3 text-center text-sm text-gray-600 font-medium border-t border-gray-100">
-                      {pair.label}
+                  </div>
+                  <div className="relative border-l-2 border-white">
+                    <div className="relative h-72 md:h-[28rem] bg-gray-100">
+                      <Image
+                        src={c.beforeAfterImages[activeResultIndex].after!}
+                        alt="Poslije tretmana — glatka koža"
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute top-3 right-3 bg-[#563435]/90 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">
+                        POSLIJE
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
+              ) : null}
+
+              {c.beforeAfterImages[activeResultIndex]?.label && (
+                <div className="px-6 py-4 text-center text-base text-gray-700 font-medium border-t border-gray-100">
+                  {c.beforeAfterImages[activeResultIndex].label}
+                </div>
+              )}
+            </div>
+
+            <div className="mt-5 flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
+              {c.beforeAfterImages.map((pair, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setActiveResultIndex(i)}
+                  className={`relative w-24 h-24 md:w-28 md:h-28 flex-shrink-0 rounded-2xl overflow-hidden border-2 transition-all ${
+                    activeResultIndex === i
+                      ? "border-[#563435] shadow-md scale-105"
+                      : "border-white/50 hover:border-[#563435]/50 opacity-75 hover:opacity-100"
+                  }`}
+                >
+                  {pair.image ? (
+                    <Image
+                      src={pair.image}
+                      alt={pair.label || `Rezultat ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="112px"
+                    />
+                  ) : pair.after ? (
+                    <Image
+                      src={pair.after}
+                      alt={pair.label || `Rezultat ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="112px"
+                    />
+                  ) : null}
+                </button>
               ))}
             </div>
 

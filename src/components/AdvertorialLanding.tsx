@@ -410,18 +410,22 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
         {c.heroImageLeftSrc || c.heroImageRightSrc ? (
           <div className="my-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             {c.heroImageLeftSrc ? (
-              <ArticleImage
-                src={c.heroImageLeftSrc}
-                alt={c.heroImageLeftAlt || c.heroImageDesc}
-                aspect="portrait"
-              />
+              <div className="order-2 md:order-1">
+                <ArticleImage
+                  src={c.heroImageLeftSrc}
+                  alt={c.heroImageLeftAlt || c.heroImageDesc}
+                  aspect="portrait"
+                />
+              </div>
             ) : null}
             {c.heroImageRightSrc ? (
-              <ArticleImage
-                src={c.heroImageRightSrc}
-                alt={c.heroImageRightAlt || c.heroImageDesc}
-                aspect="portrait"
-              />
+              <div className="order-1 md:order-2">
+                <ArticleImage
+                  src={c.heroImageRightSrc}
+                  alt={c.heroImageRightAlt || c.heroImageDesc}
+                  aspect="portrait"
+                />
+              </div>
             ) : null}
           </div>
         ) : (

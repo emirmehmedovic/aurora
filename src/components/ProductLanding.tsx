@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Check, Star, Truck, Shield, RotateCcw, CreditCard, ChevronDown, ChevronUp, ShoppingCart, ArrowRight, Banknote, Zap } from "lucide-react";
+import { Check, Star, Truck, Shield, RotateCcw, CreditCard, ChevronDown, ChevronUp, ShoppingCart, ArrowRight, Banknote } from "lucide-react";
 import { trackViewContent, trackAddToCart, trackCtaClick } from "@/lib/analytics";
 
 const productData: Record<string, any> = {
@@ -133,9 +133,9 @@ const productData: Record<string, any> = {
       { salon: "Zavisiš od termina i radnog vremena", ipl: "Noge za 10 min — u pidžami, kod kuće" },
     ],
     beforeAfterImages: [
-      { before: "/slike/rezultati/pro-prije-1.jpg", after: "/slike/rezultati/pro-poslije-1.jpg", label: "Derva, 24 god. · Sarajevo · 8 sedmica tretmana" },
-      { before: "/slike/rezultati/pro-prije-2.jpg", after: "/slike/rezultati/pro-poslije-2.jpg", label: "Samanta, 31 god. · Zenica · 6 sedmica tretmana" },
-      { before: "/slike/rezultati/pro-prije-3.jpg", after: "/slike/rezultati/pro-poslije-3.jpg", label: "Amra, 23 god. · Tuzla · 10 sedmica tretmana" },
+      { image: "/testimonials/before-after/pro1.png", label: "Ivana, 24 god. · Banja Luka · 8 sedmica tretmana" },
+      { image: "/testimonials/before-after/pro2.png", label: "Marina, 31 god. · Mostar · 6 sedmica tretmana" },
+      { image: "/testimonials/before-after/pro3.png", label: "Amra, 23 god. · Tuzla · 10 sedmica tretmana" },
     ],
   },
   "ice-cool-pro-max": {
@@ -255,9 +255,9 @@ const productData: Record<string, any> = {
       { salon: "1.200–2.000 KM godišnje za laser", ipl: "0 KM u svim narednim godinama" },
     ],
     beforeAfterImages: [
-      { before: "/slike/rezultati/max-prije-1.jpg", after: "/slike/rezultati/max-poslije-1.jpg", label: "Emina, 29 god. · Mostar · 8 sedmica tretmana" },
-      { before: "/slike/rezultati/max-prije-2.jpg", after: "/slike/rezultati/max-poslije-2.jpg", label: "Jasmina, 35 god. · Banja Luka · 6 sedmica tretmana" },
-      { before: "/slike/rezultati/max-prije-3.jpg", after: "/slike/rezultati/max-poslije-3.jpg", label: "Nina, 27 god. · Sarajevo · 10 sedmica tretmana" },
+      { image: "/testimonials/before-after/max1.png", label: "Emina, 29 god. · Mostar · 8 sedmica tretmana" },
+      { image: "/testimonials/before-after/max2.png", label: "Jasmina, 35 god. · Banja Luka · 6 sedmica tretmana" },
+      { image: "/testimonials/before-after/max3.png", label: "Nina, 27 god. · Sarajevo · 10 sedmica tretmana" },
     ],
   },
   "ice-cool-lite": {
@@ -378,9 +378,9 @@ const productData: Record<string, any> = {
       { salon: "Zakazivanje, čekanje, vožnja u salon", ipl: "5 minuta kod kuće, jednom sedmično" },
     ],
     beforeAfterImages: [
-      { before: "/slike/rezultati/lite-prije-1.jpg", after: "/slike/rezultati/lite-poslije-1.jpg", label: "Amira, 32 god. · Sarajevo · gornja usna · 4 sedmice" },
-      { before: "/slike/rezultati/lite-prije-2.jpg", after: "/slike/rezultati/lite-poslije-2.jpg", label: "Merjem, 25 god. · Mostar · lice i brada · 5 sedmica" },
-      { before: "/slike/rezultati/lite-prije-3.jpg", after: "/slike/rezultati/lite-poslije-3.jpg", label: "Lejla, 27 god. · Tuzla · bikini zona · 6 sedmica" },
+      { image: "/testimonials/before-after/lite1.png", label: "Sara, 22 god. · Sarajevo · gornja usna · 5 sedmica" },
+      { image: "/testimonials/before-after/lite2.png", label: "Aida, 28 god. · Tuzla · bikini zona · 6 sedmica" },
+      { image: "/testimonials/before-after/lite3.png", label: "Hana, 22 god. · Bihać · noge · 8 sedmica" },
     ],
   }
 };
@@ -394,8 +394,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState({ h: 23, m: 47, s: 12 });
-  const [stockCount, setStockCount] = useState(23);
+  const [activeResultIndex, setActiveResultIndex] = useState(0);
 
   const baseProduct = slug ? productData[slug] : productData["ice-cool-pro"];
   const product = customProduct
@@ -429,24 +428,6 @@ export default function ProductLanding({ slug, product: customProduct }: Product
   useEffect(() => {
     trackViewContent({ id: orderProductId, name: product.name, price: product.price });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Countdown timer
-  useEffect(() => {
-    const endTime = Date.now() + 24 * 60 * 60 * 1000;
-    const timer = setInterval(() => {
-      const diff = endTime - Date.now();
-      if (diff <= 0) { clearInterval(timer); return; }
-      setTimeLeft({
-        h: Math.floor(diff / 3600000),
-        m: Math.floor((diff % 3600000) / 60000),
-        s: Math.floor((diff % 60000) / 1000),
-      });
-    }, 1000);
-    const stockTimer = setInterval(() => {
-      setStockCount(prev => prev > 7 ? prev - 1 : prev);
-    }, 150000);
-    return () => { clearInterval(timer); clearInterval(stockTimer); };
   }, []);
 
   useEffect(() => {
@@ -701,88 +682,90 @@ export default function ProductLanding({ slug, product: customProduct }: Product
         </div>
       </section>
 
-      {/* Urgency Band */}
-      <section className="py-6 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-gray-900 rounded-[2rem] p-8 text-center text-white relative overflow-hidden shadow-2xl">
-            <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-[#563435]/20 rounded-full blur-3xl pointer-events-none" />
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 mb-3 text-yellow-400 font-semibold text-sm">
-                <Zap className="w-4 h-4 fill-yellow-400" /> Akcijska cijena — ograničeno
-              </div>
-              <p className="text-xl font-bold mb-6">⚡ Akcija traje još:</p>
-              <div className="flex justify-center items-start gap-2 md:gap-4 mb-6">
-                {[
-                  { val: String(timeLeft.h).padStart(2, '0'), label: 'SATI' },
-                  { sep: true },
-                  { val: String(timeLeft.m).padStart(2, '0'), label: 'MINUTA' },
-                  { sep: true },
-                  { val: String(timeLeft.s).padStart(2, '0'), label: 'SEKUNDI' },
-                ].map((item, i) =>
-                  'sep' in item ? (
-                    <span key={i} className="text-3xl font-bold text-[#563435] mt-1">:</span>
-                  ) : (
-                    <div key={i} className="text-center">
-                      <span className="block bg-[#563435] text-white text-2xl md:text-3xl font-bold font-mono px-4 py-2 rounded-xl min-w-[56px] tabular-nums">
-                        {item.val}
-                      </span>
-                      <span className="block text-xs text-gray-500 mt-1.5 tracking-wider">{item.label}</span>
-                    </div>
-                  )
-                )}
-              </div>
-              <div className="inline-flex items-center gap-2 bg-white/5 border border-yellow-400/30 rounded-full px-5 py-2.5 text-sm text-yellow-400 font-semibold">
-                <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse flex-shrink-0" />
-                Preostalo na akcijskoj cijeni: <strong>{stockCount}</strong> kom.
-              </div>
-              <div className="mt-6">
-                <Link
-                  href={orderHref}
-                  onClick={() => {
-                    trackAddToCart({ id: orderProductId, name: product.name, price: product.price });
-                    trackCtaClick('Naruci', 'urgency-band', orderProductId);
-                  }}
-                  className="inline-flex items-center gap-2 bg-[#563435] hover:bg-[#6d4446] text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-all"
-                >
-                  Naruči za {product.price.toFixed(2)} KM <ArrowRight className="w-5 h-5" />
-                </Link>
-                <p className="mt-3 text-xs text-gray-500">Plaćanje pouzećem · Besplatna dostava</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Before / After */}
       {product.beforeAfterImages && product.beforeAfterImages.length > 0 && (
         <section className="py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <div className="text-center mb-10">
               <div className="text-xs font-bold tracking-widest uppercase text-[#563435] mb-3">Stvarni rezultati</div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Pogledaj razliku</h2>
-              <p className="text-gray-500 text-lg">Fotografije pravih kupica iz BiH — bez filtera, bez retuša.</p>
             </div>
-            <div className={`grid gap-6 ${product.beforeAfterImages.length === 1 ? 'grid-cols-1 max-w-2xl mx-auto' : product.beforeAfterImages.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3'}`}>
-              {product.beforeAfterImages.map((pair: any, i: number) => (
-                <div key={i} className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl overflow-hidden shadow-sm">
-                  <div className="grid grid-cols-2 gap-0">
-                    <div className="relative">
-                      <div className="relative h-64 md:h-80 bg-gray-100">
-                        <Image src={pair.before} alt="Prije tretmana" fill className="object-cover" />
-                        <div className="absolute top-3 left-3 bg-gray-700/80 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">PRIJE</div>
-                      </div>
-                    </div>
-                    <div className="relative border-l-2 border-white">
-                      <div className="relative h-64 md:h-80 bg-gray-100">
-                        <Image src={pair.after} alt="Poslije tretmana" fill className="object-cover" />
-                        <div className="absolute top-3 right-3 bg-[#563435]/90 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">POSLIJE</div>
-                      </div>
+
+            <div className="bg-white/40 backdrop-blur-md border border-white/20 rounded-[2rem] overflow-hidden shadow-sm">
+              {product.beforeAfterImages[activeResultIndex]?.image ? (
+                <div className="relative aspect-video bg-gray-100">
+                  <Image
+                    src={product.beforeAfterImages[activeResultIndex].image}
+                    alt={product.beforeAfterImages[activeResultIndex].label || `Rezultat kupice ${activeResultIndex + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 1100px"
+                  />
+                </div>
+              ) : product.beforeAfterImages[activeResultIndex]?.before && product.beforeAfterImages[activeResultIndex]?.after ? (
+                <div className="grid grid-cols-2 gap-0">
+                  <div className="relative">
+                    <div className="relative h-72 md:h-[28rem] bg-gray-100">
+                      <Image
+                        src={product.beforeAfterImages[activeResultIndex].before}
+                        alt="Prije tretmana"
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute top-3 left-3 bg-gray-700/80 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">PRIJE</div>
                     </div>
                   </div>
-                  {pair.label && (
-                    <div className="px-5 py-3 text-center text-sm text-gray-600 font-medium border-t border-gray-100">{pair.label}</div>
-                  )}
+                  <div className="relative border-l-2 border-white">
+                    <div className="relative h-72 md:h-[28rem] bg-gray-100">
+                      <Image
+                        src={product.beforeAfterImages[activeResultIndex].after}
+                        alt="Poslije tretmana"
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute top-3 right-3 bg-[#563435]/90 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">POSLIJE</div>
+                    </div>
+                  </div>
                 </div>
+              ) : null}
+
+              {product.beforeAfterImages[activeResultIndex]?.label && (
+                <div className="px-6 py-4 text-center text-base text-gray-700 font-medium border-t border-gray-100">
+                  {product.beforeAfterImages[activeResultIndex].label}
+                </div>
+              )}
+            </div>
+
+            <div className="mt-5 flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
+              {product.beforeAfterImages.map((pair: any, i: number) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setActiveResultIndex(i)}
+                  className={`relative w-24 h-24 md:w-28 md:h-28 flex-shrink-0 rounded-2xl overflow-hidden border-2 transition-all ${
+                    activeResultIndex === i
+                      ? "border-[#563435] shadow-md scale-105"
+                      : "border-white/50 hover:border-[#563435]/50 opacity-75 hover:opacity-100"
+                  }`}
+                >
+                  {pair.image ? (
+                    <Image
+                      src={pair.image}
+                      alt={pair.label || `Rezultat ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="112px"
+                    />
+                  ) : pair.after ? (
+                    <Image
+                      src={pair.after}
+                      alt={pair.label || `Rezultat ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="112px"
+                    />
+                  ) : null}
+                </button>
               ))}
             </div>
           </div>
