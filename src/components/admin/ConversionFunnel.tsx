@@ -15,6 +15,8 @@ export default function ConversionFunnel() {
   const [data, setData] = useState<FunnelData | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const clampPercentage = (value: number) => Math.max(0, Math.min(100, value));
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -62,21 +64,21 @@ export default function ConversionFunnel() {
       value: data.contacted,
       icon: Phone,
       color: "bg-blue-500",
-      width: data.leads > 0 ? (data.contacted / data.leads) * 100 : 0,
+      width: clampPercentage(data.leads > 0 ? (data.contacted / data.leads) * 100 : 0),
     },
     {
       label: "Kvalifikovani",
       value: data.qualified,
       icon: CheckCircle,
       color: "bg-orange-500",
-      width: data.leads > 0 ? (data.qualified / data.leads) * 100 : 0,
+      width: clampPercentage(data.leads > 0 ? (data.qualified / data.leads) * 100 : 0),
     },
     {
       label: "Konvertovani",
       value: data.converted,
       icon: ShoppingCart,
       color: "bg-green-500",
-      width: data.leads > 0 ? (data.converted / data.leads) * 100 : 0,
+      width: clampPercentage(data.leads > 0 ? (data.converted / data.leads) * 100 : 0),
     },
   ];
 
@@ -95,8 +97,11 @@ export default function ConversionFunnel() {
       <div className="space-y-4">
         {stages.map((stage, index) => {
           const Icon = stage.icon;
+          const previousValue = index > 0 ? stages[index - 1].value : 0;
           const dropoffRate = index > 0
-            ? ((stages[index - 1].value - stage.value) / stages[index - 1].value * 100)
+            ? previousValue > 0
+              ? ((previousValue - stage.value) / previousValue) * 100
+              : 0
             : 0;
 
           return (

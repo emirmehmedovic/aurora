@@ -229,6 +229,7 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
   const [stockCount, setStockCount] = useState(19);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [activeCalloutImageIndex, setActiveCalloutImageIndex] = useState(0);
+  const [showStickyBar, setShowStickyBar] = useState(false);
 
   const p = product;
   const c = content;
@@ -276,6 +277,17 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
     }, 180000);
     return () => { clearInterval(timer); clearInterval(stockTimer); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const hero = document.getElementById('hero-section');
+      if (hero) {
+        setShowStickyBar(hero.getBoundingClientRect().bottom < 0);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrollToForm = (ctaLocation: string) => {
@@ -373,7 +385,7 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
         </div>
 
         {/* ── Article headline ──────────────────────────────────────────────── */}
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
+        <h1 id="hero-section" className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
           {c.articleHeadline}
         </h1>
         <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-6 font-normal">
@@ -875,6 +887,27 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
           </p>
         </div>
 
+      </div>
+
+      {/* Sticky Bottom Bar */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-t border-gray-200 shadow-2xl transform transition-transform duration-300 ${
+          showStickyBar ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+          <div className="hidden sm:flex flex-col">
+            <span className="font-bold text-gray-800 text-sm">{p.name}</span>
+            <span className="text-xs text-gray-500">Samo još {stockCount} na stanju · Dostava 1–2 dana</span>
+          </div>
+          <button
+            onClick={() => scrollToForm('sticky-bottom')}
+            className="flex-1 sm:flex-none sm:w-auto py-3 px-8 bg-[#563435] hover:bg-[#6d4446] text-white font-bold text-base rounded-full transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-lg"
+          >
+            Naruči odmah — {p.price.toFixed(2)} KM
+            <ArrowRight className="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </main>
   );

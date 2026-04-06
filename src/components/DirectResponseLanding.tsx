@@ -111,6 +111,7 @@ export default function DirectResponseLanding({ product, content, comparisonProd
   const [specsOpen, setSpecsOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ h: 23, m: 47, s: 12 });
   const [stockCount, setStockCount] = useState(23);
+  const [showStickyBar, setShowStickyBar] = useState(false);
 
   const p = product;
   const c = content;
@@ -170,6 +171,17 @@ export default function DirectResponseLanding({ product, content, comparisonProd
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const hero = document.getElementById('hero-section');
+      if (hero) {
+        setShowStickyBar(hero.getBoundingClientRect().bottom < 0);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const scrollToForm = (ctaLocation: string) => {
     trackCtaClick('Naruci', ctaLocation, `landing-${p.id}`);
     trackAddToCart({ id: p.id, name: p.name, price: p.price });
@@ -217,15 +229,25 @@ export default function DirectResponseLanding({ product, content, comparisonProd
 
   return (
     <main className="min-h-screen pb-24 lg:pb-0 relative overflow-hidden bg-gray-50/30">
-      {/* Sticky Mobile Bottom CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-white border-t border-gray-200 shadow-2xl px-4 py-3">
-        <button
-          onClick={() => scrollToForm('sticky-bottom')}
-          className="w-full py-4 bg-[#563435] hover:bg-[#6d4446] text-white font-bold text-lg rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-2"
-        >
-          Naruči odmah — {p.price.toFixed(2)} KM
-          <ArrowRight className="w-5 h-5" />
-        </button>
+      {/* Sticky Bottom Bar */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-t border-gray-200 shadow-2xl transform transition-transform duration-300 ${
+          showStickyBar ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+          <div className="hidden sm:flex flex-col">
+            <span className="font-bold text-gray-800 text-sm">{p.name}</span>
+            <span className="text-xs text-gray-500">Samo još {stockCount} na stanju • Dostava 1–2 dana</span>
+          </div>
+          <button
+            onClick={() => scrollToForm('sticky-bottom')}
+            className="flex-1 sm:flex-none sm:w-auto py-3 px-8 bg-[#563435] hover:bg-[#6d4446] text-white font-bold text-base rounded-full transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-lg"
+          >
+            Naruči odmah — {p.price.toFixed(2)} KM
+            <ArrowRight className="w-5 h-5" />
+          </button>
+        </div>
       </div>
       {/* Background Elements */}
       <div className="absolute top-0 left-0 right-0 h-[1000px] bg-gradient-to-b from-purple-100/20 to-transparent pointer-events-none" />
@@ -259,7 +281,7 @@ export default function DirectResponseLanding({ product, content, comparisonProd
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 relative z-10">
         
         {/* HERO SECTION */}
-        <div className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-xl border border-white/20 rounded-[2.5rem] shadow-2xl overflow-hidden p-6 md:p-12 mb-16 mt-4">
+        <div id="hero-section" className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-xl border border-white/20 rounded-[2.5rem] shadow-2xl overflow-hidden p-6 md:p-12 mb-16 mt-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             
             {/* Left - Text Content */}
