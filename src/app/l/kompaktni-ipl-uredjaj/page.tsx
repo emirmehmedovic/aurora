@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 const liteContent: LandingContent = {
-  badge: "ICE COOL LITE™ — Isti rezultati kao PRO, kompaktniji i 10 KM jeftiniji",
+  badge: "ICE COOL LITE™ — Rješenje za threading bol jednom zauvijek",
   heroHeadline: "Gornja usna. Brada. Bikini. Jednom zauvijek. Bez bola.",
   heroSubtitle: "Počni tamo gdje te najviše muči — pa tretiraj sve ostalo istim uređajem.",
   heroSubline: "Ista IPL snaga i 999.999 bljeskova kao PRO model — samo kompaktniji. Precizan nastavak za lice i bikini, ali radi i noge, ruke i pazuhe. Jedan uređaj. Sve zone. Jednom zauvijek.",
