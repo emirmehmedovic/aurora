@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 const nogeContent: LandingContent = {
   badge: "Za žene koje su umorne od brijanja",
-  heroSubtitle: "8 sedmica. Jednom tjedno. Nakon toga — briji se samo ako poželiš. ICE COOL PRO za trajno glatke noge kod kuće.",
+  heroSubtitle: "8 sedmica. Jednom sedmično. Nakon toga — briji se samo ako poželiš. ICE COOL PRO za trajno glatke noge kod kuće.",
   benefits: [
     "Brži od svakog drugog kućnog uređaja — obje noge za 20–25 minuta",
     "Ice cooling — noge bez crvenila, bez nadražaja folikula, bez urastanja",
@@ -29,10 +29,10 @@ const nogeContent: LandingContent = {
     "175 KM jednom vs. 200 KM godišnje zauvijek na žilete i pjenu",
   ],
   empathyTitle: "Zadnji put ćeš se brijati kada kupiš ovo",
-  empathySubtitle: "ICE COOL PRO za trajno glatke noge. 8 sedmica. Jednom tjedno. Nakon toga — sloboda.",
-  empathyParagraph1: "Razmisli koliko si puta u životu brijala noge. Svaka 2–3 dana, da ne ostavljamo dlačice koje su odmah vidljive. Pet minuta po sesiji, 2–3 puta tjedno — to je oko 600–700 minuta godišnje. Više od 10 sati godišnje samo na brijanje nogu.",
+  empathySubtitle: "ICE COOL PRO za trajno glatke noge. 8 sedmica. Jednom sedmično. Nakon toga — sloboda.",
+  empathyParagraph1: "Razmisli koliko si puta u životu brijala noge. Svaka 2–3 dana, da ne ostavljamo dlačice koje su odmah vidljive. Pet minuta po sesiji, 2–3 puta sedmično — to je oko 600–700 minuta godišnje. Više od 10 sati godišnje samo na brijanje nogu.",
   empathyParagraph2: "A da ne govorimo o novcu. Žilet, pjena, zamjenske britvice — recimo skromnih 15–20 KM mjesečno. To je 180–240 KM godišnje na nešto što napravi razliku na 72 sata. ICE COOL PRO košta 175 KM jednom. Koristiš 10+ godina. Plan je brutalno jednostavan.",
-  empathyHighlight: "175 KM jednom. Sedmice 1–8: jednom tjedno. Sedmice 9+: zaboravelaš da se brijaš — jer nema potrebe.",
+  empathyHighlight: "175 KM jednom. Sedmice 1–8: jednom sedmično. Sedmice 9+: zaboravelaš da se brijaš — jer nema potrebe.",
   story: {
     title: "'Nisam se brijala noge 6 sedmica. Nije slučajno — jednostavno nije trebalo.'",
     text: "Jednom sam stigla u kratkim pantalonama u ured i koleginica me pitala 'dal si u salonu bila'. Nisam. Bila sam u fotelji s ICE COOL-om i netflixom. Uvijek sam imala problem s urastanjem dlačica na nogama — pogotovo na potkoljenicama. Od kada koristim ICE COOL, toga više nema. To mi je vredelo samo po sebi, čak i bez svega ostalog.",
@@ -42,7 +42,7 @@ const nogeContent: LandingContent = {
   howItWorks: [
     {
       step: 1,
-      title: "Sedmice 1–8: jednom tjedno, 20–25 minuta",
+      title: "Sedmice 1–8: jednom sedmično, 20–25 minuta",
       desc: "PRO model pokriva veće površine brže zahvaljujući većoj glavi i optimiziranom bljeskanju. Obje noge za 20–25 minuta. Radiš to jednom nedjeljno — manje vremena nego jedan brijanje.",
     },
     {

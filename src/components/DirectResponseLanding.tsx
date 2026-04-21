@@ -109,8 +109,7 @@ export default function DirectResponseLanding({ product, content, comparisonProd
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [specsOpen, setSpecsOpen] = useState(false);
-  const [timeLeft, setTimeLeft] = useState({ h: 23, m: 47, s: 12 });
-  const [stockCount, setStockCount] = useState(23);
+  const [stockCount] = useState(23);
   const [showStickyBar, setShowStickyBar] = useState(false);
 
   const p = product;
@@ -152,24 +151,6 @@ export default function DirectResponseLanding({ product, content, comparisonProd
 
   useScrollDepth(`landing-${p.id}`);
 
-  useEffect(() => {
-    if (!c.urgencySection) return;
-    const endTime = Date.now() + 24 * 60 * 60 * 1000;
-    const timer = setInterval(() => {
-      const diff = endTime - Date.now();
-      if (diff <= 0) { clearInterval(timer); return; }
-      setTimeLeft({
-        h: Math.floor(diff / 3600000),
-        m: Math.floor((diff % 3600000) / 60000),
-        s: Math.floor((diff % 60000) / 1000),
-      });
-    }, 1000);
-    const stockTimer = setInterval(() => {
-      setStockCount(prev => prev > 7 ? prev - 1 : prev);
-    }, 150000);
-    return () => { clearInterval(timer); clearInterval(stockTimer); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -584,26 +565,6 @@ export default function DirectResponseLanding({ product, content, comparisonProd
               <div className="relative z-10">
                 <p className="text-xl md:text-2xl font-bold mb-2">{c.urgencySection.title}</p>
                 <p className="text-sm text-gray-400 mb-8">{c.urgencySection.subtitle}</p>
-                <div className="flex justify-center items-start gap-2 md:gap-4 mb-8">
-                  {[
-                    { val: String(timeLeft.h).padStart(2, '0'), label: 'SATI' },
-                    { sep: true },
-                    { val: String(timeLeft.m).padStart(2, '0'), label: 'MINUTA' },
-                    { sep: true },
-                    { val: String(timeLeft.s).padStart(2, '0'), label: 'SEKUNDI' },
-                  ].map((item, i) =>
-                    'sep' in item ? (
-                      <span key={i} className="text-4xl font-bold text-[#563435] mt-1">:</span>
-                    ) : (
-                      <div key={i} className="text-center">
-                        <span className="block bg-[#563435] text-white text-3xl md:text-4xl font-bold font-mono px-4 py-2 rounded-xl min-w-[60px] tabular-nums">
-                          {item.val}
-                        </span>
-                        <span className="block text-xs text-gray-500 mt-2 tracking-wider">{item.label}</span>
-                      </div>
-                    )
-                  )}
-                </div>
                 <div className="inline-flex items-center gap-2 bg-white/5 border border-yellow-400/30 rounded-full px-5 py-3 text-sm text-yellow-400 font-semibold">
                   <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse flex-shrink-0" />
                   Preostalo na akcijskoj cijeni: <strong>{stockCount}</strong> kom.

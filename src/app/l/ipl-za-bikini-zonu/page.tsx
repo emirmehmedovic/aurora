@@ -26,7 +26,7 @@ const bikiniContent: LandingContent = {
     "Privatnost koja se podrazumijeva — tretman sama, bez tuđih pogleda, bez žurbe",
     "Ice cooling — nema bola voska, nema iritacije brijanja, nema crvenila",
     "Trajni rezultati — nakon 8 tretmana bikini zona ostaje glatka bez intervencije",
-    "Ti odlučuješ kada — subota, usred tjedna, u 22h, bez termina",
+    "Ti odlučuješ kada — subota, usred sedmice, u 22h, bez termina",
   ],
   empathyTitle: "Bikini zona — tvoja, u tvom tempu",
   empathySubtitle: "Kućni IPL je odgovor koji su mnoge žene čekale — i nije kompromis u rezultatima.",
@@ -53,7 +53,7 @@ const bikiniContent: LandingContent = {
     {
       step: 3,
       title: "8 tretmana — i zona ostaje glatka",
-      desc: "Prvih 8 sedmica jednom tjedno. Nakon toga, jedan tretman svakih 4–8 sedmica za održavanje — ili potpuna sloboda. Mnoge korisnice ne trebaju ni to.",
+      desc: "Prvih 8 sedmica jednom sedmično. Nakon toga, jedan tretman svakih 4–8 sedmica za održavanje — ili potpuna sloboda. Mnoge korisnice ne trebaju ni to.",
     },
   ],
   reviews: [

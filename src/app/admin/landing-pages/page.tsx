@@ -103,6 +103,72 @@ const LANDING_PAGES: LandingPageEntry[] = [
       "Specijalizirani landing za osjetljivu kožu (rosacea, ekzem, iritacije). Targetira upit 'IPL osjetljiva koža'. Preporučuje Max s dvostrukim hlađenjem.",
     tags: ["Max", "Osjetljiva koža", "SEO"],
   },
+  {
+    slug: "kako-sam-prestala-ici-u-salon",
+    title: "1.440 KM godišnje za epilaciju u salonu — ili 175 KM jednom",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Šta se desi kad to jednom izračunaš",
+    description:
+      "Advertorial LP. Finansijski argument: trošak salona kroz godinu vs. jednokratna kupovina PRO uređaja. Targetira žene koje već idu redovno u salon.",
+    tags: ["PRO", "Advertorial", "Finansijski kut"],
+  },
+  {
+    slug: "10-minuta-sedmicno",
+    title: "Imam dvoje djece, puno radno vrijeme i nikad slobodnog sata",
+    productName: "ICE COOL Max",
+    productSlug: "ice-cool-pro-max",
+    price: "190 KM",
+    badge: "Evo kako sam riješila epilaciju za 10 minuta sedmično",
+    description:
+      "Advertorial LP. Targetira zaposlene mame — naglasak na brzini (10 min/sed.), dvostrukom hlađenju Max modela i uštedi vremena vs. salona.",
+    tags: ["Max", "Advertorial", "Mame & Stil"],
+  },
+  {
+    slug: "moj-najveci-kompleks",
+    title: "Gornja usna mi je bila najveći kompleks 10 godina",
+    productName: "ICE COOL LITE",
+    productSlug: "ice-cool-lite",
+    price: "165 KM",
+    badge: "Evo šta ga je konačno riješilo",
+    description:
+      "Advertorial LP. Empatijski kut — kompleks gornje usne, brade i lica. Targetira žene koje godinama skrivaju problematičnu zonu. Preporučuje LITE za preciznost.",
+    tags: ["LITE", "Advertorial", "Zona: Lice"],
+  },
+  {
+    slug: "priprema-za-more",
+    title: "Priprema za more: šta žene mijenjaju kad izračunaju stvarni trošak epilacije",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "April je pravo vrijeme — do mora ima dovoljno",
+    description:
+      "Advertorial V2 (split hero, roze tema). Sezonski LP za ljetovanje — finansijska kalkulacija salon vs. IPL, UV pauza, april kao idealan start.",
+    tags: ["PRO", "Advertorial V2", "Ljetovanje"],
+  },
+  {
+    slug: "iritacija-nakon-epilacije",
+    title: "Iritacija i urasle dlačice nakon epilacije nisu neizbježne",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Obrazovni kut — zašto brijanje i vosak iritiraju",
+    description:
+      "Advertorial V2 (band hero, lavanda tema). Objašnjava uzrok iritacije (mikrotrauma, narezani vrh dlačice) i kako IPL rješava problem na korijenu.",
+    tags: ["PRO", "Advertorial V2", "Koža & Iritacija"],
+  },
+  {
+    slug: "kratki-rukavi",
+    title: "Kratki rukavi. Bazen. Fotka bez razmišljanja. To nije privilegija, to je odluka.",
+    productName: "ICE COOL Max",
+    productSlug: "ice-cool-pro-max",
+    price: "190 KM",
+    badge: "Samopouzdanje kut — pazuhe i kompleks oblačenja",
+    description:
+      "Advertorial V2 (centered hero, mauve tema). Targetira žene koje svakodnevno prilagođavaju odijevanje zbog pazuha. Max s dvostrukim hlađenjem.",
+    tags: ["Max", "Advertorial V2", "Samopouzdanje"],
+  },
 ];
 
 const BASE_URL =
@@ -122,6 +188,13 @@ const tagColors: Record<string, string> = {
   "Zona: Noge": "bg-indigo-100 text-indigo-700",
   "Osjetljiva koža": "bg-orange-100 text-orange-700",
   SEO: "bg-gray-100 text-gray-600",
+  Advertorial: "bg-purple-100 text-purple-700",
+  "Advertorial V2": "bg-pink-100 text-pink-700",
+  "Finansijski kut": "bg-emerald-100 text-emerald-700",
+  "Mame & Stil": "bg-fuchsia-100 text-fuchsia-700",
+  Ljetovanje: "bg-orange-100 text-orange-600",
+  "Koža & Iritacija": "bg-violet-100 text-violet-700",
+  Samopouzdanje: "bg-rose-100 text-rose-700",
 };
 
 export default function LandingPagesAdminPage() {

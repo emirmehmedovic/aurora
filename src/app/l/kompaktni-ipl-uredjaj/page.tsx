@@ -34,7 +34,7 @@ const liteContent: LandingContent = {
   empathyTitle: "Svake 3 sedmice. Isti bol. Isti trošak. Isti kompleks.",
   empathySubtitle: "Gornja usna, brada, bikini linija — mjesta koja te svakodnevno podsjećaju da nisi gotova.",
   empathyParagraph1: "Threading boli. Svaki put isti ritual — zakazivanje, čekanje, suzne oči dok ti neko izvlači dlačicu po dlačicu. I dok izlaziš iz salona, već znaš: za 3 sedmice opet sve ispočetka. Godinama.",
-  empathyParagraph2: "Vosak na bikini zoni? Crvenilo i urasle dlačice koji dolaze tjedan poslije. Depilatorska krema na licu — pečenje, iritacija, sumnjivi miris. Nijedan od tih načina ne rješava problem — samo ga odgađa do sljedećeg puta.",
+  empathyParagraph2: "Vosak na bikini zoni? Crvenilo i urasle dlačice koji dolaze sedmicu-dvije poslije. Depilatorska krema na licu — pečenje, iritacija, sumnjivi miris. Nijedan od tih načina ne rješava problem — samo ga odgađa do sljedećeg puta.",
   empathyParagraph3: "Žene koje koriste LITE kažu da je ovo konačno rješenje, ne još jedan odgodak. Pet minuta jednom sedmično — i kompleks koji si nosila godinama počinje nestajati zauvijek.",
   empathyHighlight: "165 KM jednom. Manje od 3 odlaska na threading ili vosak.",
   story: {

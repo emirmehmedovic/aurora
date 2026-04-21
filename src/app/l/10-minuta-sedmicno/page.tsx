@@ -59,7 +59,7 @@ const maxContent: AdvertorialContent = {
     {
       heading: "Šta se promijenilo — konkretno, u brojevima",
       paragraphs: [
-        "Ranije: brijanje nogu 4–5 puta sedmično, 10 minuta svaki put = 40–50 minuta tjedno. Salon jednom u 3–4 sedmice kad uspijevam = 3–4 sata plus organizacija.",
+        "Ranije: brijanje nogu 4–5 puta sedmično, 10 minuta svaki put = 40–50 minuta sedmično. Salon jednom u 3–4 sedmice kad uspijevam = 3–4 sata plus organizacija.",
         "Sada: nedjelom uveče 10 minuta s Maxom. To je sve. Noge su glatke cijelu sedmicu. Pazuhe ne koristim brijanjaače od mjesec i po dana.",
         "Muž pita jesu li vriiedilo 190 KM. Svaki put mu odgovorim: 'Naruči još jedan.'",
       ],
@@ -101,7 +101,7 @@ const maxContent: AdvertorialContent = {
     {
       name: "Jasmina",
       age: 29,
-      text: "Kupila sam za 30. rodendan sebi. Prije nisam imala vremena za ništa. Sada imam 10 minuta nedeljom. Noge su mi glatke cijeli tjedan. Hlađenje je nevjerovatno. Preporučujem svim zaposlenim ženama.",
+      text: "Kupila sam za 30. rodendan sebi. Prije nisam imala vremena za ništa. Sada imam 10 minuta nedeljom. Noge su mi glatke cijelu sedmicu. Hlađenje je nevjerovatno. Preporučujem svim zaposlenim ženama.",
       date: "Januar 2026",
       location: "Sarajevo",
     },

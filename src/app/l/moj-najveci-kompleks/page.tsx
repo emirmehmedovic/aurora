@@ -51,7 +51,7 @@ const liteContent: AdvertorialContent = {
       heading: "Naišla sam na LITE slučajno — i nisam ga ozbiljno shvatila",
       paragraphs: [
         "Prošlog ljeta sam vidjela reklamu za ICE COOL LITE. Pomislila sam: 'Mali uređaj, 165 KM — sigurno je igračka.' Scrollala sam dalje.",
-        "Tri tjedna kasnije, koleginica Dina mi je pokazala gornju usnu: 'Gle, pet tjedana nisam radila ništa. Koristim neki novi IPL.' Pogledala sam — potpuno čisto. Upitala sam je za više detalja.",
+        "Tri sedmice kasnije, koleginica Dina mi je pokazala gornju usnu: 'Gle, pet sedmica nisam radila ništa. Koristim neki novi IPL.' Pogledala sam — potpuno čisto. Upitala sam je za više detalja.",
         "Rekla mi je: 'LITE. Mali, stane u torbicu, imam ga 3 mieseca. Gornja usna — riješena. Za lice je savršen jer ima precizan nastavak.'",
       ],
       calloutAfter: true,

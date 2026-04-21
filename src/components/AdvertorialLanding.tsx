@@ -96,7 +96,132 @@ export interface AdvertorialContent {
   closingText: string;
   /** Optional disclosure note rendered below the byline */
   disclosure?: string;
+  /** Optional stat highlights shown in the V2 stats strip */
+  highlights?: { value: string; label: string }[];
 }
+
+// ─── Theme system ─────────────────────────────────────────────────────────────
+
+export type AdvertorialTheme = 'warm' | 'summer' | 'fresh' | 'confident';
+
+interface ThemeConfig {
+  // Colors
+  pageBg: string;
+  categoryBadge: string;
+  closingBox: string;
+  closingText: string;
+  reviewsBadge: string;
+  reviewerAvatar: string;
+  avatarText: string;
+  // Layout
+  accentBar: string | null;         // colored bar before nav; null = none
+  headlineCentered: boolean;        // center headline + deck + byline
+  heroLayout: 'two-col' | 'full' | 'stack'; // hero image grid treatment
+  introStyle: 'bordered' | 'card' | 'statement'; // how intro paragraph renders
+  introClasses: string;             // classes specific to the intro treatment
+  sectionHeadingStyle: 'default' | 'bulleted' | 'numbered' | 'uppercase';
+  sectionHeadingClasses: string;    // extra classes on <h2>
+  bulletColor: string;              // used when style = 'bulleted'
+  pullQuoteStyle: 'boxed' | 'editorial' | 'dramatic';
+  // For boxed (warm): classic left-border box
+  pullBoxClasses: string;
+  pullTextClasses: string;
+  // For editorial (summer): big italic quote mark, no background
+  pullMarkColor: string;
+  // For dramatic (confident): dark full-width inverted card
+  pullDramaticBg: string;
+}
+
+const THEMES: Record<AdvertorialTheme, ThemeConfig> = {
+  warm: {
+    pageBg: 'from-amber-50/20 to-transparent',
+    categoryBadge: 'bg-[#563435]/8 text-[#563435] rounded-full',
+    closingBox: 'bg-amber-50 border border-amber-200',
+    closingText: 'text-amber-900',
+    reviewsBadge: 'bg-amber-100 text-amber-700',
+    reviewerAvatar: 'from-[#563435]/20 to-[#563435]/10',
+    avatarText: 'text-[#563435]',
+    accentBar: null,
+    headlineCentered: false,
+    heroLayout: 'two-col',
+    introStyle: 'bordered',
+    introClasses: 'border-l-4 border-[#563435] pl-5 text-lg md:text-xl font-semibold text-gray-800 leading-relaxed mb-6',
+    sectionHeadingStyle: 'default',
+    sectionHeadingClasses: 'text-xl md:text-2xl font-bold text-gray-800 mt-8 mb-4',
+    bulletColor: '',
+    pullQuoteStyle: 'boxed',
+    pullBoxClasses: 'bg-[#563435]/5 border-l-4 border-[#563435] my-6 p-5 rounded-2xl relative',
+    pullTextClasses: 'text-lg font-semibold pl-6 leading-snug italic text-[#563435]',
+    pullMarkColor: 'text-[#563435]/40',
+    pullDramaticBg: '',
+  },
+  summer: {
+    pageBg: 'from-orange-50/60 via-amber-50/30 to-transparent',
+    categoryBadge: 'bg-orange-100 text-orange-700 rounded-full',
+    closingBox: 'bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200',
+    closingText: 'text-orange-900',
+    reviewsBadge: 'bg-orange-100 text-orange-700',
+    reviewerAvatar: 'from-orange-400/25 to-amber-300/15',
+    avatarText: 'text-orange-700',
+    accentBar: 'h-1 bg-gradient-to-r from-orange-400 via-amber-400 to-orange-300',
+    headlineCentered: false,
+    heroLayout: 'two-col',
+    introStyle: 'card',
+    introClasses: 'bg-orange-50/80 border-l-[6px] border-orange-400 rounded-r-2xl px-6 py-5 my-6 text-lg md:text-xl font-semibold text-gray-800 leading-relaxed shadow-sm',
+    sectionHeadingStyle: 'bulleted',
+    sectionHeadingClasses: 'text-xl md:text-2xl font-bold text-gray-800 mt-8 mb-4 flex items-center gap-3',
+    bulletColor: 'text-orange-400',
+    pullQuoteStyle: 'editorial',
+    pullBoxClasses: '',
+    pullTextClasses: 'text-xl md:text-2xl font-semibold italic text-gray-800 leading-snug',
+    pullMarkColor: 'text-orange-400',
+    pullDramaticBg: '',
+  },
+  fresh: {
+    pageBg: 'from-emerald-50/50 to-teal-50/10',
+    categoryBadge: 'bg-emerald-100 text-emerald-700 rounded-md font-mono',
+    closingBox: 'bg-white border-l-4 border-emerald-500 pl-5',
+    closingText: 'text-gray-800',
+    reviewsBadge: 'bg-emerald-100 text-emerald-700',
+    reviewerAvatar: 'from-emerald-600/20 to-teal-400/10',
+    avatarText: 'text-emerald-700',
+    accentBar: 'h-[3px] bg-emerald-600',
+    headlineCentered: false,
+    heroLayout: 'stack',
+    introStyle: 'card',
+    introClasses: 'bg-white border border-emerald-200 border-l-4 border-l-emerald-600 rounded-xl px-6 py-5 my-6 text-base md:text-lg font-medium text-gray-700 leading-relaxed shadow-sm',
+    sectionHeadingStyle: 'numbered',
+    sectionHeadingClasses: 'text-xl md:text-2xl font-bold text-gray-800 mt-10 mb-4 flex items-start gap-4',
+    bulletColor: 'text-emerald-600',
+    pullQuoteStyle: 'editorial',
+    pullBoxClasses: '',
+    pullTextClasses: 'text-lg font-medium text-gray-700 leading-relaxed pl-2',
+    pullMarkColor: 'text-emerald-500',
+    pullDramaticBg: '',
+  },
+  confident: {
+    pageBg: 'from-slate-200/40 via-blue-50/20 to-transparent',
+    categoryBadge: 'text-slate-500 text-[10px] tracking-[0.25em] uppercase font-medium',
+    closingBox: 'bg-slate-900 border border-slate-700',
+    closingText: 'text-white',
+    reviewsBadge: 'bg-slate-100 text-slate-600',
+    reviewerAvatar: 'from-slate-700/20 to-blue-400/10',
+    avatarText: 'text-slate-600',
+    accentBar: null,
+    headlineCentered: true,
+    heroLayout: 'full',
+    introStyle: 'statement',
+    introClasses: 'text-xl md:text-2xl font-bold text-gray-900 leading-relaxed mb-8 text-center max-w-2xl mx-auto',
+    sectionHeadingStyle: 'uppercase',
+    sectionHeadingClasses: 'text-sm md:text-base font-bold text-slate-500 tracking-[0.15em] uppercase mt-10 mb-3 pt-6 border-t border-gray-200',
+    bulletColor: '',
+    pullQuoteStyle: 'dramatic',
+    pullBoxClasses: '',
+    pullTextClasses: 'text-xl md:text-2xl font-bold text-white leading-snug',
+    pullMarkColor: 'text-white/30',
+    pullDramaticBg: 'bg-slate-900 rounded-2xl my-8 p-8 md:p-10 relative overflow-hidden',
+  },
+};
 
 interface AdvertorialProps {
   product: {
@@ -121,6 +246,7 @@ interface AdvertorialProps {
     weight: string;
     slug?: string;
   }>;
+  theme?: AdvertorialTheme;
 }
 
 // ─── Image placeholder components ────────────────────────────────────────────
@@ -220,13 +346,13 @@ function ViberIcon() {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export default function AdvertorialLanding({ product, content, comparisonProducts }: AdvertorialProps) {
+export default function AdvertorialLanding({ product, content, comparisonProducts, theme = 'warm' }: AdvertorialProps) {
+  const t = THEMES[theme];
   const WHATSAPP_PHONE = "38761904759";
   const VIBER_PHONE = "%2B38761904759";
 
   const [specsOpen, setSpecsOpen] = useState(false);
-  const [timeLeft, setTimeLeft] = useState({ h: 23, m: 47, s: 12 });
-  const [stockCount, setStockCount] = useState(19);
+  const [stockCount] = useState(19);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [activeCalloutImageIndex, setActiveCalloutImageIndex] = useState(0);
   const [showStickyBar, setShowStickyBar] = useState(false);
@@ -259,25 +385,6 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
 
   useScrollDepth(`advertorial-${p.id}`);
 
-  // Countdown timer
-  useEffect(() => {
-    if (!c.urgencySection) return;
-    const endTime = Date.now() + 24 * 60 * 60 * 1000;
-    const timer = setInterval(() => {
-      const diff = endTime - Date.now();
-      if (diff <= 0) { clearInterval(timer); return; }
-      setTimeLeft({
-        h: Math.floor(diff / 3600000),
-        m: Math.floor((diff % 3600000) / 60000),
-        s: Math.floor((diff % 60000) / 1000),
-      });
-    }, 1000);
-    const stockTimer = setInterval(() => {
-      setStockCount(prev => prev > 5 ? prev - 1 : prev);
-    }, 180000);
-    return () => { clearInterval(timer); clearInterval(stockTimer); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -339,7 +446,10 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
   return (
     <main className="min-h-screen pb-24 bg-gray-50/30 relative overflow-hidden">
       {/* Subtle background */}
-      <div className="absolute top-0 left-0 right-0 h-[800px] bg-gradient-to-b from-amber-50/20 to-transparent pointer-events-none" />
+      <div className={`absolute top-0 left-0 right-0 h-[800px] bg-gradient-to-b ${t.pageBg} pointer-events-none`} />
+
+      {/* ── Accent bar (theme-specific) ──────────────────────────────────── */}
+      {t.accentBar && <div className={`w-full ${t.accentBar}`} />}
 
       {/* ── Navbar ─────────────────────────────────────────────────────────── */}
       <div className="sticky top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-gray-200/60 shadow-sm">
@@ -378,37 +488,39 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
       <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-8 pb-4 relative z-10">
 
         {/* Category breadcrumb */}
-        <div className="flex items-center gap-2 mb-5">
-          <span className="text-xs font-semibold uppercase tracking-widest text-[#563435] px-3 py-1 bg-[#563435]/8 rounded-full">
+        <div className={`flex items-center gap-2 mb-5 ${t.headlineCentered ? 'justify-center' : ''}`}>
+          <span className={`text-xs font-semibold uppercase tracking-widest px-3 py-1 ${t.categoryBadge}`}>
             {c.articleCategory}
           </span>
         </div>
 
         {/* ── Article headline ──────────────────────────────────────────────── */}
-        <h1 id="hero-section" className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
+        <h1 id="hero-section" className={`font-bold text-gray-900 leading-tight mb-4 ${t.headlineCentered ? 'text-center text-4xl md:text-5xl lg:text-6xl' : 'text-3xl md:text-4xl lg:text-5xl'}`}>
           {c.articleHeadline}
         </h1>
-        <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-6 font-normal">
+        <p className={`text-lg md:text-xl text-gray-600 leading-relaxed mb-6 font-normal ${t.headlineCentered ? 'text-center' : ''}`}>
           {c.articleDeck}
         </p>
 
         {/* Byline */}
-        <div className="flex items-center gap-4 py-5 border-t border-b border-gray-200 mb-8">
+        <div className={`flex items-center gap-4 py-5 border-t border-b border-gray-200 mb-8 ${t.headlineCentered ? 'justify-center text-center' : ''}`}>
           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#563435]/20 to-[#563435]/10 flex items-center justify-center flex-shrink-0">
             <span className="text-lg font-bold text-[#563435]">
               {c.authorName.split(" ").map(w => w[0]).join("").slice(0, 2)}
             </span>
           </div>
-          <div className="flex-1 min-w-0">
+          <div className={t.headlineCentered ? '' : 'flex-1 min-w-0'}>
             <p className="font-semibold text-gray-900 text-sm">{c.authorName}</p>
             <p className="text-xs text-gray-500">{c.authorTitle}</p>
           </div>
-          <div className="text-right flex-shrink-0">
-            <p className="text-xs text-gray-500 flex items-center gap-1 justify-end">
-              <Clock className="w-3 h-3" />
-              {c.readingTime}
-            </p>
-          </div>
+          {!t.headlineCentered && (
+            <div className="text-right flex-shrink-0">
+              <p className="text-xs text-gray-500 flex items-center gap-1 justify-end">
+                <Clock className="w-3 h-3" />
+                {c.readingTime}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Disclosure note */}
@@ -418,41 +530,64 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
           </div>
         )}
 
-        {/* Hero article image */}
+        {/* Hero article image — layout changes per theme */}
         {c.heroImageLeftSrc || c.heroImageRightSrc ? (
-          <div className="my-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-            {c.heroImageLeftSrc ? (
-              <div className="order-2 md:order-1">
-                <ArticleImage
-                  src={c.heroImageLeftSrc}
-                  alt={c.heroImageLeftAlt || c.heroImageDesc}
-                  aspect="portrait"
-                />
-              </div>
-            ) : null}
-            {c.heroImageRightSrc ? (
-              <div className="order-1 md:order-2">
-                <ArticleImage
-                  src={c.heroImageRightSrc}
-                  alt={c.heroImageRightAlt || c.heroImageDesc}
-                  aspect="portrait"
-                />
-              </div>
-            ) : null}
-          </div>
+          t.heroLayout === 'full' ? (
+            // Confident: single full-width image (use right image as hero)
+            <div className="my-6 -mx-4 sm:-mx-6">
+              <ArticleImage
+                src={c.heroImageRightSrc || c.heroImageLeftSrc || ''}
+                alt={c.heroImageRightAlt || c.heroImageDesc}
+                aspect="landscape"
+              />
+            </div>
+          ) : t.heroLayout === 'stack' ? (
+            // Fresh: two images stacked vertically (single column), clinical focus
+            <div className="my-6 flex flex-col gap-3">
+              {c.heroImageLeftSrc && (
+                <ArticleImage src={c.heroImageLeftSrc} alt={c.heroImageLeftAlt || c.heroImageDesc} aspect="landscape" />
+              )}
+              {c.heroImageRightSrc && (
+                <ArticleImage src={c.heroImageRightSrc} alt={c.heroImageRightAlt || c.heroImageDesc} aspect="landscape" />
+              )}
+            </div>
+          ) : (
+            // Default two-col (warm / summer)
+            <div className="my-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+              {c.heroImageLeftSrc && (
+                <div className="order-2 md:order-1">
+                  <ArticleImage src={c.heroImageLeftSrc} alt={c.heroImageLeftAlt || c.heroImageDesc} aspect="portrait" />
+                </div>
+              )}
+              {c.heroImageRightSrc && (
+                <div className="order-1 md:order-2">
+                  <ArticleImage src={c.heroImageRightSrc} alt={c.heroImageRightAlt || c.heroImageDesc} aspect="portrait" />
+                </div>
+              )}
+            </div>
+          )
         ) : (
           <BeforeAfterPlaceholder desc={c.heroImageDesc} />
         )}
 
-        {/* ── Article intro ─────────────────────────────────────────────────── */}
-        <p className="text-lg md:text-xl font-semibold text-gray-800 leading-relaxed mb-6 border-l-4 border-[#563435] pl-5">
+        {/* ── Article intro — style changes per theme ───────────────────────── */}
+        <p className={t.introClasses}>
           {c.intro}
         </p>
 
         {/* ── Article body sections ─────────────────────────────────────────── */}
         {c.sections.map((section, si) => (
           <div key={si}>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mt-8 mb-4">
+            {/* Section heading — style varies by theme */}
+            <h2 className={t.sectionHeadingClasses}>
+              {t.sectionHeadingStyle === 'bulleted' && (
+                <span className={`text-xl leading-none select-none ${t.bulletColor}`} aria-hidden>■</span>
+              )}
+              {t.sectionHeadingStyle === 'numbered' && (
+                <span className={`text-xs font-bold tabular-nums mt-1 flex-shrink-0 ${t.bulletColor}`} aria-hidden>
+                  0{si + 1}
+                </span>
+              )}
               {section.heading}
             </h2>
             {section.paragraphs.map((para, pi) => (
@@ -472,14 +607,27 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
               <ArticleImgPlaceholder desc={section.imagePlaceholder} />
             ) : null}
 
-            {/* Optional inline highlight/pull-quote */}
+            {/* Optional inline highlight/pull-quote — style varies by theme */}
             {section.highlight && (
-              <div className="my-6 p-5 rounded-2xl bg-[#563435]/5 border-l-4 border-[#563435] relative">
-                <Quote className="w-5 h-5 text-[#563435]/40 absolute top-4 left-4" />
-                <p className="text-lg font-semibold text-[#563435] pl-6 leading-snug italic">
-                  {section.highlight}
-                </p>
-              </div>
+              t.pullQuoteStyle === 'dramatic' ? (
+                // Confident: dark inverted full-width
+                <div className={t.pullDramaticBg}>
+                  <div className="absolute -top-6 -left-4 text-[8rem] leading-none font-serif select-none pointer-events-none opacity-10 text-white">"</div>
+                  <p className={t.pullTextClasses}>{section.highlight}</p>
+                </div>
+              ) : t.pullQuoteStyle === 'editorial' ? (
+                // Summer / Fresh: minimal editorial, just oversized quote mark + text
+                <div className="my-8 relative pl-2">
+                  <span className={`absolute -top-4 -left-1 text-5xl font-serif leading-none select-none ${t.pullMarkColor}`} aria-hidden>"</span>
+                  <p className={t.pullTextClasses}>{section.highlight}</p>
+                </div>
+              ) : (
+                // Warm (default): classic left-border box
+                <div className={t.pullBoxClasses}>
+                  <Quote className={`w-5 h-5 absolute top-4 left-4 ${t.pullMarkColor}`} />
+                  <p className={t.pullTextClasses}>{section.highlight}</p>
+                </div>
+              )
             )}
 
             {/* Inline product callout after designated section */}
@@ -590,8 +738,8 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
         ))}
 
         {/* ── Article closing highlight ─────────────────────────────────────── */}
-        <div className="my-8 p-6 rounded-2xl bg-amber-50 border border-amber-200">
-          <p className="text-base md:text-lg font-semibold text-amber-900 leading-relaxed">
+        <div className={`my-8 p-6 rounded-2xl ${t.closingBox}`}>
+          <p className={`text-base md:text-lg font-semibold leading-relaxed ${t.closingText} ${t.headlineCentered ? 'text-center' : ''}`}>
             {c.articleClosingHighlight}
           </p>
         </div>
@@ -606,8 +754,8 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
         {c.reviews.length > 0 && (
           <div className="mb-16">
             <div className="text-center mb-10">
-              <span className="inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase tracking-widest mb-3">
-                Čitatelji pišu
+              <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-3 ${t.reviewsBadge}`}>
+                Čitaoci pišu
               </span>
               <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
                 Šta kažu žene koje su probale
@@ -639,8 +787,8 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
                   ) : null}
                   <div className="p-6">
                     <div className="flex items-start gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#563435]/20 to-[#563435]/10 flex items-center justify-center flex-shrink-0">
-                        <span className="text-sm font-bold text-[#563435]">{review.name[0]}</span>
+                      <div className={`w-10 h-10 rounded-full bg-gradient-to-br flex items-center justify-center flex-shrink-0 ${t.reviewerAvatar}`}>
+                        <span className={`text-sm font-bold ${t.avatarText}`}>{review.name[0]}</span>
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
@@ -754,24 +902,6 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
                   {c.urgencySection.title}
                 </h2>
                 <p className="text-gray-500 mb-8 max-w-md mx-auto">{c.urgencySection.subtitle}</p>
-
-                {/* Timer */}
-                <div className="flex items-center justify-center gap-4 mb-8">
-                  {[
-                    { val: timeLeft.h, label: "sati" },
-                    { val: timeLeft.m, label: "min" },
-                    { val: timeLeft.s, label: "sek" },
-                  ].map(({ val, label }, i) => (
-                    <div key={i} className="flex flex-col items-center">
-                      <div className="w-20 h-20 md:w-24 md:h-24 bg-white/80 border border-[#563435]/20 rounded-2xl flex items-center justify-center shadow-sm">
-                        <span className="text-3xl md:text-4xl font-bold text-[#563435] tabular-nums">
-                          {String(val).padStart(2, "0")}
-                        </span>
-                      </div>
-                      <span className="text-xs text-gray-400 mt-1.5 uppercase tracking-wider">{label}</span>
-                    </div>
-                  ))}
-                </div>
 
                 {/* Stock badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 border border-[#563435]/20 text-[#563435] text-sm font-semibold mb-8">

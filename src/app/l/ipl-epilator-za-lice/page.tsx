@@ -29,13 +29,13 @@ const liceContent: LandingContent = {
     "500.000 bljeskova = 10+ godina tretmana lica bez zamjenskih dijelova",
   ],
   empathyTitle: "Dlačice na licu — jednom i zauvijek",
-  empathySubtitle: "LITE je kompaktan i lagan točno toliko da precizan rad na malom licu ima smisla.",
+  empathySubtitle: "LITE je kompaktan i lagan tačno toliko da precizan rad na malom licu ima smisla.",
   empathyParagraph1: "Svaki put kad se pogledaš u ogledalo — jutros, pred izlaz, usput u liftu — primijetiš ih. Te par dlačica na gornjoj usni. Mala brada koja se uvijek pojavi u najgorem trenutku. Zalisci koje nitko drugi ne primjećuje, a ti uvijek.",
   empathyParagraph2: "Brijanje lica? Ne, hvala — crvenilo, osjećaj kao da si grebala papyrom, i za tri dana isto iznova. Salon depilacija voskom? Bolna, skupa, i uvijek nekako vidljivo crveniš sat-dva poslije. Postoji razlog zašto sve više žena bira kućni IPL za lice — i nije samo cijena.",
   empathyHighlight: "ICE COOL LITE. 165 KM jednom. Gornja usna, brada, zalisci — za 5 minuta, u miru tvog kupaonice.",
   story: {
     title: "'Srela me prijateljica i pitala jel sam nešto radila na licu — nisam joj rekla šta.'",
-    text: "Koristim LITE samo za gornju usnu i postoji, bukvalno. Nakon 5 tretmana više nema potrebe da svako jutro provjeravam. Uvijek sam se stresirala oko tog jednog detalja — i sad toga nema. Uređaj stoji u ladici, uzmem ga jednom tjedno, gotovo. Kao da taj problem više ne postoji. Hlađenje je presudno — nema uopće neugode, čak ni na gornjoj usni koja mi je uvijek bila najosjetljivija zona.",
+    text: "Koristim LITE samo za gornju usnu i postoji, bukvalno. Nakon 5 tretmana više nema potrebe da svako jutro provjeravam. Uvijek sam se stresirala oko tog jednog detalja — i sad toga nema. Uređaj stoji u ladici, uzmem ga jednom sedmično, gotovo. Kao da taj problem više ne postoji. Hlađenje je presudno — nema uopće neugode, čak ni na gornjoj usni koja mi je uvijek bila najosjetljivija zona.",
     authorName: "Amra D.",
     authorSubtitle: "28 god. · Sarajevo · koristi LITE 2 mjeseca",
   },
@@ -43,7 +43,7 @@ const liceContent: LandingContent = {
     {
       step: 1,
       title: "Kompaktno — precizan rad na svakoj zoni lica",
-      desc: "LITE je kompaktan i lagčan točno toliko da precizan rad na malom licu ima smisla. Gornja usna, brada, linija vilice — lako. Stane u ladicu, torbicu, kofer. Malen kao šminkarska spužvica — ali radi posao koji salon naplaćuje 400+ KM.",
+      desc: "LITE je kompaktan i lagčan tačno toliko da precizan rad na malom licu ima smisla. Gornja usna, brada, linija vilice — lako. Stane u ladicu, torbicu, kofer. Malen kao šminkarska spužvica — ali radi posao koji salon naplaćuje 400+ KM.",
     },
     {
       step: 2,
