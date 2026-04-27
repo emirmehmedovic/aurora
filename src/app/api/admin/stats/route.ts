@@ -41,12 +41,14 @@ export async function GET(request: Request) {
 }
 
 async function handleDefaultStats() {
-  // Get total orders
-  const totalOrders = await prisma.order.count();
+  // Get total orders (excluding cancelled and returned)
+  const totalOrders = await prisma.order.count({
+    where: { status: { notIn: ["CANCELLED", "RETURNED"] } }
+  });
 
-  // Get total revenue
+  // Get total revenue (excluding cancelled and returned)
   const orders = await prisma.order.findMany({
-    where: { status: { not: "CANCELLED" } },
+    where: { status: { notIn: ["CANCELLED", "RETURNED"] } },
     select: { totalAmount: true }
   });
   const totalRevenue = orders.reduce((sum: number, order: { totalAmount: number }) => sum + order.totalAmount, 0);
@@ -90,11 +92,11 @@ async function handleSalesTrend(searchParams: URLSearchParams) {
   // Get all dates in range
   const dateRange = eachDayOfInterval({ start: startDate, end: endDate });
 
-  // Get orders grouped by date
+  // Get orders grouped by date (excluding cancelled and returned)
   const orders = await prisma.order.findMany({
     where: {
       createdAt: { gte: startDate },
-      status: { not: "CANCELLED" }
+      status: { notIn: ["CANCELLED", "RETURNED"] }
     },
     select: {
       createdAt: true,
