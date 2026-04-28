@@ -58,6 +58,36 @@ export const fbEvent = (name: string, options = {}) => {
   });
 };
 
+// Update advanced matching data when user information is available
+export const updateAdvancedMatching = (userData: {
+  email?: string;
+  phone?: string;
+  firstName?: string;
+  lastName?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  country?: string;
+}) => {
+  waitForFbq(() => {
+    const advancedMatching: any = {};
+
+    if (userData.email) advancedMatching.em = userData.email;
+    if (userData.phone) advancedMatching.ph = userData.phone;
+    if (userData.firstName) advancedMatching.fn = userData.firstName;
+    if (userData.lastName) advancedMatching.ln = userData.lastName;
+    if (userData.city) advancedMatching.ct = userData.city;
+    if (userData.state) advancedMatching.st = userData.state;
+    if (userData.zip) advancedMatching.zp = userData.zip;
+    if (userData.country) advancedMatching.country = userData.country;
+
+    // Re-initialize pixel with user data (will be auto-hashed by Meta)
+    if (Object.keys(advancedMatching).length > 0 && FB_PIXEL_ID) {
+      window.fbq('init', FB_PIXEL_ID, advancedMatching);
+    }
+  });
+};
+
 // Tracking events
 export const trackAddToCart = (product: { name: string; price: number; id: string }) => {
   // GA4

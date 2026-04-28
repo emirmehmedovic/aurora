@@ -81,7 +81,16 @@ export default function RootLayout({
                 t.src=v;s=b.getElementsByTagName(e)[0];
                 s.parentNode.insertBefore(t,s)}(window, document,'script',
                 'https://connect.facebook.net/en_US/fbevents.js');
-                fbq('init', '${FB_PIXEL_ID}');
+                fbq('init', '${FB_PIXEL_ID}', {
+                  em: undefined,
+                  ph: undefined,
+                  fn: undefined,
+                  ln: undefined,
+                  ct: undefined,
+                  st: undefined,
+                  zp: undefined,
+                  country: undefined
+                });
                 fbq('track', 'PageView');
               `}
             </Script>
