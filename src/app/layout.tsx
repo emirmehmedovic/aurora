@@ -7,14 +7,14 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://aurorashop.ba"),
   title: "IPL Epilator za Kućnu Upotrebu | Trajno Uklanjanje Dlačica u BiH",
   description:
-    "Kućni IPL epilator s ugrađenim hlađenjem za trajno uklanjanje dlačica. 3 modela od 165 KM. Besplatna dostava u BiH, plaćanje pouzećem i 14 dana povrata.",
+    "Kućni IPL epilator s ugrađenim hlađenjem za trajno uklanjanje dlačica. Besplatna dostava u BiH, plaćanje pouzećem i rezultati vidljivi već nakon 2 sedmice korištenja.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "IPL Epilator za Kućnu Upotrebu | Aurora Shop",
     description:
-      "Kućni IPL epilator od 165 KM. Besplatna dostava u BiH, plaćanje pouzećem i vidljivi rezultati za 8 sedmica.",
+      "Kućni IPL epilator s ugrađenim hlađenjem. Besplatna dostava u BiH, plaćanje pouzećem i rezultati vidljivi već nakon 2 sedmice korištenja.",
     url: "https://aurorashop.ba",
     siteName: "Aurora Shop",
     locale: "bs_BA",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "IPL Epilator za Kućnu Upotrebu | Aurora Shop",
     description:
-      "Kućni IPL epilator od 165 KM. Besplatna dostava u BiH i plaćanje pouzećem.",
+      "Kućni IPL epilator s ugrađenim hlađenjem. Besplatna dostava u BiH, plaćanje pouzećem i rezultati vidljivi već nakon 2 sedmice korištenja.",
     images: ["/slike/PRO/cover-image.png"],
   },
 };

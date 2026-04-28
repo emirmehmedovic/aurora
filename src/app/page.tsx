@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title:
     "IPL Epilator za Kućnu Upotrebu | Trajno Uklanjanje Dlačica - Besplatna Dostava BiH",
   description:
-    "Kućni IPL epilator s ugrađenim hlađenjem, bez salona i bez boli. 3 modela od 165 KM. Besplatna dostava u BiH, plaćanje pouzećem i rezultati za 8 sedmica.",
+    "Kućni IPL epilator s ugrađenim hlađenjem, bez salona i bez boli. Besplatna dostava u BiH, plaćanje pouzećem i rezultati vidljivi već nakon 2 sedmice korištenja.",
   keywords: [
     "IPL epilator BiH",
     "IPL aparat BiH",
