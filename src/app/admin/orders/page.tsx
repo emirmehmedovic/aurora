@@ -937,6 +937,82 @@ export default function OrdersPage() {
           </div>
         </div>
 
+        {/* KPI Section */}
+        <div className="mb-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Total Revenue */}
+          <div className="bg-gradient-to-br from-emerald-50 to-white backdrop-blur-md rounded-3xl shadow-sm border border-white/40 p-6">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">Ukupni Promet</h3>
+              <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center">
+                <Download className="w-5 h-5 text-white" />
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-gray-900 mb-1">
+              {(filteredOrders
+                .filter(o => o.status !== "CANCELLED" && o.status !== "RETURNED")
+                .reduce((sum, order) => sum + order.totalAmount, 0) / 100
+              ).toFixed(2)} KM
+            </p>
+            <p className="text-xs text-gray-500">Bez otkazanih i vraćenih</p>
+          </div>
+
+          {/* Number of Orders */}
+          <div className="bg-gradient-to-br from-blue-50 to-white backdrop-blur-md rounded-3xl shadow-sm border border-white/40 p-6">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">Broj Narudžbi</h3>
+              <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center">
+                <Package className="w-5 h-5 text-white" />
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-gray-900 mb-1">
+              {filteredOrders.filter(o => o.status !== "CANCELLED" && o.status !== "RETURNED").length}
+            </p>
+            <p className="text-xs text-gray-500">Filtrirano po periodu</p>
+          </div>
+
+          {/* Purchase Cost */}
+          <div className="bg-gradient-to-br from-amber-50 to-white backdrop-blur-md rounded-3xl shadow-sm border border-white/40 p-6">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">Trošak Nabavke</h3>
+              <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center">
+                <ShoppingBag className="w-5 h-5 text-white" />
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-gray-900 mb-1">
+              {(filteredOrders
+                .filter(o => o.status !== "CANCELLED" && o.status !== "RETURNED")
+                .reduce((sum, order) => {
+                  const totalQuantity = order.items.reduce((qty, item) => qty + item.quantity, 0);
+                  return sum + (totalQuantity * 30);
+                }, 0)
+              ).toFixed(2)} KM
+            </p>
+            <p className="text-xs text-gray-500">30 KM po komadu</p>
+          </div>
+
+          {/* Profit Margin */}
+          <div className="bg-gradient-to-br from-purple-50 to-white backdrop-blur-md rounded-3xl shadow-sm border border-white/40 p-6">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">Neto Profit</h3>
+              <div className="w-10 h-10 rounded-xl bg-purple-500 flex items-center justify-center">
+                <Download className="w-5 h-5 text-white rotate-180" />
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-gray-900 mb-1">
+              {(() => {
+                const validOrders = filteredOrders.filter(o => o.status !== "CANCELLED" && o.status !== "RETURNED");
+                const revenue = validOrders.reduce((sum, order) => sum + order.totalAmount, 0) / 100;
+                const cost = validOrders.reduce((sum, order) => {
+                  const totalQuantity = order.items.reduce((qty, item) => qty + item.quantity, 0);
+                  return sum + (totalQuantity * 30);
+                }, 0);
+                return (revenue - cost).toFixed(2);
+              })()} KM
+            </p>
+            <p className="text-xs text-gray-500">Promet - Nabavka</p>
+          </div>
+        </div>
+
         {/* Filters Panel - Always Visible */}
         <div className="mb-6 bg-gradient-to-br from-white/70 via-white/60 to-white/50 backdrop-blur-md rounded-3xl shadow-sm border border-white/40 p-6">
           <div className="flex items-center justify-between mb-6">
