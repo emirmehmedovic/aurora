@@ -27,6 +27,28 @@ interface LandingPageEntry {
 
 const LANDING_PAGES: LandingPageEntry[] = [
   {
+    slug: "philips-lumea-alternativa",
+    title: "Prije nego platiš 1.500 KM za kućni IPL uređaj — Pogledaj pristupačniju alternativu",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Pametna alternativa skupim brendovima",
+    description:
+      "🆕 NAJNOVIJI — Advertorial V2 (confident tema) fokusiran na Philips Lumea konkurenciju. Direktno targetira žene koje razmatraju skupe premium uređaje (1.000-1.500 KM) i pokazuje pristupačnu alternativu. Naglasak na 175 KM vs 1.500 KM, isti IPL princip, ugrađeno hlađenje. Idealan za SEO: 'Philips Lumea alternativa BiH'.",
+    tags: ["PRO", "Advertorial V2", "🆕 NOVO", "Konkurencija", "175 vs 1500"],
+  },
+  {
+    slug: "summer-glatka-koza",
+    title: "Zašto sve više žena preskače skupe salone i prelazi na kućni uređaj za glatku kožu s hlađenjem?",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Summer vibe — lepršav dizajn sa floating dekoracijama",
+    description:
+      "🆕 NAJNOVIJI — Advertorial V2 sa summer vibe dizajnom (rose/pink paleta). Targetira žene koje traže alternativu skupim uređajima (1.000+ KM) i salonima. Naglasak na Ice Cool™ hlađenju, kućnoj upotrebi i cijeni 175 KM. Uključuje lepršave dekoracije, floating elemente i pastelne gradijente.",
+    tags: ["PRO", "Advertorial V2", "🆕 NOVO", "Summer Vibe", "Hlađenje"],
+  },
+  {
     slug: "ipl-aparat-protiv-dlacica",
     title: "ICE COOL PRO™ — IPL Aparat za Trajno Uklanjanje Dlačica",
     productName: "ICE COOL PRO",
@@ -195,6 +217,11 @@ const tagColors: Record<string, string> = {
   Ljetovanje: "bg-orange-100 text-orange-600",
   "Koža & Iritacija": "bg-violet-100 text-violet-700",
   Samopouzdanje: "bg-rose-100 text-rose-700",
+  "🆕 NOVO": "bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold shadow-md",
+  "Summer Vibe": "bg-rose-100 text-rose-600",
+  "Hlađenje": "bg-cyan-100 text-cyan-700",
+  "Konkurencija": "bg-indigo-100 text-indigo-700",
+  "175 vs 1500": "bg-emerald-100 text-emerald-700",
 };
 
 export default function LandingPagesAdminPage() {
