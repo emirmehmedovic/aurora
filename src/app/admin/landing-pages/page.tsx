@@ -27,6 +27,28 @@ interface LandingPageEntry {
 
 const LANDING_PAGES: LandingPageEntry[] = [
   {
+    slug: "zao-mi-je-v2",
+    title: "300+ žena iz BiH kaže: 'Trebala sam ranije probati Ice Cool PRO'",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Optimizovano prema Clarity podacima - V2",
+    description:
+      "🚀 A/B TEST V2 — Social proof landing sa Clarity optimizacijama: floating CTA (nakon 10s), live view counter, recent buyer notifications, urgency banner, progress bar, quick win stats. Bazirano na analizi 378 sesija (31.05-02.06). Targeting: smanjenje 27% bounce-a u 11-60s zoni, povećanje 4.2% → 8-10% conversion rate. Expected lift: +30-60% revenue.",
+    tags: ["PRO", "🆕 A/B TEST", "Social Proof", "Clarity Optimized", "CRO"],
+  },
+  {
+    slug: "zao-mi-je-sto-nisam-ranije-probala",
+    title: "300+ žena iz BiH kaže: 'Trebala sam ranije probati Ice Cool PRO'",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Original verzija - kontrola za A/B test",
+    description:
+      "📊 CONTROL — Original social proof landing (ElegantSocialProof komponenta). Trenutno aktivan na Facebook kampanjama. Clarity data (31.05-02.06): 24 sesije, 3.6 min avg duration, 50% engagement rate, 4.2% conversion intent. Koristi se kao baseline za A/B testiranje sa V2 verzijom. Dugo zadržavanje (najbolje od svih landing pages), ali mali traffic volume.",
+    tags: ["PRO", "Social Proof", "Control Group", "Active"],
+  },
+  {
     slug: "philips-lumea-alternativa",
     title: "Prije nego platiš 1.500 KM za kućni IPL uređaj — Pogledaj pristupačniju alternativu",
     productName: "ICE COOL PRO",
@@ -218,6 +240,12 @@ const tagColors: Record<string, string> = {
   "Koža & Iritacija": "bg-violet-100 text-violet-700",
   Samopouzdanje: "bg-rose-100 text-rose-700",
   "🆕 NOVO": "bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold shadow-md",
+  "🆕 A/B TEST": "bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold shadow-md",
+  "Social Proof": "bg-pink-100 text-pink-700",
+  "Clarity Optimized": "bg-blue-100 text-blue-700",
+  CRO: "bg-green-100 text-green-700",
+  "Control Group": "bg-gray-100 text-gray-700",
+  Active: "bg-green-100 text-green-700 border border-green-300",
   "Summer Vibe": "bg-rose-100 text-rose-600",
   "Hlađenje": "bg-cyan-100 text-cyan-700",
   "Konkurencija": "bg-indigo-100 text-indigo-700",
