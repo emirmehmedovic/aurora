@@ -56,7 +56,7 @@ export default function JednaOdlukaLanding({
   };
 
   const handleCtaClick = (location: string) => {
-    trackCtaClick(product.slug, location);
+    trackCtaClick("Naruci", location, `jedna-odluka-${product.id}`);
     scrollToOrder();
   };
 
