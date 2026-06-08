@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 const specifications = [
   { label: "Tehnologija", value: "IPL (Intense Pulsed Light)" },
   { label: "Broj impulsa", value: "999.900" },
-  { label: "Intenziteti", value: "5 nivoa" },
+  { label: "Intenziteti", value: "9 nivoa" },
   { label: "Hlađenje", value: "Ice Cooling™ tehnologija" },
   { label: "Zone tretmana", value: "Noge, pazuhe, bikini, lice" },
   { label: "Trajanje tretmana", value: "~10 minuta" },

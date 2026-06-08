@@ -101,7 +101,7 @@ export default function PremiumProductLanding({
           </Link>
           <button
             onClick={() => scrollToForm("nav")}
-            className="px-5 py-2 bg-[#0c0c0c] text-white rounded-full text-[13px] font-normal tracking-wide hover:opacity-75 transition-opacity"
+            className="px-5 py-2 bg-[#C19A91] text-white rounded-full text-[13px] font-normal tracking-wide hover:opacity-80 transition-opacity"
           >
             Naruči — {product.price} KM
           </button>
@@ -109,9 +109,9 @@ export default function PremiumProductLanding({
       </nav>
 
       {/* HERO - Split Screen */}
-      <section className="grid md:grid-cols-2 min-h-[92vh] bg-[#f7f4ef]">
+      <section className="grid md:grid-cols-2 md:min-h-[92vh] bg-[#f7f4ef]">
         {/* Hero Image */}
-        <div className="relative overflow-hidden h-[60vw] md:h-auto min-h-[280px]">
+        <div className="relative overflow-hidden h-[50vh] md:h-auto md:min-h-[280px]">
           <Image
             src="/novi-landing/product.png"
             alt="Ice Cool PRO™"
@@ -119,22 +119,22 @@ export default function PremiumProductLanding({
             className="object-cover object-center"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#f7f4ef]/80 md:to-[#f7f4ef]" />
+          <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#f7f4ef] via-[#f7f4ef]/60 to-transparent md:from-transparent md:via-transparent md:to-[#f7f4ef]" />
         </div>
 
         {/* Hero Content */}
-        <div className="flex flex-col justify-center px-6 md:px-12 py-12 md:py-16 space-y-5">
+        <div className="flex flex-col justify-center px-4 md:px-12 py-8 md:py-16 space-y-4 md:space-y-5">
           <div className="flex items-center gap-2 text-[11px] tracking-widest uppercase text-[#c9a96e] font-normal">
             <div className="w-6 h-px bg-[#c9a96e]" />
             Kućni IPL epilator
           </div>
 
-          <h1 className="font-[var(--font-playfair)] text-[36px] md:text-[52px] font-light leading-tight tracking-tight">
+          <h1 className="font-[var(--font-playfair)] text-[32px] md:text-[52px] font-light leading-tight tracking-tight">
             Glatka koža.<br />
             <em className="italic text-[#C19A91]">Trajno.</em>
           </h1>
 
-          <p className="text-[15px] text-gray-600 leading-relaxed font-light max-w-[340px]">
+          <p className="text-[14px] md:text-[15px] text-gray-600 leading-relaxed font-light max-w-[340px]">
             Profesionalni IPL tretman kod kuće. Bez salona, bez termina, bez ponavljanja svake sedmice.
           </p>
 
@@ -144,27 +144,27 @@ export default function PremiumProductLanding({
                 <Star key={i} className="w-3.5 h-3.5 fill-[#c9a96e]" />
               ))}
             </div>
-            <span className="text-[13px] text-gray-500 font-light ml-1">4.9 · 300+ korisnica u BiH</span>
+            <span className="text-xs md:text-[13px] text-gray-500 font-light ml-1">4.9 · 300+ korisnica u BiH</span>
           </div>
 
           <div>
-            <div className="flex items-baseline gap-2.5 mb-1">
-              <span className="font-[var(--font-playfair)] text-[44px] font-normal leading-none">
+            <div className="flex flex-wrap items-baseline gap-2 md:gap-2.5 mb-1">
+              <span className="font-[var(--font-playfair)] text-[38px] md:text-[44px] font-normal leading-none">
                 {product.price} KM
               </span>
-              <span className="text-[18px] text-gray-400 line-through font-light">
+              <span className="text-base md:text-[18px] text-gray-400 line-through font-light">
                 {product.compareAtPrice} KM
               </span>
-              <span className="text-xs tracking-wide bg-[#eaf4ee] text-[#2d6a4f] px-2.5 py-1 rounded-full">
+              <span className="text-[11px] md:text-xs tracking-wide bg-[#eaf4ee] text-[#2d6a4f] px-2 md:px-2.5 py-1 rounded-full">
                 −{discount}%
               </span>
             </div>
-            <p className="text-[13px] text-gray-500 font-light">Besplatna dostava · Plaćanje pouzećem</p>
+            <p className="text-xs md:text-[13px] text-gray-500 font-light">Besplatna dostava · Plaćanje pouzećem</p>
           </div>
 
           <button
             onClick={() => scrollToForm("hero")}
-            className="w-full py-4 bg-[#0c0c0c] text-white rounded-xl text-[15px] font-normal tracking-wider uppercase hover:opacity-80 transition-all hover:-translate-y-0.5"
+            className="w-full py-3.5 md:py-4 bg-[#C19A91] text-white rounded-xl text-sm md:text-[15px] font-normal tracking-wider uppercase hover:opacity-85 transition-all hover:-translate-y-0.5"
           >
             Naruči odmah
           </button>
@@ -173,9 +173,9 @@ export default function PremiumProductLanding({
             {["Plaćanje pouzećem", "14 dana povrat", "12 mj. garancija"].map((item, i) => (
               <span
                 key={i}
-                className="inline-flex items-center gap-1.5 text-xs text-gray-600 font-light bg-white border border-[#e8e4de] px-3 py-1.5 rounded-full"
+                className="inline-flex items-center gap-1.5 text-[11px] md:text-xs text-gray-600 font-light bg-white border border-[#e8e4de] px-2.5 md:px-3 py-1 md:py-1.5 rounded-full"
               >
-                <span className="text-[#2d6a4f] text-[11px]">✓</span>
+                <span className="text-[#2d6a4f] text-[10px] md:text-[11px]">✓</span>
                 {item}
               </span>
             ))}
@@ -184,21 +184,21 @@ export default function PremiumProductLanding({
       </section>
 
       {/* FEATURES BAR */}
-      <section className="bg-[#0c0c0c] border-b border-gray-800">
+      <section className="bg-[#faf6ee] border-b border-[#e8e4de]">
         <div className="grid grid-cols-2 md:grid-cols-4">
           {[
             { icon: "❄️", title: "Ice Cooling™", sub: "Hlađenje pri svakom impulsu" },
             { icon: "⚡", title: "999.900 impulsa", sub: "Doživotna upotreba" },
-            { icon: "🎯", title: "5 intenziteta", sub: "Za svaki tip kože" },
+            { icon: "🎯", title: "9 intenziteta", sub: "Za svaki tip kože" },
             { icon: "⏱️", title: "10 min / tretman", sub: "Cijelo tijelo" },
           ].map((feature, i) => (
             <div
               key={i}
-              className="px-5 py-6 text-center border-r border-gray-800 last:border-r-0 odd:border-b md:odd:border-b-0 md:border-b-0 border-gray-800"
+              className="px-5 py-6 text-center border-r border-[#e8e4de] last:border-r-0 odd:border-b md:odd:border-b-0 md:border-b-0 border-[#e8e4de]"
             >
               <div className="text-[22px] mb-2">{feature.icon}</div>
-              <div className="text-[13px] text-white font-normal tracking-wide mb-0.5">{feature.title}</div>
-              <div className="text-xs text-gray-400 font-light">{feature.sub}</div>
+              <div className="text-[13px] text-[#c9a96e] font-medium tracking-wide mb-0.5">{feature.title}</div>
+              <div className="text-xs text-gray-600 font-light">{feature.sub}</div>
             </div>
           ))}
         </div>
@@ -316,7 +316,7 @@ export default function PremiumProductLanding({
                   <th className="px-5 py-3.5 text-left font-normal tracking-wide text-[13px] border-b border-[#e8e4de]">
                     Kriterij
                   </th>
-                  <th className="px-5 py-3.5 text-center font-normal tracking-wide text-[13px] bg-[#0c0c0c] text-white rounded-t-md border-b border-gray-800">
+                  <th className="px-5 py-3.5 text-center font-normal tracking-wide text-[13px] bg-[#C19A91] text-white rounded-t-md border-b border-[#C19A91]">
                     Ice Cool PRO™
                   </th>
                   <th className="px-5 py-3.5 text-center font-normal tracking-wide text-[13px] text-gray-500 border-b border-[#e8e4de]">
@@ -333,7 +333,7 @@ export default function PremiumProductLanding({
                     <td className="px-5 py-3 text-gray-700 font-light border-b border-[#e8e4de]">
                       {row.criterion}
                     </td>
-                    <td className="px-5 py-3 text-center bg-[#0c0c0c]/5 font-normal text-gray-900 border-b border-[#e8e4de]">
+                    <td className="px-5 py-3 text-center bg-[#f9eef1] font-normal text-gray-900 border-b border-[#e8e4de]">
                       {renderComparisonValue(row.iceCoolPro)}
                     </td>
                     <td className="px-5 py-3 text-center text-gray-500 border-b border-[#e8e4de]">
@@ -369,7 +369,7 @@ export default function PremiumProductLanding({
             <>
               <button
                 onClick={() => setShowForm(true)}
-                className="w-full py-4 bg-[#0c0c0c] text-white rounded-xl text-sm font-normal tracking-widest uppercase hover:opacity-80 transition-all hover:-translate-y-0.5 mb-2.5"
+                className="w-full py-4 bg-[#C19A91] text-white rounded-xl text-sm font-normal tracking-widest uppercase hover:opacity-85 transition-all hover:-translate-y-0.5 mb-2.5"
               >
                 Naruči — plaćam pouzećem
               </button>
