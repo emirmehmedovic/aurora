@@ -27,6 +27,28 @@ interface LandingPageEntry {
 
 const LANDING_PAGES: LandingPageEntry[] = [
   {
+    slug: "jedna-odluka",
+    title: "Nije u genima. Nije u salonu. Jedna odluka. To je sve.",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Emotivni storytelling sa animiranim hero tekstom",
+    description:
+      "🆕 NAJNOVIJI — Minimalistički emotivni landing sa dramatičnim hook-om. Animated hero text sa motion reveal efektima, fokus na 'jedna odluka' koncept. Zlatno-roze paleta (rose #c0546a, gold #b8924a, cream #f6f3ed), Playfair Display + DM Sans fontovi. Sekcije: animated hero (split-screen), discovery (narrative copy), product, 'Zašto radi' (3 razloga), reviews (5 testimonial-a), FAQ accordion (3 prigovora), order forma. Naglasak na emocionalnu rezonanciju i minimalizam.",
+    tags: ["PRO", "🆕 NOVO", "Emotivni", "Animated", "Minimalistički"],
+  },
+  {
+    slug: "premium",
+    title: "Glatka koža. Trajno. — Premium Product Page",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Elegantan split-screen dizajn sa zlatno-roze paletom",
+    description:
+      "🆕 NAJNOVIJI — Premium product page sa elegantnim split-screen dizajnom. Zlatno-roze paleta (gold #c9a96e + rose #C19A91), Playfair Display serif font. Split sections: hero (slika + sadržaj), features bar (9 intenziteta), specs (split layout), reviews grid, comparison table (vs Philips Lumea & Salon), order section (forma + sažetak). Minimalistički dizajn sa eyebrow linijama i mnogo white space. Savršen responsive za mobilne.",
+    tags: ["PRO", "🆕 NOVO", "Premium", "Split-screen", "Gold-Rose"],
+  },
+  {
     slug: "zao-mi-je-v2",
     title: "300+ žena iz BiH kaže: 'Trebala sam ranije probati Ice Cool PRO'",
     productName: "ICE COOL PRO",
@@ -224,7 +246,12 @@ const tagColors: Record<string, string> = {
   PRO: "bg-violet-100 text-violet-700",
   Max: "bg-amber-100 text-amber-700",
   LITE: "bg-sky-100 text-sky-700",
-  Premium: "bg-[#563435]/10 text-[#563435]",
+  Premium: "bg-[#C19A91]/10 text-[#C19A91]",
+  "Split-screen": "bg-purple-100 text-purple-700",
+  "Gold-Rose": "bg-gradient-to-r from-amber-100 to-rose-100 text-amber-800",
+  Emotivni: "bg-rose-100 text-rose-700",
+  Animated: "bg-indigo-100 text-indigo-700",
+  Minimalistički: "bg-slate-100 text-slate-700",
   "Glavni model": "bg-green-100 text-green-700",
   Kompaktni: "bg-teal-100 text-teal-700",
   "Zona: Lice": "bg-pink-100 text-pink-700",
