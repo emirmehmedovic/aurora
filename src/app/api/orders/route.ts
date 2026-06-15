@@ -328,6 +328,33 @@ export async function GET(request: NextRequest) {
     // Get total count for pagination
     const totalCount = await prisma.order.count({ where: whereClause });
 
+    // Get aggregate stats for ALL filtered orders (not just current page)
+    const allFilteredOrders = await prisma.order.findMany({
+      where: whereClause,
+      select: {
+        totalAmount: true,
+        status: true,
+        items: {
+          select: {
+            quantity: true,
+          },
+        },
+      },
+    });
+
+    // Calculate aggregate stats
+    const validOrders = allFilteredOrders.filter(
+      (o) => o.status !== 'CANCELLED' && o.status !== 'RETURNED'
+    );
+
+    const totalRevenue = validOrders.reduce((sum, order) => sum + order.totalAmount, 0);
+    const totalOrdersCount = validOrders.length;
+    const totalPurchaseCost = validOrders.reduce((sum, order) => {
+      const totalQuantity = order.items.reduce((qty, item) => qty + item.quantity, 0);
+      return sum + totalQuantity * 3000; // 30 KM per item in cents
+    }, 0);
+    const netProfit = totalRevenue - totalPurchaseCost;
+
     // Get orders with filters
     const dbOrders = await prisma.order.findMany({
       where: whereClause,
@@ -403,6 +430,12 @@ export async function GET(request: NextRequest) {
         limit,
         total: totalCount,
         totalPages: Math.ceil(totalCount / limit),
+      },
+      stats: {
+        totalRevenue,
+        totalOrdersCount,
+        totalPurchaseCost,
+        netProfit,
       },
     });
   } catch (error) {

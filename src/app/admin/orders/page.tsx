@@ -94,6 +94,14 @@ export default function OrdersPage() {
   const [totalCount, setTotalCount] = useState(0);
   const [pageLimit] = useState(30);
 
+  // Aggregate stats (for ALL filtered orders, not just current page)
+  const [stats, setStats] = useState({
+    totalRevenue: 0,
+    totalOrdersCount: 0,
+    totalPurchaseCost: 0,
+    netProfit: 0,
+  });
+
   // Bulk operations
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [showStatusModal, setShowStatusModal] = useState(false);
@@ -193,6 +201,9 @@ export default function OrdersPage() {
         if (data.pagination) {
           setTotalPages(data.pagination.totalPages);
           setTotalCount(data.pagination.total);
+        }
+        if (data.stats) {
+          setStats(data.stats);
         }
       }
     } catch (error) {
@@ -957,10 +968,7 @@ export default function OrdersPage() {
               </div>
             </div>
             <p className="text-3xl font-bold text-gray-900 mb-1">
-              {(filteredOrders
-                .filter(o => o.status !== "CANCELLED" && o.status !== "RETURNED")
-                .reduce((sum, order) => sum + order.totalAmount, 0) / 100
-              ).toFixed(2)} KM
+              {(stats.totalRevenue / 100).toFixed(2)} KM
             </p>
             <p className="text-xs text-gray-500">Bez otkazanih i vraćenih</p>
           </div>
@@ -974,7 +982,7 @@ export default function OrdersPage() {
               </div>
             </div>
             <p className="text-3xl font-bold text-gray-900 mb-1">
-              {filteredOrders.filter(o => o.status !== "CANCELLED" && o.status !== "RETURNED").length}
+              {stats.totalOrdersCount}
             </p>
             <p className="text-xs text-gray-500">Filtrirano po periodu</p>
           </div>
@@ -988,13 +996,7 @@ export default function OrdersPage() {
               </div>
             </div>
             <p className="text-3xl font-bold text-gray-900 mb-1">
-              {(filteredOrders
-                .filter(o => o.status !== "CANCELLED" && o.status !== "RETURNED")
-                .reduce((sum, order) => {
-                  const totalQuantity = order.items.reduce((qty, item) => qty + item.quantity, 0);
-                  return sum + (totalQuantity * 30);
-                }, 0)
-              ).toFixed(2)} KM
+              {(stats.totalPurchaseCost / 100).toFixed(2)} KM
             </p>
             <p className="text-xs text-gray-500">30 KM po komadu</p>
           </div>
@@ -1008,15 +1010,7 @@ export default function OrdersPage() {
               </div>
             </div>
             <p className="text-3xl font-bold text-gray-900 mb-1">
-              {(() => {
-                const validOrders = filteredOrders.filter(o => o.status !== "CANCELLED" && o.status !== "RETURNED");
-                const revenue = validOrders.reduce((sum, order) => sum + order.totalAmount, 0) / 100;
-                const cost = validOrders.reduce((sum, order) => {
-                  const totalQuantity = order.items.reduce((qty, item) => qty + item.quantity, 0);
-                  return sum + (totalQuantity * 30);
-                }, 0);
-                return (revenue - cost).toFixed(2);
-              })()} KM
+              {(stats.netProfit / 100).toFixed(2)} KM
             </p>
             <p className="text-xs text-gray-500">Promet - Nabavka</p>
           </div>
