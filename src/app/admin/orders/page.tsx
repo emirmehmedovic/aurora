@@ -88,6 +88,12 @@ export default function OrdersPage() {
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageLimit] = useState(30);
+
   // Bulk operations
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [showStatusModal, setShowStatusModal] = useState(false);
@@ -130,11 +136,24 @@ export default function OrdersPage() {
     }
   }, [status, router]);
 
+  // Debounce search query
   useEffect(() => {
-    if (session) {
+    const timer = setTimeout(() => {
+      if (session) {
+        setCurrentPage(1); // Reset to first page when filters change
+        fetchOrders();
+      }
+    }, searchQuery ? 500 : 0); // 500ms debounce for search, immediate for other filters
+
+    return () => clearTimeout(timer);
+  }, [session, statusFilter, searchQuery, dateFrom, dateTo]);
+
+  // Fetch when page changes (no debounce)
+  useEffect(() => {
+    if (session && currentPage > 1) {
       fetchOrders();
     }
-  }, [session]);
+  }, [currentPage]);
 
   useEffect(() => {
     if (showCreateModal && availableProducts.length === 0) {
@@ -144,10 +163,37 @@ export default function OrdersPage() {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch("/api/orders");
+      setLoading(true);
+
+      // Build query parameters
+      const params = new URLSearchParams();
+      params.append('page', currentPage.toString());
+      params.append('limit', pageLimit.toString());
+
+      if (statusFilter && statusFilter !== 'ALL') {
+        params.append('status', statusFilter);
+      }
+
+      if (searchQuery.trim()) {
+        params.append('search', searchQuery.trim());
+      }
+
+      if (dateFrom) {
+        params.append('dateFrom', dateFrom);
+      }
+
+      if (dateTo) {
+        params.append('dateTo', dateTo);
+      }
+
+      const response = await fetch(`/api/orders?${params.toString()}`);
       if (response.ok) {
         const data = await response.json();
         setOrders(data.orders);
+        if (data.pagination) {
+          setTotalPages(data.pagination.totalPages);
+          setTotalCount(data.pagination.total);
+        }
       }
     } catch (error) {
       console.error("Failed to fetch orders:", error);
@@ -750,52 +796,15 @@ export default function OrdersPage() {
     }
   };
 
-  // Filter and search logic
-  const filteredOrders = orders.filter(order => {
-    // Status filter
-    if (statusFilter !== "ALL" && order.status !== statusFilter) {
-      return false;
-    }
-
-    // Search filter (by customer name, phone, or order ID)
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      const matchesCustomer = order.customer.fullName?.toLowerCase().includes(query) ?? false;
-      const matchesPhone = order.customer.phone.includes(query);
-      const matchesOrderId = order.id?.toLowerCase().includes(query) ?? false;
-
-      if (!matchesCustomer && !matchesPhone && !matchesOrderId) {
-        return false;
-      }
-    }
-
-    // Date range filter
-    if (dateFrom) {
-      const orderDate = new Date(order.createdAt);
-      const fromDate = new Date(dateFrom);
-      fromDate.setHours(0, 0, 0, 0);
-      if (orderDate < fromDate) {
-        return false;
-      }
-    }
-
-    if (dateTo) {
-      const orderDate = new Date(order.createdAt);
-      const toDate = new Date(dateTo);
-      toDate.setHours(23, 59, 59, 999);
-      if (orderDate > toDate) {
-        return false;
-      }
-    }
-
-    return true;
-  });
+  // Filtering is now done on the server, so we just use orders directly
+  const filteredOrders = orders;
 
   const clearFilters = () => {
     setStatusFilter("ALL");
     setSearchQuery("");
     setDateFrom("");
     setDateTo("");
+    setCurrentPage(1); // Reset to first page
   };
 
   const hasActiveFilters = statusFilter !== "ALL" || searchQuery !== "" || dateFrom !== "" || dateTo !== "";
@@ -842,7 +851,7 @@ export default function OrdersPage() {
               <div className="px-4 py-2 bg-amber-100 border border-amber-300 rounded-xl">
                 <p className="text-sm font-medium text-amber-800">
                   <Filter className="w-4 h-4 inline mr-1" />
-                  Prikazano: {filteredOrders.length} narudžbi
+                  Prikazano: {filteredOrders.length} od {totalCount} narudžbi
                 </p>
               </div>
             )}
@@ -1410,6 +1419,55 @@ export default function OrdersPage() {
                   })}
                 </tbody>
               </table>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-6 flex items-center justify-between border-t border-gray-200 pt-4">
+                  <div className="text-sm text-gray-600">
+                    Prikazano {((currentPage - 1) * pageLimit) + 1} - {Math.min(currentPage * pageLimit, totalCount)} od {totalCount} narudžbi
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    >
+                      Prethodna
+                    </button>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
+                        // Show first, last, current, and pages around current
+                        const showPage = page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1;
+                        const showEllipsis = (page === 2 && currentPage > 3) || (page === totalPages - 1 && currentPage < totalPages - 2);
+
+                        if (!showPage && !showEllipsis) return null;
+                        if (showEllipsis) return <span key={page} className="px-2">...</span>;
+
+                        return (
+                          <button
+                            key={page}
+                            onClick={() => setCurrentPage(page)}
+                            className={`px-4 py-2 rounded-lg border transition-all ${
+                              page === currentPage
+                                ? 'bg-[#563435] text-white border-[#563435]'
+                                : 'border-gray-300 bg-white hover:bg-gray-50'
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <button
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    >
+                      Sljedeća
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
