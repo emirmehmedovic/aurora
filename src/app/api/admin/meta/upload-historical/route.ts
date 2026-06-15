@@ -68,7 +68,10 @@ async function uploadHistoricalOrders(request: NextRequest) {
           orderNumber: o.orderNumber,
           createdAt: o.createdAt,
           totalAmount: o.totalAmount,
+          totalAmountBAM: (o.totalAmount / 100).toFixed(2) + ' KM',
           customerName: o.customer.fullName,
+          source: o.source || 'N/A',
+          utmSource: o.utmSource || 'N/A',
         })),
       });
     }
