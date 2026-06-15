@@ -35,3 +35,17 @@ export function formatPhoneForDisplay(phone: string): string {
   }
   return phone;
 }
+
+/**
+ * Format phone number for WhatsApp/Viber API (international format)
+ * Examples:
+ * - "61904759" -> "+38761904759"
+ * - "061904759" -> "+38761904759"
+ * - "+387 61 904 759" -> "+38761904759"
+ * - "0038761904759" -> "+38761904759"
+ */
+export function formatPhoneForMessaging(phone: string): string {
+  const normalized = normalizePhone(phone);
+  // Add Bosnia country code (+387) and return international format
+  return `+387${normalized}`;
+}

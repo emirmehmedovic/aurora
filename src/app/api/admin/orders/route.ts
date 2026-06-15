@@ -8,6 +8,7 @@ import { normalizeNameForMatching } from "@/lib/textUtils";
 import { findDuplicateCustomers } from "@/lib/customerDeduplication";
 import { updateCustomerStats } from "@/lib/customerStats";
 import { sendMetaPurchaseEvent } from "@/lib/metaConversionsAPI";
+import { sendOrderConfirmation } from "@/lib/messaging";
 
 function generateOrderNumber() {
   return `ORD-${Date.now()}-${Math.random().toString(36).slice(2, 11).toUpperCase()}`;
@@ -186,6 +187,20 @@ export async function POST(request: NextRequest) {
       console.log(`[Meta Conversions API] Offline Purchase event sent (${actionSource})`);
     } catch (error) {
       console.error('[Meta Conversions API] Failed to send offline event:', error);
+    }
+
+    // Send WhatsApp/Viber confirmation message
+    try {
+      await sendOrderConfirmation({
+        customerName: customer.fullName,
+        customerPhone: customer.phone,
+        orderNumber: order.orderNumber,
+        totalAmount: totalAmount,
+        productName: product.name,
+      });
+      console.log('[Admin Order] WhatsApp/Viber confirmation sent');
+    } catch (error) {
+      console.error('[Admin Order] Failed to send WhatsApp/Viber:', error);
     }
 
     await updateCustomerStats(customer.id);

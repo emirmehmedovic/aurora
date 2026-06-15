@@ -11,6 +11,7 @@ import { checkRateLimit, getClientIp } from "@/lib/security";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { formatOrderSourceLabel, formatWebOrderSource } from "@/lib/order-source";
 import { sendMetaPurchaseEvent, sendMetaLeadEvent } from "@/lib/metaConversionsAPI";
+import { sendOrderConfirmation } from "@/lib/messaging";
 import { z } from "zod";
 
 const MIN_FORM_FILL_MS = 1000;
@@ -250,8 +251,22 @@ export async function POST(request: NextRequest) {
       console.error('[Meta Conversions API] Failed to send events:', error);
     }
 
+    // Send WhatsApp/Viber confirmation message
+    try {
+      await sendOrderConfirmation({
+        customerName: customer.fullName,
+        customerPhone: customer.phone,
+        orderNumber: order.orderNumber,
+        totalAmount: order.totalAmount,
+        productName: productInfo.name,
+      });
+      console.log('[Order] WhatsApp/Viber confirmation sent');
+    } catch (error) {
+      // Log error but don't fail the order
+      console.error('[Order] Failed to send WhatsApp/Viber:', error);
+    }
+
     // TODO: Send email notification
-    // TODO: Send SMS notification
 
     // Update customer stats
     await updateCustomerStats(customer.id);
