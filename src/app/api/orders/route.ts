@@ -10,6 +10,7 @@ import { getStorefrontProductBySlug } from "@/lib/storefront-products";
 import { checkRateLimit, getClientIp } from "@/lib/security";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { formatOrderSourceLabel, formatWebOrderSource } from "@/lib/order-source";
+import { sendMetaPurchaseEvent, sendMetaLeadEvent } from "@/lib/metaConversionsAPI";
 import { z } from "zod";
 
 const MIN_FORM_FILL_MS = 1000;
@@ -207,6 +208,46 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       // Log error but don't fail the order
       console.error('Failed to send Telegram notification:', error);
+    }
+
+    // Send Meta Conversions API events (server-side tracking)
+    try {
+      // Send Purchase event
+      await sendMetaPurchaseEvent({
+        orderId: order.orderNumber,
+        value: productInfo.price,
+        currency: 'BAM',
+        contentIds: [productInfo.id],
+        contentName: productInfo.name,
+        customer: {
+          email: customer.email,
+          phone: customer.phone,
+          fullName: customer.fullName,
+          city: customer.city,
+          zipCode: customer.zipCode,
+        },
+        eventSourceUrl: `https://aurorashop.ba${sourcePath || '/naruci'}`,
+        actionSource: 'website',
+      });
+
+      // Send Lead event
+      await sendMetaLeadEvent({
+        leadId: lead.id,
+        customer: {
+          email: customer.email,
+          phone: customer.phone,
+          fullName: customer.fullName,
+          city: customer.city,
+          zipCode: customer.zipCode,
+        },
+        eventSourceUrl: `https://aurorashop.ba${sourcePath || '/naruci'}`,
+        actionSource: 'website',
+      });
+
+      console.log('[Meta Conversions API] Purchase and Lead events sent successfully');
+    } catch (error) {
+      // Log error but don't fail the order
+      console.error('[Meta Conversions API] Failed to send events:', error);
     }
 
     // TODO: Send email notification

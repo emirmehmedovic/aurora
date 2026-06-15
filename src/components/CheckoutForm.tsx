@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Check, Truck, ShieldCheck, Clock, CreditCard, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { trackInitiateCheckout, trackPurchase, trackLead } from "@/lib/analytics";
+import { trackInitiateCheckout, trackPurchase, trackLead, updateAdvancedMatching } from "@/lib/analytics";
 import { DeliveryTruck } from "@/components/admin/DeliveryTruck";
 import { DeliveredPackage } from "@/components/admin/DeliveredPackage";
 
@@ -75,6 +75,22 @@ export default function CheckoutForm({ initialProduct, products }: CheckoutFormP
       const data = await response.json();
 
       if (response.ok) {
+        // Update Meta Pixel with user data for advanced matching
+        // Split full name into first and last name
+        const nameParts = formData.fullName.trim().split(' ');
+        const firstName = nameParts[0];
+        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
+        updateAdvancedMatching({
+          email: formData.email || undefined,
+          phone: formData.phone,
+          firstName: firstName,
+          lastName: lastName,
+          city: formData.city,
+          zip: formData.zipCode || undefined,
+          country: 'ba', // Bosnia and Herzegovina
+        });
+
         trackPurchase(data.orderId, selectedProduct.price, [{ id: formData.product, name: selectedProduct.name }]);
         trackLead(data.leadId);
         setSubmitted(true);
@@ -274,6 +290,18 @@ export default function CheckoutForm({ initialProduct, products }: CheckoutFormP
                   placeholder="061 123 456"
                 />
               </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Email (opcionalno)</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white/70 focus:bg-white focus:ring-2 focus:ring-[#563435]/20 focus:border-[#563435] transition-all outline-none"
+                placeholder="vas.email@primjer.ba"
+              />
             </div>
 
             <div>

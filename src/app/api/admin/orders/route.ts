@@ -7,6 +7,7 @@ import { normalizePhone } from "@/lib/phoneUtils";
 import { normalizeNameForMatching } from "@/lib/textUtils";
 import { findDuplicateCustomers } from "@/lib/customerDeduplication";
 import { updateCustomerStats } from "@/lib/customerStats";
+import { sendMetaPurchaseEvent } from "@/lib/metaConversionsAPI";
 
 function generateOrderNumber() {
   return `ORD-${Date.now()}-${Math.random().toString(36).slice(2, 11).toUpperCase()}`;
@@ -151,6 +152,40 @@ export async function POST(request: NextRequest) {
       });
     } catch (error) {
       console.error("Failed to send Telegram notification:", error);
+    }
+
+    // Send Meta Conversions API event for offline/manual orders
+    try {
+      const sourceLabel = source?.trim()?.toLowerCase() || '';
+      let actionSource: 'phone_call' | 'physical_store' | 'other' = 'other';
+
+      // Determine action source based on order source
+      if (sourceLabel.includes('whatsapp') || sourceLabel.includes('telefon') || sourceLabel.includes('phone')) {
+        actionSource = 'phone_call';
+      } else if (sourceLabel.includes('shop') || sourceLabel.includes('trgovina')) {
+        actionSource = 'physical_store';
+      }
+
+      await sendMetaPurchaseEvent({
+        orderId: order.orderNumber,
+        value: totalAmount / 100, // Convert from cents to BAM
+        currency: 'BAM',
+        contentIds: [product.id],
+        contentName: product.name,
+        customer: {
+          email: customer.email,
+          phone: customer.phone,
+          fullName: customer.fullName,
+          city: customer.city,
+          zipCode: customer.zipCode,
+        },
+        eventSourceUrl: 'https://aurorashop.ba',
+        actionSource: actionSource,
+      });
+
+      console.log(`[Meta Conversions API] Offline Purchase event sent (${actionSource})`);
+    } catch (error) {
+      console.error('[Meta Conversions API] Failed to send offline event:', error);
     }
 
     await updateCustomerStats(customer.id);
