@@ -144,14 +144,15 @@ export default function OrdersPage() {
     }
   }, [status, router]);
 
-  // Debounce search query
+  // Debounce search query and date filters
   useEffect(() => {
+    const hasTypingFilters = searchQuery || dateFrom || dateTo;
     const timer = setTimeout(() => {
       if (session) {
         setCurrentPage(1); // Reset to first page when filters change
         fetchOrders();
       }
-    }, searchQuery ? 500 : 0); // 500ms debounce for search, immediate for other filters
+    }, hasTypingFilters ? 800 : 0); // 800ms debounce for search/dates, immediate for status filter
 
     return () => clearTimeout(timer);
   }, [session, statusFilter, searchQuery, dateFrom, dateTo]);
