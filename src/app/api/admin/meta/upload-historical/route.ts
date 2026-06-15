@@ -25,6 +25,7 @@ async function uploadHistoricalOrders(request: NextRequest) {
     const daysBack = Math.min(parseInt(searchParams.get('days') || '7'), 62);
     const statusFilterRaw = searchParams.get('status')?.split(',');
     const dryRun = searchParams.get('dryRun') === 'true';
+    const offlineOnly = searchParams.get('offlineOnly') !== 'false'; // Default true
 
     // Calculate date range
     const startDate = new Date();
@@ -39,6 +40,11 @@ async function uploadHistoricalOrders(request: NextRequest) {
 
     if (statusFilterRaw && statusFilterRaw.length > 0) {
       whereClause.status = { in: statusFilterRaw };
+    }
+
+    // By default, only upload offline orders (not tracked by browser pixel)
+    if (offlineOnly) {
+      whereClause.utmSource = 'admin';
     }
 
     // Fetch historical orders
@@ -57,13 +63,15 @@ async function uploadHistoricalOrders(request: NextRequest) {
       },
     });
 
-    console.log(`[Meta Historical Upload] Found ${orders.length} orders from last ${daysBack} days`);
+    const filterInfo = offlineOnly ? ' (offline orders only)' : ' (all orders)';
+    console.log(`[Meta Historical Upload] Found ${orders.length} orders from last ${daysBack} days${filterInfo}`);
 
     if (dryRun) {
       return NextResponse.json({
         success: true,
         dryRun: true,
-        message: `Found ${orders.length} orders. Run without dryRun=true to upload.`,
+        offlineOnly,
+        message: `Found ${orders.length}${filterInfo}. Run without dryRun=true to upload.`,
         orders: orders.map(o => ({
           orderNumber: o.orderNumber,
           createdAt: o.createdAt,
