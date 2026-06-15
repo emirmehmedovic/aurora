@@ -36,7 +36,9 @@ async function uploadHistoricalOrders(request: NextRequest) {
 
     // If specific order IDs provided, use those instead of date range
     if (specificOrderIds && specificOrderIds.length > 0) {
-      whereClause.id = { in: specificOrderIds };
+      // Remove # if present (IDs from UI are shown as #cmq3z7vv but stored as cmq3z7vv)
+      const cleanIds = specificOrderIds.map(id => id.replace(/^#/, '').trim());
+      whereClause.id = { in: cleanIds };
     } else {
       // Otherwise use date range
       const startDate = new Date();
