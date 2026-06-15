@@ -11,6 +11,8 @@ import { sendMetaConversionEvent } from "@/lib/metaConversionsAPI";
  * - days: Number of days back to upload (default: 7, max: 62)
  * - status: Filter by order status (optional, e.g., "CONFIRMED,DELIVERED")
  * - dryRun: If true, only logs what would be sent without actually sending (default: false)
+ * - offlineOnly: If true, only upload admin orders (default: true)
+ * - orderIds: Comma-separated list of specific order IDs to upload (e.g., "cmq3z7vv,cmq2gqx0")
  */
 async function uploadHistoricalOrders(request: NextRequest) {
   try {
@@ -26,24 +28,29 @@ async function uploadHistoricalOrders(request: NextRequest) {
     const statusFilterRaw = searchParams.get('status')?.split(',');
     const dryRun = searchParams.get('dryRun') === 'true';
     const offlineOnly = searchParams.get('offlineOnly') !== 'false'; // Default true
-
-    // Calculate date range
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - daysBack);
+    const orderIdsParam = searchParams.get('orderIds');
+    const specificOrderIds = orderIdsParam ? orderIdsParam.split(',').map(id => id.trim()) : null;
 
     // Build where clause
-    const whereClause: any = {
-      createdAt: {
-        gte: startDate,
-      },
-    };
+    const whereClause: any = {};
+
+    // If specific order IDs provided, use those instead of date range
+    if (specificOrderIds && specificOrderIds.length > 0) {
+      whereClause.id = { in: specificOrderIds };
+    } else {
+      // Otherwise use date range
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - daysBack);
+      whereClause.createdAt = { gte: startDate };
+    }
 
     if (statusFilterRaw && statusFilterRaw.length > 0) {
       whereClause.status = { in: statusFilterRaw };
     }
 
     // By default, only upload offline orders (not tracked by browser pixel)
-    if (offlineOnly) {
+    // Skip this filter if specific order IDs are provided (assume user knows what they want)
+    if (offlineOnly && !specificOrderIds) {
       whereClause.utmSource = 'admin';
     }
 
@@ -63,15 +70,19 @@ async function uploadHistoricalOrders(request: NextRequest) {
       },
     });
 
-    const filterInfo = offlineOnly ? ' (offline orders only)' : ' (all orders)';
-    console.log(`[Meta Historical Upload] Found ${orders.length} orders from last ${daysBack} days${filterInfo}`);
+    const filterInfo = specificOrderIds
+      ? ` (specific IDs: ${specificOrderIds.length})`
+      : offlineOnly ? ' (offline orders only)' : ' (all orders)';
+
+    console.log(`[Meta Historical Upload] Found ${orders.length} orders${filterInfo}`);
 
     if (dryRun) {
       return NextResponse.json({
         success: true,
         dryRun: true,
         offlineOnly,
-        message: `Found ${orders.length}${filterInfo}. Run without dryRun=true to upload.`,
+        specificOrderIds: specificOrderIds || undefined,
+        message: `Found ${orders.length} orders${filterInfo}. Run without dryRun=true to upload.`,
         orders: orders.map(o => ({
           orderNumber: o.orderNumber,
           createdAt: o.createdAt,
