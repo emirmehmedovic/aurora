@@ -12,7 +12,7 @@ import { sendMetaConversionEvent } from "@/lib/metaConversionsAPI";
  * - status: Filter by order status (optional, e.g., "CONFIRMED,DELIVERED")
  * - dryRun: If true, only logs what would be sent without actually sending (default: false)
  */
-export async function POST(request: NextRequest) {
+async function uploadHistoricalOrders(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
@@ -156,4 +156,13 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// Support both GET and POST methods
+export async function GET(request: NextRequest) {
+  return uploadHistoricalOrders(request);
+}
+
+export async function POST(request: NextRequest) {
+  return uploadHistoricalOrders(request);
 }
