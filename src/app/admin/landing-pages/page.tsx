@@ -27,6 +27,17 @@ interface LandingPageEntry {
 
 const LANDING_PAGES: LandingPageEntry[] = [
   {
+    slug: "ljeto-bez-brige",
+    title: "Koliko si ljetnih dana provela sjedeći ovako?",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Glassmorphism premium dizajn sa rose-gold paletom",
+    description:
+      "🆕 NAJNOVIJI — Premium glassmorphism landing sa luksuznom rose-gold paletom. Emotivni hook targetira ljeto i spontanost. Playfair Display + DM Sans fontovi. Dizajn: sticky nav, glassmorphism kartice, before/after scene cards (sa citiranim momentima), stats badges, moments grid (4 prepoznatljive situacije), before/after by zones (fotografije dolaze), testimonials (3 korisnice), how it works (3 koraka + timeline), order forma sa WhatsApp/Viber linkovima. Glassmorphic elementi sa blur backdrop, gradient pozadina, pill badges. Identičan dizajn kao u HTML mockup-u.",
+    tags: ["PRO", "🆕 NOVO", "Glassmorphism", "Rose-Gold", "Premium", "Ljeto"],
+  },
+  {
     slug: "jedna-odluka",
     title: "Nije u genima. Nije u salonu. Jedna odluka. To je sve.",
     productName: "ICE COOL PRO",
@@ -277,6 +288,9 @@ const tagColors: Record<string, string> = {
   "Hlađenje": "bg-cyan-100 text-cyan-700",
   "Konkurencija": "bg-indigo-100 text-indigo-700",
   "175 vs 1500": "bg-emerald-100 text-emerald-700",
+  "Glassmorphism": "bg-gradient-to-br from-purple-100 via-pink-50 to-amber-50 text-purple-700",
+  "Rose-Gold": "bg-gradient-to-r from-rose-100 to-amber-100 text-rose-700",
+  "Ljeto": "bg-orange-100 text-orange-600",
 };
 
 export default function LandingPagesAdminPage() {
