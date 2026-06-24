@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { StorefrontProduct } from "@/lib/storefront-products";
@@ -14,6 +15,15 @@ interface LjetoLandingProps {
 }
 
 export default function LjetoLanding({ product }: LjetoLandingProps) {
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   return (
     <>
@@ -288,9 +298,12 @@ export default function LjetoLanding({ product }: LjetoLandingProps) {
             position: "relative",
           }}>
             <video
+              ref={videoRef}
               autoPlay
               loop
+              muted
               playsInline
+              preload="auto"
               style={{
                 width: "100%",
                 height: "auto",
@@ -300,6 +313,54 @@ export default function LjetoLanding({ product }: LjetoLandingProps) {
               <source src="/slike/Hero.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
+
+            {/* Mute/Unmute Button */}
+            <button
+              onClick={toggleMute}
+              style={{
+                position: "absolute",
+                bottom: "16px",
+                right: "16px",
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                background: "rgba(42,24,10,0.75)",
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
+                border: "1px solid rgba(200,162,106,0.3)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                zIndex: 10,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(42,24,10,0.9)";
+                e.currentTarget.style.transform = "scale(1.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(42,24,10,0.75)";
+                e.currentTarget.style.transform = "scale(1)";
+              }}
+              aria-label={isMuted ? "Uključi zvuk" : "Isključi zvuk"}
+            >
+              {isMuted ? (
+                // Muted icon
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-pale)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <line x1="23" y1="9" x2="17" y2="15"></line>
+                  <line x1="17" y1="9" x2="23" y2="15"></line>
+                </svg>
+              ) : (
+                // Unmuted icon
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-pale)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+              )}
+            </button>
           </div>
 
           {/* Stats */}
