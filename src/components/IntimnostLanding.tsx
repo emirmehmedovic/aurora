@@ -12,6 +12,7 @@ interface IntimnostLandingProps {
 
 export default function IntimnostLanding({ product }: IntimnostLandingProps) {
   const [isMuted, setIsMuted] = useState(true);
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const toggleMute = () => {
@@ -113,6 +114,30 @@ export default function IntimnostLanding({ product }: IntimnostLandingProps) {
           border-bottom: 1px solid var(--light-border);
         }
 
+        .how-it-works-card {
+          background: white;
+          border: 1px solid var(--light-border);
+          border-radius: 16px;
+          padding: 20px 24px;
+          display: flex;
+          gap: 16px;
+          align-items: flex-start;
+        }
+
+        .how-it-works-number {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: var(--rose-gold);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          font-size: 14px;
+          flex-shrink: 0;
+        }
+
         @media (max-width: 768px) {
           .intimnost-hero-grid {
             grid-template-columns: 1fr !important;
@@ -138,27 +163,22 @@ export default function IntimnostLanding({ product }: IntimnostLandingProps) {
 
       {/* Navigation */}
       <nav className="intimnost-nav sticky top-0 z-50">
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
-            <div style={{
-              width: "36px",
-              height: "36px",
-              background: "var(--rose-gold)",
-              borderRadius: "16px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}>
-              <span style={{ color: "white", fontWeight: "bold", fontSize: "20px", letterSpacing: "-1px" }}>A</span>
-            </div>
-            <span style={{ fontWeight: 600, fontSize: "24px", letterSpacing: "-0.5px", color: "var(--taupe)" }}>Aurora Shop</span>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+            <Image
+              src="/slike/Black White Minimal Modern Simple Bold Business Mag Logo.png"
+              alt="Ice Cool PRO™"
+              width={80}
+              height={80}
+              className="rounded-xl"
+            />
           </Link>
 
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             <a
               href="https://wa.me/38761904759?text=Zdravo%2C%20zanima%20me%20ICE%20COOL%20PRO%20ure%C4%91aj"
+              className="hidden md:flex"
               style={{
-                display: "none",
                 alignItems: "center",
                 gap: "8px",
                 padding: "8px 20px",
@@ -168,7 +188,6 @@ export default function IntimnostLanding({ product }: IntimnostLandingProps) {
                 textDecoration: "none",
                 transition: "color 0.2s",
               }}
-              className="hidden md:flex"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
               WhatsApp
@@ -458,18 +477,18 @@ export default function IntimnostLanding({ product }: IntimnostLandingProps) {
 
             <div className="intimnost-math-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px", marginTop: "32px" }}>
               <div className="premium-card" style={{ borderRadius: "24px", padding: "28px", textAlign: "left" }}>
-                <div style={{ fontSize: "14px", color: "#8C7668" }}>Godišnji trošak salona</div>
+                <div style={{ fontSize: "14px", color: "#8C7668" }}>12 odlazaka u salon godišnje</div>
                 <div style={{ fontSize: "48px", fontWeight: 700, letterSpacing: "-2px", marginTop: "4px", color: "var(--taupe)" }}>1.440 KM</div>
               </div>
 
               <div className="premium-card" style={{ borderRadius: "24px", padding: "28px", textAlign: "left", borderWidth: "2px", borderColor: "var(--rose-gold)" }}>
-                <div style={{ fontSize: "14px", color: "var(--rose-gold)", fontWeight: 500 }}>Ice Cool PRO — jednokratno</div>
+                <div style={{ fontSize: "14px", color: "var(--rose-gold)", fontWeight: 500 }}>Ice Cool PRO — jednom</div>
                 <div style={{ fontSize: "48px", fontWeight: 700, letterSpacing: "-2px", marginTop: "4px", color: "var(--rose-gold)" }}>{product.price} KM</div>
-                <div style={{ fontSize: "12px", marginTop: "12px", color: "#059669", fontWeight: 500 }}>+ intimnost bez brige</div>
+                <div style={{ fontSize: "12px", marginTop: "12px", color: "#059669", fontWeight: 500 }}>999.999 bljeskova — traje godinama</div>
               </div>
 
               <div className="premium-card" style={{ borderRadius: "24px", padding: "28px", textAlign: "left" }}>
-                <div style={{ fontSize: "14px", color: "#8C7668" }}>Ušteda + sloboda</div>
+                <div style={{ fontSize: "14px", color: "#8C7668" }}>Ušteda u prvoj godini</div>
                 <div style={{ fontSize: "48px", fontWeight: 700, letterSpacing: "-2px", marginTop: "4px", color: "#059669" }}>1.265 KM</div>
               </div>
             </div>
@@ -490,19 +509,156 @@ export default function IntimnostLanding({ product }: IntimnostLandingProps) {
           </div>
 
           <div className="testimonial-card" style={{ padding: "24px", borderRadius: "24px", border: "1px solid var(--light-border)" }}>
-            <p style={{ fontSize: "14px", lineHeight: 1.7, color: "var(--taupe)" }}>„Platila sam {product.price} KM umjesto 1.200 za Philips Lumeu. Nakon 3 mjeseca pazuhe i noge su mi glatke bez brijanja."</p>
+            <p style={{ fontSize: "14px", lineHeight: 1.7, color: "var(--taupe)" }}>„Platila sam {product.price} KM umjesto 1.200 za Philips Lumeu. Isti IPL efekat, samo 8 puta jeftinije + ugrađeno hlađenje."</p>
             <p style={{ marginTop: "16px", fontSize: "12px", fontWeight: 500, color: "var(--rose-gold)" }}>— Maida, Tuzla</p>
           </div>
 
           <div className="testimonial-card" style={{ padding: "24px", borderRadius: "24px", border: "1px solid var(--light-border)" }}>
-            <p style={{ fontSize: "14px", lineHeight: 1.7, color: "var(--taupe)" }}>„Nakon mjesec i po dana više nemam urasle dlačice. Sada se opuštam kada me partner dodiruje, bez straha da će me peći."</p>
+            <p style={{ fontSize: "14px", lineHeight: 1.7, color: "var(--taupe)" }}>„Nakon mjesec i po više nemam urasle dlačice. Koža se hladi na svakom impulsu — ne osjećam peckanje čak ni na bikini zoni."</p>
             <p style={{ marginTop: "16px", fontSize: "12px", fontWeight: 500, color: "var(--rose-gold)" }}>— jedna od naših korisnica</p>
           </div>
         </div>
       </section>
 
-      {/* Final CTA / Order Section */}
+      {/* Order Section with How It Works Button */}
       <section id="naruci" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px 64px" }}>
+        {/* How It Works Button */}
+        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+          <button
+            onClick={() => setShowHowItWorks(!showHowItWorks)}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "12px 24px",
+              background: "white",
+              border: "1px solid var(--light-border)",
+              borderRadius: "24px",
+              fontSize: "14px",
+              fontWeight: 600,
+              color: "var(--taupe)",
+              cursor: "pointer",
+              transition: "all 0.2s",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--rose-gold)" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>Kako funkcioniše Ice Cool PRO?</span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--muted-brown)"
+              strokeWidth="2"
+              style={{ transform: showHowItWorks ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        {/* How It Works Content */}
+        {showHowItWorks && (
+          <div style={{
+            maxWidth: "800px",
+            margin: "0 auto 32px",
+            padding: "32px",
+            background: "white",
+            borderRadius: "24px",
+            border: "1px solid var(--light-border)",
+            boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
+          }}>
+            <h3 style={{ fontSize: "24px", fontWeight: 700, color: "var(--taupe)", marginBottom: "24px", textAlign: "center" }}>
+              Kako funkcioniše Ice Cool PRO
+            </h3>
+
+            {/* How to use */}
+            <div style={{ marginBottom: "32px" }}>
+              <h4 style={{ fontSize: "16px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                Korištenje — 10 minuta sedmično
+              </h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <div className="how-it-works-card">
+                  <div className="how-it-works-number">1</div>
+                  <div>
+                    <strong style={{ color: "var(--taupe)" }}>Obrij zonu</strong>
+                    <p style={{ fontSize: "14px", color: "var(--muted-brown)", marginTop: "4px" }}>Čista, suha koža. 2-3 minute pripreme.</p>
+                  </div>
+                </div>
+                <div className="how-it-works-card">
+                  <div className="how-it-works-number">2</div>
+                  <div>
+                    <strong style={{ color: "var(--taupe)" }}>Primijeni tretman</strong>
+                    <p style={{ fontSize: "14px", color: "var(--muted-brown)", marginTop: "4px" }}>Prisloni uređaj, pritisni dugme. Koža se hladi na svakom impulsu — ne osjećaš peckanje čak ni na bikini zoni.</p>
+                  </div>
+                </div>
+                <div className="how-it-works-card">
+                  <div className="how-it-works-number">3</div>
+                  <div>
+                    <strong style={{ color: "var(--taupe)" }}>Ponovi jednom sedmično</strong>
+                    <p style={{ fontSize: "14px", color: "var(--muted-brown)", marginTop: "4px" }}>10 minuta dok gledaš seriju. Noge 8 min, pazuhe 2 min, bikini zona 3 min.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Results timeline */}
+            <div style={{ marginBottom: "32px" }}>
+              <h4 style={{ fontSize: "16px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                Rezultati — sedmica po sedmicu
+              </h4>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" }}>
+                <div style={{ padding: "16px", background: "var(--cream)", borderRadius: "12px", border: "1px solid var(--light-border)" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "4px" }}>SEDMICA 1-2</div>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}>Dlake rastu sporije. Možeš brijati rjeđe.</p>
+                </div>
+                <div style={{ padding: "16px", background: "var(--cream)", borderRadius: "12px", border: "1px solid var(--light-border)" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "4px" }}>SEDMICA 3-4</div>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}>Primjetan pad gustine. Nema više iritacije.</p>
+                </div>
+                <div style={{ padding: "16px", background: "var(--cream)", borderRadius: "12px", border: "1px solid var(--light-border)" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "4px" }}>SEDMICA 5-6</div>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}>Bikini zona mirna. Noge glatke 10+ dana bez brijanja.</p>
+                </div>
+                <div style={{ padding: "16px", background: "var(--cream)", borderRadius: "12px", border: "1px solid var(--light-border)" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "4px" }}>SEDMICA 7-8</div>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}>Većina žena prestaje brijati pazuhe i bikini zonu.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Key benefits */}
+            <div>
+              <h4 style={{ fontSize: "16px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                Zašto Ice Cool PRO
+              </h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--rose-gold)" style={{ flexShrink: 0, marginTop: "2px" }}><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}><strong>999.999 bljeskova</strong> — ne mijenjaš lampicu godinama, traje cijelu porodicu</p>
+                </div>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--rose-gold)" style={{ flexShrink: 0, marginTop: "2px" }}><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}><strong>Ice Cooling™ hlađenje</strong> — koža se hladi na svakom impulsu, bez peckanja i crvenila</p>
+                </div>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--rose-gold)" style={{ flexShrink: 0, marginTop: "2px" }}><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}><strong>Isti IPL efekat kao Philips Lumea</strong> — samo 8 puta jeftinije ({product.price} KM vs 1.200 KM)</p>
+                </div>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--rose-gold)" style={{ flexShrink: 0, marginTop: "2px" }}><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}><strong>Tretman uveče kod kuće</strong> — bez zakazivanja, bez vožnje, bez neugodnih poza u salonu</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <LandingOrderForm product={product} />
       </section>
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import type { StorefrontProduct } from "@/lib/storefront-products";
 import LandingOrderForm from "@/components/LandingOrderForm";
@@ -9,6 +11,8 @@ interface SpontanostLandingProps {
 }
 
 export default function SpontanostLanding({ product }: SpontanostLandingProps) {
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: `
@@ -82,6 +86,30 @@ export default function SpontanostLanding({ product }: SpontanostLandingProps) {
           border-bottom: 1px solid var(--light-border);
         }
 
+        .how-it-works-card {
+          background: white;
+          border: 1px solid var(--light-border);
+          border-radius: 16px;
+          padding: 20px 24px;
+          display: flex;
+          gap: 16px;
+          align-items: flex-start;
+        }
+
+        .how-it-works-number {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: var(--rose-gold);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          font-size: 14px;
+          flex-shrink: 0;
+        }
+
         @media (max-width: 768px) {
           .spontanost-problem-grid {
             grid-template-columns: 1fr !important;
@@ -95,20 +123,15 @@ export default function SpontanostLanding({ product }: SpontanostLandingProps) {
 
       {/* Navigation */}
       <nav className="spontanost-nav sticky top-0 z-50">
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
-            <div style={{
-              width: "36px",
-              height: "36px",
-              background: "var(--rose-gold)",
-              borderRadius: "16px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}>
-              <span style={{ color: "white", fontWeight: "bold", fontSize: "20px", letterSpacing: "-1px" }}>A</span>
-            </div>
-            <span style={{ fontWeight: 600, fontSize: "24px", letterSpacing: "-0.5px", color: "var(--taupe)" }}>Aurora Shop</span>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+            <Image
+              src="/slike/Black White Minimal Modern Simple Bold Business Mag Logo.png"
+              alt="Ice Cool PRO™"
+              width={80}
+              height={80}
+              className="rounded-xl"
+            />
           </Link>
 
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
@@ -279,8 +302,145 @@ export default function SpontanostLanding({ product }: SpontanostLandingProps) {
         </div>
       </section>
 
-      {/* Order Section */}
+      {/* Order Section with How It Works Button */}
       <section id="naruci" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px 64px" }}>
+        {/* How It Works Button */}
+        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+          <button
+            onClick={() => setShowHowItWorks(!showHowItWorks)}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "12px 24px",
+              background: "white",
+              border: "1px solid var(--light-border)",
+              borderRadius: "24px",
+              fontSize: "14px",
+              fontWeight: 600,
+              color: "var(--taupe)",
+              cursor: "pointer",
+              transition: "all 0.2s",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--rose-gold)" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>Kako funkcioniše Ice Cool PRO?</span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--muted-brown)"
+              strokeWidth="2"
+              style={{ transform: showHowItWorks ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        {/* How It Works Content */}
+        {showHowItWorks && (
+          <div style={{
+            maxWidth: "800px",
+            margin: "0 auto 32px",
+            padding: "32px",
+            background: "white",
+            borderRadius: "24px",
+            border: "1px solid var(--light-border)",
+            boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
+          }}>
+            <h3 style={{ fontSize: "24px", fontWeight: 700, color: "var(--taupe)", marginBottom: "24px", textAlign: "center" }}>
+              Kako funkcioniše Ice Cool PRO
+            </h3>
+
+            {/* How to use */}
+            <div style={{ marginBottom: "32px" }}>
+              <h4 style={{ fontSize: "16px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                Korištenje — 10 minuta sedmično
+              </h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <div className="how-it-works-card">
+                  <div className="how-it-works-number">1</div>
+                  <div>
+                    <strong style={{ color: "var(--taupe)" }}>Obrij zonu</strong>
+                    <p style={{ fontSize: "14px", color: "var(--muted-brown)", marginTop: "4px" }}>Čista, suha koža. 2-3 minute pripreme.</p>
+                  </div>
+                </div>
+                <div className="how-it-works-card">
+                  <div className="how-it-works-number">2</div>
+                  <div>
+                    <strong style={{ color: "var(--taupe)" }}>Primijeni tretman</strong>
+                    <p style={{ fontSize: "14px", color: "var(--muted-brown)", marginTop: "4px" }}>Prisloni uređaj, pritisni dugme. Koža se hladi na svakom impulsu — ne osjećaš peckanje čak ni na bikini zoni.</p>
+                  </div>
+                </div>
+                <div className="how-it-works-card">
+                  <div className="how-it-works-number">3</div>
+                  <div>
+                    <strong style={{ color: "var(--taupe)" }}>Ponovi jednom sedmično</strong>
+                    <p style={{ fontSize: "14px", color: "var(--muted-brown)", marginTop: "4px" }}>10 minuta dok gledaš seriju. Noge 8 min, pazuhe 2 min, bikini zona 3 min.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Results timeline */}
+            <div style={{ marginBottom: "32px" }}>
+              <h4 style={{ fontSize: "16px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                Rezultati — sedmica po sedmicu
+              </h4>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "12px" }}>
+                <div style={{ padding: "16px", background: "var(--cream)", borderRadius: "12px", border: "1px solid var(--light-border)" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "4px" }}>SEDMICA 1-2</div>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}>Dlake rastu sporije. Možeš brijati rjeđe.</p>
+                </div>
+                <div style={{ padding: "16px", background: "var(--cream)", borderRadius: "12px", border: "1px solid var(--light-border)" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "4px" }}>SEDMICA 3-4</div>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}>Primjetan pad gustine. Nema više iritacije.</p>
+                </div>
+                <div style={{ padding: "16px", background: "var(--cream)", borderRadius: "12px", border: "1px solid var(--light-border)" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "4px" }}>SEDMICA 5-6</div>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}>Bikini zona mirna. Noge glatke 10+ dana bez brijanja.</p>
+                </div>
+                <div style={{ padding: "16px", background: "var(--cream)", borderRadius: "12px", border: "1px solid var(--light-border)" }}>
+                  <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "4px" }}>SEDMICA 7-8</div>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}>Većina žena prestaje brijati pazuhe i bikini zonu.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Key benefits */}
+            <div>
+              <h4 style={{ fontSize: "16px", fontWeight: 600, color: "var(--rose-gold)", marginBottom: "16px", textTransform: "uppercase", letterSpacing: "1px" }}>
+                Zašto Ice Cool PRO
+              </h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--rose-gold)" style={{ flexShrink: 0, marginTop: "2px" }}><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}><strong>999.999 bljeskova</strong> — ne mijenjaš lampicu godinama, traje cijelu porodicu</p>
+                </div>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--rose-gold)" style={{ flexShrink: 0, marginTop: "2px" }}><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}><strong>Ice Cooling™ hlađenje</strong> — koža se hladi na svakom impulsu, bez peckanja i crvenila</p>
+                </div>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--rose-gold)" style={{ flexShrink: 0, marginTop: "2px" }}><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}><strong>Isti IPL efekat kao Philips Lumea</strong> — samo 8 puta jeftinije ({product.price} KM vs 1.200 KM)</p>
+                </div>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--rose-gold)" style={{ flexShrink: 0, marginTop: "2px" }}><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <p style={{ fontSize: "14px", color: "var(--taupe)" }}><strong>Tretman uveče kod kuće</strong> — bez zakazivanja, bez vožnje, bez neugodnih poza u salonu</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <LandingOrderForm product={product} />
       </section>
 
