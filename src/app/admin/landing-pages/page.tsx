@@ -27,6 +27,28 @@ interface LandingPageEntry {
 
 const LANDING_PAGES: LandingPageEntry[] = [
   {
+    slug: "spontanost-u-intimnosti",
+    title: "Kad skineš veš, prvo što primijetiš su urasle dlačice i crvenilo",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Spontanost fokus — emotivni hook",
+    description:
+      "🆕 NAJNOVIJI — Landing fokusiran na spontanost u intimnosti. Hook: 'Ne možeš biti spontana — moraš planirati intimnost oko salona.' Emotivni impact sekcija (osjećaš se neuredno, gubiš spontanost, padne ti raspoloženje). Rose-gold paleta, Inter font. Sekcije: hero, problem (2 kartice), emotional impact (3 bola), testimonial, order forma sa WhatsApp/Viber. Minimalistički dizajn.",
+    tags: ["PRO", "🆕 NOVO", "Spontanost", "Emotivni", "Bikini zona"],
+  },
+  {
+    slug: "intimnost-bez-brige",
+    title: "Urasle dlačice i iritacije na bikini zoni te sprječavaju da uživaš",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Intimnost fokus — rose-gold elegantni dizajn",
+    description:
+      "🆕 NAJNOVIJI — Landing fokusiran na intimnost i bikini zonu. Hook: 'Četvrta sedmica — muž je primijetio prije mene.' Rose-gold paleta, Inter + Playfair Display fontovi. Sekcije: hero sa 9:16 videom, problem (urasle dlačice, iritacija), intimnost testimonial, matematika (salon vs Ice Cool PRO), social proof (3 testimonijala), order forma sa WhatsApp/Viber. Premium glassmorphism kartice, floating WhatsApp dugme.",
+    tags: ["PRO", "🆕 NOVO", "Intimnost", "Rose-Gold", "Bikini zona"],
+  },
+  {
     slug: "ljeto-bez-brige",
     title: "Koliko si ljetnih dana provela sjedeći ovako?",
     productName: "ICE COOL PRO",
@@ -291,6 +313,9 @@ const tagColors: Record<string, string> = {
   "Glassmorphism": "bg-gradient-to-br from-purple-100 via-pink-50 to-amber-50 text-purple-700",
   "Rose-Gold": "bg-gradient-to-r from-rose-100 to-amber-100 text-rose-700",
   "Ljeto": "bg-orange-100 text-orange-600",
+  "Intimnost": "bg-rose-100 text-rose-700",
+  "Bikini zona": "bg-pink-100 text-pink-600",
+  "Spontanost": "bg-fuchsia-100 text-fuchsia-700",
 };
 
 export default function LandingPagesAdminPage() {
