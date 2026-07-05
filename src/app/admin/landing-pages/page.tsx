@@ -27,6 +27,17 @@ interface LandingPageEntry {
 
 const LANDING_PAGES: LandingPageEntry[] = [
   {
+    slug: "intimnost-ne-ceka",
+    title: "Intimnost ne bi trebala čekati da se koža smiri",
+    productName: "ICE COOL Pro Max",
+    productSlug: "ice-cool-pro-max",
+    price: "190 KM",
+    badge: "Emotivni hook — spontanost i intimnost",
+    description:
+      "🆕 NAJNOVIJI — Landing fokusiran na spontanost u intimnosti. Hook: 'Intimnost ne bi trebala čekati da se koža smiri.' Coral/roze paleta (#d96b68 accent), Inter font. Sekcije: top bar, sticky nav, hero sa videom, pain points (3 kartice), quote sekcija, scenario lista (6 checkova), solution grid, features (4 kartice), comparison before/after, FAQ grid (6 pitanja), final CTA, order forma sa WhatsApp/Viber. Floating WhatsApp dugme. Ice Cool Pro Max sa dvostrukim hlađenjem.",
+    tags: ["Max", "🆕 NOVO", "Spontanost", "Emotivni", "Bikini zona", "Intimnost"],
+  },
+  {
     slug: "spontanost-u-intimnosti",
     title: "Kad skineš veš, prvo što primijetiš su urasle dlačice i crvenilo",
     productName: "ICE COOL PRO",
