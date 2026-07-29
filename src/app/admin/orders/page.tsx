@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw, Filter, Search, X as XIcon, Download, Edit, Trash2, User, ExternalLink, Plus, FileText, Loader2 } from "lucide-react";
+import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw, Filter, Search, X as XIcon, Download, Edit, Trash2, User, ExternalLink, Plus, FileText, Loader2, Copy, Calendar } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import BulkActionBar from "@/components/admin/BulkActionBar";
@@ -808,6 +808,21 @@ export default function OrdersPage() {
     }
   };
 
+  const copyOrderDetails = (order: Order) => {
+    const details = [
+      order.customer.fullName,
+      order.customer.phone,
+      order.shippingAddress,
+      `${order.city} ${order.zipCode}`.trim(),
+    ].filter(Boolean).join("\n");
+
+    navigator.clipboard.writeText(details).then(() => {
+      toast.success("Podaci kopirani!");
+    }).catch(() => {
+      toast.error("Greška pri kopiranju");
+    });
+  };
+
   // Filtering is now done on the server, so we just use orders directly
   const filteredOrders = orders;
 
@@ -1085,29 +1100,57 @@ export default function OrdersPage() {
             {/* Date From */}
             <div>
               <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
-                <Clock className="w-3 h-3 inline mr-1" />
+                <Calendar className="w-3 h-3 inline mr-1" />
                 Datum od
               </label>
-              <input
-                type="date"
-                value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
-                className="w-full px-4 py-3 bg-white/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#563435] focus:border-transparent transition-all shadow-sm"
-              />
+              <div className="relative">
+                <input
+                  type="date"
+                  value={dateFrom}
+                  onChange={(e) => setDateFrom(e.target.value)}
+                  onFocus={(e) => e.target.showPicker?.()}
+                  className="w-full px-4 py-3 bg-white/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#563435] focus:border-transparent transition-all shadow-sm cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                  placeholder="Odaberi datum"
+                />
+                <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                {dateFrom && (
+                  <button
+                    type="button"
+                    onClick={() => setDateFrom("")}
+                    className="absolute right-10 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <XIcon className="w-4 h-4 text-gray-400" />
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Date To */}
             <div>
               <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
-                <Clock className="w-3 h-3 inline mr-1" />
+                <Calendar className="w-3 h-3 inline mr-1" />
                 Datum do
               </label>
-              <input
-                type="date"
-                value={dateTo}
-                onChange={(e) => setDateTo(e.target.value)}
-                className="w-full px-4 py-3 bg-white/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#563435] focus:border-transparent transition-all shadow-sm"
-              />
+              <div className="relative">
+                <input
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => setDateTo(e.target.value)}
+                  onFocus={(e) => e.target.showPicker?.()}
+                  className="w-full px-4 py-3 bg-white/80 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#563435] focus:border-transparent transition-all shadow-sm cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                  placeholder="Odaberi datum"
+                />
+                <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                {dateTo && (
+                  <button
+                    type="button"
+                    onClick={() => setDateTo("")}
+                    className="absolute right-10 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <XIcon className="w-4 h-4 text-gray-400" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -1208,16 +1251,26 @@ export default function OrdersPage() {
                               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 {/* Details Col 1: Customer */}
                                 <div className="space-y-4">
-                                  <div className="flex items-center justify-between">
+                                  <div className="flex items-center justify-between gap-2">
                                     <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500">Podaci o kupcu</h4>
-                                    <Link
-                                      href={`/admin/customers/${order.customer.id}`}
-                                      className="flex items-center gap-1 px-3 py-1 bg-[#563435] text-white text-xs font-medium rounded-lg hover:bg-[#563435]/90 transition-all shadow-sm"
-                                    >
-                                      <User className="w-3 h-3" />
-                                      Profil
-                                      <ExternalLink className="w-3 h-3" />
-                                    </Link>
+                                    <div className="flex items-center gap-2">
+                                      <button
+                                        onClick={() => copyOrderDetails(order)}
+                                        className="flex items-center gap-1 px-3 py-1 bg-emerald-600 text-white text-xs font-medium rounded-lg hover:bg-emerald-700 transition-all shadow-sm"
+                                        title="Kopiraj ime, telefon i adresu"
+                                      >
+                                        <Copy className="w-3 h-3" />
+                                        Kopiraj
+                                      </button>
+                                      <Link
+                                        href={`/admin/customers/${order.customer.id}`}
+                                        className="flex items-center gap-1 px-3 py-1 bg-[#563435] text-white text-xs font-medium rounded-lg hover:bg-[#563435]/90 transition-all shadow-sm"
+                                      >
+                                        <User className="w-3 h-3" />
+                                        Profil
+                                        <ExternalLink className="w-3 h-3" />
+                                      </Link>
+                                    </div>
                                   </div>
                                   <div className="bg-white/60 backdrop-blur-md rounded-2xl p-5 border border-white/40 shadow-sm space-y-4">
                                     {/* Customer Name - Clickable */}
