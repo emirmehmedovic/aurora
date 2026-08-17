@@ -87,7 +87,7 @@ const proConfidenceContent: AdvertorialContent = {
       "Ugrađeni senzor tona kože — automatska kalibracija za svaku zonu",
       "999.999 bljeskova — doživotni uređaj bez zamjene lampice",
       "Sve zone: brada, trbuh, noge, pazuhe, bikini zona, leđa",
-      "14 dana povrat bez pitanja · 12 mj. garancija · Plaćanje pouzećem",
+      "plaćanje pouzećem · detaljno uputstvo · Plaćanje pouzećem",
     ],
   },
   articleClosingHighlight:
@@ -160,7 +160,7 @@ const proConfidenceContent: AdvertorialContent = {
       },
       {
         q: "Šta ako ne budu rezultati za mene?",
-        a: "14 dana prava na povrat bez pitanja. Ako ICE COOL PRO ne odgovara tvom tipu kože ili dlačice, ili nisi zadovoljna unutar 14 dana — vraćaš ga i dobivaš povrat novca. Plaćanje pouzećem, znači plaćaš tek kad prime uređaj.",
+        a: "Prije narudžbe možeš nas pitati da li ICE COOL PRO odgovara tvom tipu kože i dlačica. Plaćanje pouzećem znači da plaćaš tek kada primiš uređaj na vrata.",
       },
       {
         q: "Mogu li ga koristiti i za noge i pazuhe, ne samo lice?",
@@ -182,11 +182,11 @@ const proConfidenceContent: AdvertorialContent = {
     { label: "Pogodno za", value: "Brada, iznad usne, trbuh, noge, pazuhe, bikini zona, leđa" },
     { label: "Tip kože", value: "Fitzpatrick I–V (svijetla do tamna)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, korisnički priručnik" },
-    { label: "Garancija", value: "12 mjeseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "Jutro bez čupkanja. Dan bez provjere. To je ono što se mijenja.",
   closingText:
-    "ICE COOL PRO — 175 KM jednom, besplatna dostava u BiH, plaćanje pouzećem, 14 dana povrat bez pitanja.",
+    "ICE COOL PRO — 175 KM jednom, besplatna dostava u BiH, plaćanje pouzećem, plaćanje pouzećem.",
   highlights: [
     { value: "5–6 sed.", label: "do prvih vidljivih rezultata" },
     { value: "175 KM", label: "jednom, umjesto 1.800 KM godišnje" },

@@ -6,7 +6,7 @@ import { getStorefrontProducts } from "@/lib/storefront-products";
 
 export const metadata: Metadata = {
   title: "IPL Uređaji za Uklanjanje Dlačica | Ice Cool PRO™, Max i LITE | BiH",
-  description: "Uporedite 3 modela IPL uređaja za trajno uklanjanje dlačica: PRO, Max i LITE. Besplatna dostava u BiH, 14 dana povrat, 12 mj. garancija.",
+  description: "Uporedite 3 modela IPL uređaja za trajno uklanjanje dlačica: PRO, Max i LITE. Besplatna dostava u BiH, plaćanje pouzećem, detaljno uputstvo.",
 };
 
 export default async function ProizvodiPage() {
@@ -23,7 +23,7 @@ export default async function ProizvodiPage() {
               Odaberi model koji odgovara tvom životu
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Sva tri modela daju iste rezultate. Razlika je u brzini tretmana i veličini uređaja. Besplatna dostava u BiH, 14 dana za povrat.
+              Sva tri modela daju iste rezultate. Razlika je u brzini tretmana i veličini uređaja. Besplatna dostava u BiH i plaćanje pouzećem.
             </p>
           </div>
 
@@ -38,12 +38,12 @@ export default async function ProizvodiPage() {
               <div className="text-xs text-gray-600">Dostava u BiH</div>
             </div>
             <div className="bg-gradient-to-br from-rose-50/30 via-white/40 to-pink-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-4 text-center shadow-sm">
-              <div className="text-sm font-bold text-[#563435] mb-1">14 dana</div>
-              <div className="text-xs text-gray-600">Povrat</div>
+              <div className="text-sm font-bold text-[#563435] mb-1">Pouzećem</div>
+              <div className="text-xs text-gray-600">Plaćanje</div>
             </div>
             <div className="bg-gradient-to-br from-amber-50/30 via-white/40 to-orange-50/20 backdrop-blur-lg border border-white/20 rounded-2xl p-4 text-center shadow-sm">
-              <div className="text-sm font-bold text-[#563435] mb-1">12 mj.</div>
-              <div className="text-xs text-gray-600">Garancija</div>
+              <div className="text-sm font-bold text-[#563435] mb-1">Podrška</div>
+              <div className="text-xs text-gray-600">Prije kupovine</div>
             </div>
           </div>
 
@@ -92,8 +92,8 @@ export default async function ProizvodiPage() {
                   <span className="text-white font-bold">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Probaš bez rizika</h3>
-                  <p className="text-sm text-gray-600">14 dana za povrat ako nisi zadovoljna. Besplatna dostava u cijeloj BiH</p>
+                  <h3 className="font-semibold text-gray-800 mb-1">Podrška prije kupovine</h3>
+                  <p className="text-sm text-gray-600">Ako nisi sigurna koji model izabrati, piši nam prije narudžbe. Dostava je besplatna u cijeloj BiH.</p>
                 </div>
               </div>
             </div>

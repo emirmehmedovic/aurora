@@ -183,7 +183,7 @@ export default function DirectResponseLanding({ product, content, comparisonProd
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
       </button>
       <div className="mt-4 text-center bg-white/40 backdrop-blur-md text-[#563435] px-6 py-2.5 rounded-xl font-medium text-sm w-full border border-white/30 shadow-sm flex items-center justify-center gap-2">
-        <Truck className="w-4 h-4" /> Naruči do 15h — šalje se danas · Plaćanje pouzećem · 14 dana povrat
+        <Truck className="w-4 h-4" /> Naruči do 15h — šalje se danas · Plaćanje pouzećem · plaćanje pouzećem
       </div>
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
         <a
@@ -301,8 +301,8 @@ export default function DirectResponseLanding({ product, content, comparisonProd
                 {[
                   { icon: <Truck className="w-5 h-5 text-green-700" />, text: "Dostava u BiH 1-3 dana" },
                   { icon: <Banknote className="w-5 h-5 text-amber-600" />, text: "Plaćanje pouzećem" },
-                  { icon: <RotateCcw className="w-5 h-5 text-purple-700" />, text: "14 dana povrat" },
-                  { icon: <Shield className="w-5 h-5 text-blue-700" />, text: "12 mj. garancija" }
+                  { icon: <RotateCcw className="w-5 h-5 text-purple-700" />, text: "plaćanje pouzećem" },
+                  { icon: <Shield className="w-5 h-5 text-blue-700" />, text: "detaljno uputstvo" }
                 ].map((badge, i) => (
                   <div key={i} className="text-center p-3 bg-white/50 rounded-xl border border-violet-100/50 flex flex-col items-center gap-2">
                     <div className="p-1.5 bg-white rounded-lg shadow-sm">{badge.icon}</div>
@@ -746,7 +746,7 @@ export default function DirectResponseLanding({ product, content, comparisonProd
             </div>
           </div>
           <p className="text-center text-sm text-gray-500 mt-4">
-            Svi modeli dolaze s besplatnom dostavom u BiH, 12 mjeseci garancije i 14 dana prava na povrat.
+            Svi modeli dolaze s besplatnom dostavom u BiH, plaćanjem pouzećem i detaljnim uputstvom za upotrebu.
           </p>
         </div>
 

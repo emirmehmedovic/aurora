@@ -21,7 +21,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Ice Cool PRO™ — Kućni IPL epilator | Aurora Shop",
-  description: "Glatka koža. Trajno. Profesionalni IPL tretman kod kuće. 175 KM - Besplatna dostava - 14 dana povrat.",
+  description: "Glatka koža. Trajno. Profesionalni IPL tretman kod kuće. 175 KM - Besplatna dostava - plaćanje pouzećem.",
   keywords: "Ice Cool PRO, IPL epilator, kućni IPL, trajna depilacija, Ice Cooling, epilator BiH",
   alternates: {
     canonical: "https://aurorashop.ba/l/premium",
@@ -37,7 +37,7 @@ const specifications = [
   { label: "Zone tretmana", value: "Noge, pazuhe, bikini, lice" },
   { label: "Trajanje tretmana", value: "~10 minuta" },
   { label: "Napajanje", value: "Kabel (uključen)" },
-  { label: "Garancija", value: "12 mjeseci" },
+  { label: "Podrška", value: "Dostupna prije kupovine" },
 ];
 
 // Timeline rezultata
@@ -105,7 +105,7 @@ const comparisonData = [
     salon: null,
   },
   {
-    criterion: "14 dana povrat",
+    criterion: "plaćanje pouzećem",
     iceCoolPro: true,
     philipsLumea: "Ovisi od prodavca",
     salon: null,

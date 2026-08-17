@@ -88,7 +88,7 @@ const testimonials = [
     age: 28,
     location: "Sarajevo",
     quote: "Nikad mi koža nije bila glatđa. Prijateljice me pitaju koji salon idem - a radim sve kod kuće!",
-    story: "Radim kao fitness instruktorica i uvijek sam bila svjesna kako izgledam. Prije sam išla na laser svaka 3-4 sedmice, što je bilo skupo i naporno za zakazivati. Kada sam vidjela Ice Cool PRO na promociji, pomislila sam 'hajde da probam, u najgorem slučaju vraćam za 14 dana'. Nisam očekivala da će biti toliko dobro! Već nakon mjesec dana tretmana, dlačice su postale skoro nevidljive. Sad radim tretman jednom sedmično dok gledam seriju, 10-15 minuta maksimum. Jednostavno i efikasno. Preporučila sam ga već pola teretane!",
+    story: "Radim kao fitness instruktorica i uvijek sam bila svjesna kako izgledam. Prije sam išla na laser svaka 3-4 sedmice, što je bilo skupo i naporno za zakazivati. Kada sam vidjela Ice Cool PRO na promociji, pomislila sam 'hajde da probam, naručujem pouzećem i plaćam tek kad stigne'. Nisam očekivala da će biti toliko dobro! Već nakon mjesec dana tretmana, dlačice su postale skoro nevidljive. Sad radim tretman jednom sedmično dok gledam seriju, 10-15 minuta maksimum. Jednostavno i efikasno. Preporučila sam ga već pola teretane!",
     image: aminaImg.src,
     monthsUsing: 4,
     favoriteFeature: "Jednostavnost",
@@ -113,7 +113,7 @@ const features = [
   { text: "175 KM jednokratno - vs. 80-120 KM mjesečno za salon (ušteda 1.000+ KM godišnje)" },
   { text: "Radi po tvom rasporedu - ne čekaš termine, ne prilagođavaš se rasporeda salona" },
   { text: "Za sve zone tijela - lice, pazuhe, noge, bikini zona, ruke - jedan uređaj za sve" },
-  { text: "999.999 tretmana u uređaju - dovoljna garancija za cijeli život korištenja" },
+  { text: "999.999 tretmana u uređaju - dovoljno za dugogodišnje korištenje" },
   { text: "Bez iritacija i urasle dlačice - koža ti je glatkija i zdravija nego ikad prije" },
 ];
 

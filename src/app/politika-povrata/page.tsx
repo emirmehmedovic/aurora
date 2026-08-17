@@ -1,134 +1,93 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Metadata } from "next";
-import { RotateCcw, Shield, CheckCircle } from "lucide-react";
+import { CheckCircle, MessageCircle, Truck } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Politika Povrata - Ice Cool PRO™",
-  description: "14 dana za povrat Ice Cool PRO™ IPL uređaja bez komplikacija. 100% povrat novca, jednostavan proces.",
+  title: "Dostava i Podrška - Ice Cool PRO™",
+  description: "Informacije o besplatnoj dostavi, plaćanju pouzećem, reklamacijama i podršci za Ice Cool PRO™ IPL uređaje.",
 };
 
-export default function ReturnPolicyPage() {
+export default function SupportPolicyPage() {
   return (
     <>
       <Navbar />
       <main className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-br from-violet-50/30 via-white/40 to-purple-50/20 backdrop-blur-lg border border-white/20 rounded-3xl p-8 md:p-12">
-            <h1 className="text-4xl font-bold text-gray-800 mb-8">Politika Povrata</h1>
+            <h1 className="text-4xl font-bold text-gray-800 mb-8">Dostava i podrška</h1>
             
             {/* Info Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               <div className="bg-white/50 rounded-2xl p-6 border border-white/20 text-center">
-                <RotateCcw className="w-8 h-8 text-[#563435] mb-3 mx-auto" />
-                <h3 className="font-semibold text-gray-800 mb-2">14 dana</h3>
-                <p className="text-sm text-gray-600">Za povrat proizvoda</p>
-              </div>
-              <div className="bg-white/50 rounded-2xl p-6 border border-white/20 text-center">
-                <Shield className="w-8 h-8 text-[#563435] mb-3 mx-auto" />
-                <h3 className="font-semibold text-gray-800 mb-2">100% povrat</h3>
-                <p className="text-sm text-gray-600">Pun povrat novca</p>
+                <Truck className="w-8 h-8 text-[#563435] mb-3 mx-auto" />
+                <h3 className="font-semibold text-gray-800 mb-2">Besplatno</h3>
+                <p className="text-sm text-gray-600">Dostava u cijeloj BiH</p>
               </div>
               <div className="bg-white/50 rounded-2xl p-6 border border-white/20 text-center">
                 <CheckCircle className="w-8 h-8 text-[#563435] mb-3 mx-auto" />
-                <h3 className="font-semibold text-gray-800 mb-2">Jednostavno</h3>
-                <p className="text-sm text-gray-600">Bez komplikacija</p>
+                <h3 className="font-semibold text-gray-800 mb-2">Pouzećem</h3>
+                <p className="text-sm text-gray-600">Plaćanje pri preuzimanju</p>
+              </div>
+              <div className="bg-white/50 rounded-2xl p-6 border border-white/20 text-center">
+                <MessageCircle className="w-8 h-8 text-[#563435] mb-3 mx-auto" />
+                <h3 className="font-semibold text-gray-800 mb-2">Direktno</h3>
+                <p className="text-sm text-gray-600">Podrška prije narudžbe</p>
               </div>
             </div>
 
             <div className="prose prose-gray max-w-none space-y-6">
               <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Pravo na povrat</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Dostava</h2>
                 <p className="text-gray-600 leading-relaxed">
-                  Imate pravo na povrat proizvoda u roku od <strong>14 dana</strong> od dana preuzimanja, bez navođenja razloga. Ovo pravo je zagarantovano Zakonom o zaštiti potrošača.
+                  Dostava je besplatna na teritoriji cijele BiH. Paket šaljemo kurirskom službom, a uobičajeni rok dostave je 1-3 radna dana, zavisno od lokacije i opterećenja kurira.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Uslovi za povrat</h2>
-                <p className="text-gray-600 leading-relaxed mb-3">
-                  Da biste ostvarili pravo na povrat, proizvod mora ispunjavati sljedeće uslove:
-                </p>
-                <ul className="list-disc list-inside text-gray-600 space-y-2">
-                  <li>Proizvod je u originalnom pakovanju</li>
-                  <li>Proizvod nije korišten</li>
-                  <li>Svi dodaci i dokumentacija su prisutni</li>
-                  <li>Proizvod nije oštećen</li>
-                  <li>Zaštitne folije i plombe su netaknute</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Kako vratiti proizvod?</h2>
-                <ol className="list-decimal list-inside text-gray-600 space-y-3">
-                  <li>Kontaktirajte nas putem email-a ili telefona</li>
-                  <li>Navedite broj narudžbe i razlog povrata</li>
-                  <li>Dobijate instrukcije za povrat</li>
-                  <li>Pošaljite proizvod na našu adresu</li>
-                  <li>Nakon prijema i provjere, vraćamo vam novac</li>
-                </ol>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Troškovi povrata</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Plaćanje</h2>
                 <p className="text-gray-600 leading-relaxed">
-                  Troškove povrata snosi kupac, osim u slučaju da je proizvod neispravan ili pogrešno isporučen. U tom slučaju, mi snosimo sve troškove.
+                  Plaćanje se vrši pouzećem, direktno kuriru prilikom preuzimanja paketa. Prije slanja narudžbe možemo vas kontaktirati radi potvrde adrese i dostupnosti.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Povrat novca</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Podrška prije kupovine</h2>
                 <p className="text-gray-600 leading-relaxed">
-                  Novac će vam biti vraćen u roku od <strong>14 dana</strong> od dana kada primimo vraćeni proizvod. Povrat se vrši na isti način na koji ste platili (gotovina, bankovna transakcija).
+                  Ako niste sigurni koji model odgovara vašoj koži, dlačicama ili zoni tretmana, kontaktirajte nas prije narudžbe. Rado ćemo pomoći da izaberete odgovarajući uređaj i pojasniti način korištenja.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Zamjena proizvoda</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Zamjena modela prije slanja</h2>
                 <p className="text-gray-600 leading-relaxed">
-                  Ako želite zamijeniti proizvod za drugi model, kontaktirajte nas. Razliku u cijeni možete platiti ili dobiti povrat, zavisno od cijene novog proizvoda.
+                  Ako želite promijeniti naručeni model prije nego što paket bude poslan, javite nam se što prije putem telefona, WhatsAppa ili emaila. Ako paket još nije preuzet od kurira, narudžbu možemo prilagoditi.
                 </p>
               </section>
 
               <section>
                 <h2 className="text-2xl font-bold text-gray-800 mb-4">Reklamacije</h2>
                 <p className="text-gray-600 leading-relaxed mb-3">
-                  Ako proizvod ima proizvodne defekte, imate pravo na:
+                  Ako primite pogrešan ili oštećen proizvod, kontaktirajte nas odmah nakon preuzimanja. U poruci navedite broj narudžbe, opis problema i fotografije paketa/proizvoda ako je moguće.
                 </p>
                 <ul className="list-disc list-inside text-gray-600 space-y-2">
-                  <li>Besplatnu popravku</li>
-                  <li>Zamjenu za novi proizvod</li>
-                  <li>Povrat novca</li>
-                  <li>Sniženje cijene</li>
-                </ul>
-                <p className="text-gray-600 leading-relaxed mt-3">
-                  Reklamacije se rješavaju u skladu sa Zakonom o zaštiti potrošača i garancijom proizvođača (12 mjeseci).
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Izuzeci</h2>
-                <p className="text-gray-600 leading-relaxed mb-3">
-                  Pravo na povrat ne možete ostvariti u sljedećim slučajevima:
-                </p>
-                <ul className="list-disc list-inside text-gray-600 space-y-2">
-                  <li>Proizvod je korišten ili oštećen</li>
-                  <li>Originalno pakovanje je uništeno</li>
-                  <li>Prošlo je više od 14 dana od preuzimanja</li>
-                  <li>Proizvod je oštećen nepravilnom upotrebom</li>
+                  <li>Provjera narudžbe i isporuke</li>
+                  <li>Upute za dalje korake</li>
+                  <li>Zamjena u slučaju pogrešno isporučenog proizvoda</li>
+                  <li>Rješavanje reklamacije u skladu sa važećim propisima</li>
                 </ul>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Kontakt za povrat</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Kontakt</h2>
                 <p className="text-gray-600 leading-relaxed">
-                  Za povrat proizvoda, kontaktirajte nas na:<br />
+                  Za pitanja o narudžbi, dostavi ili reklamaciji, kontaktirajte nas na:<br />
                   Email: <a href="mailto:info@icecoolpro.ba" className="text-[#563435] hover:underline">info@icecoolpro.ba</a><br />
                   WhatsApp: <a href="https://wa.me/38761904759" className="text-[#563435] hover:underline">Pišite nam na WhatsApp</a><br />
                   <br />
                   Navedite:<br />
                   - Broj narudžbe<br />
-                  - Razlog povrata<br />
+                  - Kratak opis pitanja ili reklamacije<br />
                   - Vaše kontakt informacije
                 </p>
               </section>

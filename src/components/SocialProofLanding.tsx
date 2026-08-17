@@ -166,7 +166,7 @@ export default function SocialProofLanding({
             </span>
           </div>
           <p className="mt-4 text-sm text-pink-600 font-medium">
-            175 KM jednokratno • Besplatna dostava • 14 dana garancija povrata novca
+            175 KM jednokratno • Besplatna dostava • besplatna dostava u BiH
           </p>
         </div>
       </section>
@@ -385,7 +385,7 @@ export default function SocialProofLanding({
                 </div>
                 <div className="text-center">
                   <Shield className="w-6 h-6 text-pink-600 mx-auto mb-1" />
-                  <span className="text-xs text-pink-700">14 dana povrat</span>
+                  <span className="text-xs text-pink-700">plaćanje pouzećem</span>
                 </div>
                 <div className="text-center">
                   <Clock className="w-6 h-6 text-pink-600 mx-auto mb-1" />
@@ -443,7 +443,7 @@ export default function SocialProofLanding({
                   <h3 className="font-bold text-amber-900 text-lg mb-2">Već si napravila pravi izbor</h3>
                   <p className="text-amber-800 leading-relaxed">
                     Samo završi narudžbu i za mjesec dana ćeš vidjeti zašto 300+ žena kaže "Trebala sam ranije".
-                    <span className="font-semibold"> Besplatna dostava, plaćanje pouzećem i 14 dana garancija povrata.</span>
+                    <span className="font-semibold"> Besplatna dostava, plaćanje pouzećem i besplatna dostava u BiH.</span>
                   </p>
                 </div>
               </div>
@@ -501,7 +501,7 @@ export default function SocialProofLanding({
 
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm opacity-90">
             <span className="flex items-center gap-2">
-              <Check className="w-5 h-5" /> 14 dana garancija povrata novca
+              <Check className="w-5 h-5" /> besplatna dostava u BiH
             </span>
             <span className="flex items-center gap-2">
               <Check className="w-5 h-5" /> Besplatna dostava 1-3 dana

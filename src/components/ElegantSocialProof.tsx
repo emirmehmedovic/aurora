@@ -164,7 +164,7 @@ export default function ElegantSocialProof({
           </button>
 
           <p className="mt-4 text-sm text-[#6B5D4F]">
-            175 KM • Besplatna dostava • 14 dana povrat
+            175 KM • Besplatna dostava • plaćanje pouzećem
           </p>
         </div>
       </section>
@@ -429,7 +429,7 @@ export default function ElegantSocialProof({
                       <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F4C2C2] to-[#FFD4D4] flex items-center justify-center group-hover:scale-110 transition-transform">
                         <Shield className="w-5 h-5 text-white" />
                       </div>
-                      <span className="text-[#6B5D4F] font-medium">14 dana povrat novca</span>
+                      <span className="text-[#6B5D4F] font-medium">plaćanje pouzećem novca</span>
                     </div>
                     <div className="flex items-center gap-3 justify-center md:justify-start group">
                       <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F4C2C2] to-[#FFD4D4] flex items-center justify-center group-hover:scale-110 transition-transform">

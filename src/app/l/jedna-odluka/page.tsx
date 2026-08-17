@@ -21,7 +21,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Jedna odluka. To je sve. — Ice Cool PRO™ | Aurora Shop",
-  description: "Nije u genima. Nije u salonu. 175 KM - jedna odluka koja mijenja sve. Besplatna dostava - 14 dana povrat.",
+  description: "Nije u genima. Nije u salonu. 175 KM - jedna odluka koja mijenja sve. Besplatna dostava - plaćanje pouzećem.",
   keywords: "Ice Cool PRO, IPL epilator, jedna odluka, trajna depilacija, Ice Cooling, epilator BiH",
   alternates: {
     canonical: "https://aurorashop.ba/l/jedna-odluka",
@@ -59,7 +59,7 @@ const reviews = [
     zone: "pazuhe · noge",
   },
   {
-    text: "Naručila sam jer piše 14 dana povrat. Nisam ga vratila. Moja kuma već naručila nakon što je vidjela moje noge.",
+    text: "Naručila sam jer piše plaćanje pouzećem. Nisam ga vratila. Moja kuma već naručila nakon što je vidjela moje noge.",
     author: "Dina",
     location: "Banja Luka",
     duration: "3 sedmice korištenja",

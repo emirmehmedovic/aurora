@@ -21,14 +21,13 @@ Dodati komplentni shipping detalji:
 }
 ```
 
-### 3. **hasMerchantReturnPolicy** ✅
-Dodana return politika:
+### 3. **shippingDetails** ✅
+Dodani podaci o dostavi:
 ```json
 {
-  "applicableCountry": "BA",
-  "returnPolicyCategory": "14 dana",
-  "returnMethod": "Poštom",
-  "returnFees": "Besplatno"
+  "shippingRate": "0 BAM",
+  "shippingDestination": "BA",
+  "deliveryTime": "1-3 radna dana"
 }
 ```
 
@@ -95,7 +94,7 @@ Nakon što Google prihvati izmjene:
 - ⭐ Rating (4.9 zvjezdica)
 - 💰 Cijena (175 KM, 165 KM, 190 KM)
 - 🚚 **BESPLATNA DOSTAVA** badge
-- 🔄 **14 dana povrat** badge
+- 🔄 **Plaćanje pouzećem** badge
 - ⏱️ **Brza dostava (1-3 dana)**
 
 ### SEO benefiti:
@@ -113,7 +112,7 @@ ICE COOL PRO | IPL Aparat za Trajno Uklanjanje...
 aurorashop.ba › l › ipl-aparat-protiv-dlacica
 
 ⭐⭐⭐⭐⭐ 4.9 (47) · 175,00 KM · Na stanju
-🚚 BESPLATNA dostava · 🔄 Povrat 14 dana
+🚚 BESPLATNA dostava · Plaćanje pouzećem
 ICE COOL PRO – IPL aparat za trajno uklanjanje dlačica...
 ```
 
@@ -156,16 +155,6 @@ Svaka landing stranica ima JSON-LD script tag u `<head>`:
 />
 ```
 
-### Ako želiš promijeniti return policy:
-
-Edit file: `/src/app/l/[stranica]/page.tsx`
-
-Promijeni:
-```json
-"merchantReturnDays": 14,  // Broj dana
-"returnFees": "FreeReturn"  // Ili "ReturnShippingFees"
-```
-
 ### Ako želiš promijeniti delivery time:
 
 ```json
@@ -181,7 +170,7 @@ Promijeni:
 
 - [x] Dodana `priceValidUntil` polja
 - [x] Dodana `shippingDetails` sa besplatnom dostavom
-- [x] Dodana `hasMerchantReturnPolicy` sa 14 dana povrata
+- [x] Dodani podaci o besplatnoj dostavi i roku isporuke
 - [x] Ažurirani svi 3 landing page-a
 - [x] Dodana Hero Sekcija link u Admin Sidebar
 - [ ] Deploy na produkciju

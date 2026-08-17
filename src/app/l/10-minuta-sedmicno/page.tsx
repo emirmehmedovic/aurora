@@ -78,7 +78,7 @@ const maxContent: AdvertorialContent = {
       "Ice Cool+™ dvostruko hlađenje — čak ni na jakosti ne boli",
       "Vidljivi rezultati za 2–3 sedmice",
       "Cijelo tijelo bez iznimke: noge, ruke, pazuhe, bikini, lice, leđa",
-      "12 mj. garancija + 14 dana pravo na povrat",
+      "detaljno uputstvo + besplatna dostava u BiH",
     ],
   },
   articleClosingHighlight:
@@ -150,7 +150,7 @@ const maxContent: AdvertorialContent = {
       },
       {
         q: "Mogu li koristiti tokom dojenja ili trudnoće?",
-        a: "IPL tretmani se ne preporučuju tokom trudnoće i dojenja iz predostrožnosti. Preporučujemo konzultaciju s liječnikom. Uređaj čuvaš za period nakon — a garancija i bljeskovi te čekaju.",
+        a: "IPL tretmani se ne preporučuju tokom trudnoće i dojenja iz predostrožnosti. Preporučujemo konzultaciju s liječnikom i korištenje tek nakon tog perioda.",
       },
       {
         q: "Koliko sedmica do vidljivih rezultata?",
@@ -158,7 +158,7 @@ const maxContent: AdvertorialContent = {
       },
       {
         q: "Što ako ne budu rezultati za mene?",
-        a: "14 dana prava na povrat bez pitanja. Ako Max ne odgovara tvom tipu kože ili nisi zadovoljna rezultatima — vraćaš ga i dobivaš povrat. Bez komplikacija.",
+        a: "Prije narudžbe možeš nas pitati da li Max odgovara tvom tipu kože i dlačica. Dobijaš jasne upute za korištenje i podršku pri kupovini.",
       },
       {
         q: "Mogu li ga koristiti na tamnoj koži?",
@@ -181,11 +181,11 @@ const maxContent: AdvertorialContent = {
     { label: "Pogodno za", value: "Noge, ruke, pazuh, bikini zona, lice, leđa" },
     { label: "Tip kože", value: "Fitzpatrick I–V (svijetla do tamna)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, nastavci, korisnički priručnik" },
-    { label: "Garancija", value: "12 mieseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "Salon u džepu. 190 KM jednom — 10 minuta sedmično.",
   closingText:
-    "Za žene koje nemaju sat vremena za salon — ali imaju 10 minuta nedjelom uveče. Besplatna dostava · Plaćanje pouzećem · 14 dana povrat.",
+    "Za žene koje nemaju sat vremena za salon — ali imaju 10 minuta nedjelom uveče. Besplatna dostava · Plaćanje pouzećem · plaćanje pouzećem.",
 };
 
 export default async function DesetMinutaSedmicnoPage() {

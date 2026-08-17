@@ -1266,7 +1266,7 @@ export default function IceCoolProMaxLanding({ product }: IceCoolProMaxLandingPr
             © Ice Cool Pro Max. Informacije na stranici ne zamjenjuju medicinski savjet. Prije korištenja obavezno pročitati uputstvo.
             <br/><br/>
             <a href="https://aurorashop.ba/politika-privatnosti" style={{ color: "var(--accent)", marginRight: "16px" }}>Politika privatnosti</a>
-            <a href="https://aurorashop.ba/politika-povrata" style={{ color: "var(--accent)" }}>Politika povrata</a>
+            <a href="https://aurorashop.ba/politika-dostave" style={{ color: "var(--accent)" }}>Politika dostave</a>
           </div>
         </footer>
 

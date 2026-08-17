@@ -90,10 +90,10 @@ const osjetljivaContent: LandingContent = {
     { label: "Pogodno za", value: "Sve zone — posebno preporučeno za osjetljivu kožu" },
     { label: "Tip kože", value: "Fitzpatrick I-V (world. do tamna; V uz oprez)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, nastavci, priručnik" },
-    { label: "Garancija", value: "12 mjeseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "Osjetljiva koža. Konačno — depilacija bez kompromisa.",
-  closingText: "ICE COOL Max s dvostrukim hlađenjem je optimalan za najosjetljiviju kožu. Besplatna dostava u BiH · Plaćanje pouzećem · 14 dana povrat bez pitanja.",
+  closingText: "ICE COOL Max s dvostrukim hlađenjem je optimalan za najosjetljiviju kožu. Besplatna dostava u BiH · Plaćanje pouzećem · plaćanje pouzećem.",
 };
 
 export default async function IplZaOsjetljivuKozuPage() {
@@ -125,14 +125,6 @@ export default async function IplZaOsjetljivuKozuPage() {
           handlingTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 1, unitCode: "DAY" },
           transitTime: { "@type": "QuantitativeValue", minValue: 1, maxValue: 3, unitCode: "DAY" },
         },
-      },
-      hasMerchantReturnPolicy: {
-        "@type": "MerchantReturnPolicy",
-        applicableCountry: "BA",
-        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
-        merchantReturnDays: 14,
-        returnMethod: "https://schema.org/ReturnByMail",
-        returnFees: "https://schema.org/FreeReturn",
       },
     },
     aggregateRating: { "@type": "AggregateRating", ratingValue: "5.0", reviewCount: "19" },

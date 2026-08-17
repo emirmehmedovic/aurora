@@ -90,10 +90,10 @@ const nogeContent: LandingContent = {
     { label: "Pogodno za", value: "Noge, ruke, pazuhe, bikini zona, lice" },
     { label: "Tip kože", value: "Fitzpatrick I-V (svijetla do tamna)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, nastavci, priručnik" },
-    { label: "Garancija", value: "12 mjeseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "Noge bez brijanja. 175 KM jednom — zauvijek.",
-  closingText: "Svaki žilet, svaka pjena — novac koji više ne moraš davati. PRO se isplati već nakon prve godine. Besplatna dostava u BiH · Plaćanje pouzećem · 14 dana povrat bez pitanja.",
+  closingText: "Svaki žilet, svaka pjena — novac koji više ne moraš davati. PRO se isplati već nakon prve godine. Besplatna dostava u BiH · Plaćanje pouzećem · plaćanje pouzećem.",
 };
 
 export default async function TrajnaDepilacijaPotkoleniePage() {
@@ -125,14 +125,6 @@ export default async function TrajnaDepilacijaPotkoleniePage() {
           handlingTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 1, unitCode: "DAY" },
           transitTime: { "@type": "QuantitativeValue", minValue: 1, maxValue: 3, unitCode: "DAY" },
         },
-      },
-      hasMerchantReturnPolicy: {
-        "@type": "MerchantReturnPolicy",
-        applicableCountry: "BA",
-        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
-        merchantReturnDays: 14,
-        returnMethod: "https://schema.org/ReturnByMail",
-        returnFees: "https://schema.org/FreeReturn",
       },
     },
     aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "41" },

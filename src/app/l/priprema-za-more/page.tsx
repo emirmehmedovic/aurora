@@ -90,7 +90,7 @@ const maxBeachContent: AdvertorialContent = {
       "Najveća glava za tretman — obje noge za 15 minuta",
       "999.999 bljeskova — doživotni uređaj, bez zamjene lampice",
       "5+ razina intenziteta, ugrađeni senzor tona kože",
-      "14 dana povrat bez pitanja · 12 mj. garancija · Plaćanje pouzećem",
+      "plaćanje pouzećem · detaljno uputstvo · Plaćanje pouzećem",
     ],
   },
   articleClosingHighlight:
@@ -167,7 +167,7 @@ const maxBeachContent: AdvertorialContent = {
       },
       {
         q: "Šta ako ne budu rezultati?",
-        a: "14 dana prava na povrat bez pitanja. Ako PRO MAX ne odgovara tvom tipu kože ili nisi zadovoljna unutar 14 dana, vraćaš ga i dobivaš povrat. Plaćanje pouzećem — plaćaš tek kad prime uređaj na vrata.",
+        a: "Prije narudžbe možeš nas pitati da li PRO MAX odgovara tvom tipu kože i dlačica. Plaćanje pouzećem znači da plaćaš tek kada primiš uređaj na vrata.",
       },
     ],
   },
@@ -185,11 +185,11 @@ const maxBeachContent: AdvertorialContent = {
     { label: "Pogodno za", value: "Noge, pazuhe, bikini zona, ruke, lice, leđa" },
     { label: "Tip kože", value: "Fitzpatrick I–V (svijetla do tamna; V uz oprez)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, nastavci, korisnički priručnik" },
-    { label: "Garancija", value: "12 mjeseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "Ručnik na stolici. Brijač kod kuće. Noge slobodne. To je ljeto koje možeš imati.",
   closingText:
-    "ICE COOL PRO MAX — 190 KM jednom, besplatna dostava u BiH, plaćanje pouzećem, 14 dana povrat bez pitanja.",
+    "ICE COOL PRO MAX — 190 KM jednom, besplatna dostava u BiH, plaćanje pouzećem, plaćanje pouzećem.",
   highlights: [
     { value: "5–6 sed.", label: "do prvih vidljivih rezultata" },
     { value: "190 KM", label: "jednom, umjesto 800–1.000 KM po ljetu" },

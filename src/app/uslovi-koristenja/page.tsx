@@ -53,16 +53,16 @@ export default function TermsPage() {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">6. Povrat i reklamacije</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">6. Reklamacije</h2>
                 <p className="text-gray-600 leading-relaxed">
-                  Imate pravo na povrat proizvoda u roku od 14 dana od dana preuzimanja. Proizvod mora biti u originalnom pakovanju i nekorišten. Troškove povrata snosi kupac.
+                  Ako primite pogrešan ili oštećen proizvod, kontaktirajte nas odmah nakon preuzimanja uz broj narudžbe, opis problema i fotografije paketa ili proizvoda. Reklamacije se obrađuju u skladu sa važećim propisima.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">7. Garancija</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">7. Uputstvo i podrška</h2>
                 <p className="text-gray-600 leading-relaxed">
-                  Svi proizvodi dolaze sa 12 mjeseci garancije proizvođača. Garancija pokriva proizvodne defekte, ali ne pokriva oštećenja nastala nepravilnom upotrebom.
+                  Uz proizvod dobijate informacije za pravilno korištenje. Za pitanja prije narudžbe ili tokom korištenja možete nas kontaktirati putem emaila, telefona ili WhatsAppa.
                 </p>
               </section>
 

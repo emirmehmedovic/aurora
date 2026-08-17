@@ -30,8 +30,8 @@ const faqItems = [
     a: "500.000 bljeskova za LITE, 999.999 za PRO i Max modele. Ako radiš tretmane tjedno (8 sedmica), pa jednom mjesečno — to je 10–15 godina redovnog korišćenja.",
   },
   {
-    q: "Ima li Aurora garanciju?",
-    a: "Da — 14 dana povrat bez pitanja i garancija na uređaj. Kontakt direktno kroz aurorashop.ba.",
+    q: "Kako mogu dobiti podršku prije narudžbe?",
+    a: "Da — možeš nas kontaktirati direktno kroz aurorashop.ba prije narudžbe i provjeriti koji model odgovara tvojoj koži.",
   },
 ];
 
@@ -115,7 +115,7 @@ export default function BlogPostLumea() {
               {[
                 { title: "Narudžba iz EU (Amazon, Media Markt, Philips.com)", desc: "Čekanje 2–4 tjedna, carina pri uvozu (10–17% + PDV na carinsku vrijednost), mogući problemi s reklamacijom." },
                 { title: "Traženje u HR ili RS", desc: "Lumea 9000 i 8000 serija ponekad se nađu, ali cijena je 350–600 EUR (685–1.175 KM)." },
-                { title: "Kupovina \"iz ruke\"", desc: "Nema nikakve garancije ni mogućnosti povrata." },
+                { title: "Kupovina \"iz ruke\"", desc: "Nema lokalne podrške ni jasnih informacija o porijeklu uređaja." },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3 bg-red-50/50 border border-red-100 rounded-xl p-4">
                   <X className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
@@ -160,7 +160,7 @@ export default function BlogPostLumea() {
                     ["Hlađenje kože", "Opciono (Cooling cap)", "Ugrađeno"],
                     ["Bljeskovi", "450.000", "999.999"],
                     ["Dostupnost u BiH", "Nema direktne distribucije", "Odmah, pouzećem"],
-                    ["Garancija/povrat", "Servisni centar u HR/RS", "14 dana povrat, direktno"],
+                    ["Podrška/dostava", "Servisni centar u HR/RS", "plaćanje pouzećem, direktno"],
                     ["Intenziteti", "5", "5"],
                   ].map(([row, lumea, aurora], i) => (
                     <tr key={i} className="border-b border-gray-100 last:border-0">
@@ -195,7 +195,7 @@ export default function BlogPostLumea() {
               <div className="bg-[#563435]/5 border border-[#563435]/15 rounded-2xl p-5">
                 <h3 className="font-bold text-gray-800 mb-2 text-sm">S Aurora ICE COOL</h3>
                 <ul className="space-y-1.5 text-sm text-gray-600">
-                  {["Zoveš ili pišeš direktno", "Šalješ nazad lokalno", "Dobijajš povrat ili zamjenu"].map((item, i) => (
+                  {["Zoveš ili pišeš direktno", "Dobijaš lokalnu podršku", "Plaćaš pouzećem pri preuzimanju"].map((item, i) => (
                     <li key={i} className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-[#563435]" />{item}</li>
                   ))}
                 </ul>
@@ -225,13 +225,13 @@ export default function BlogPostLumea() {
             <div className="relative z-10">
               <p className="text-white/70 text-sm font-semibold tracking-wider uppercase mb-2">Aurora ICE COOL serija</p>
               <h3 className="text-2xl md:text-3xl font-bold mb-2">Od 165 KM. Dostava sutra.</h3>
-              <p className="text-white/70 mb-6">Plaćanje pouzećem · 14 dana povrat · Lokalna podrška</p>
+              <p className="text-white/70 mb-6">Plaćanje pouzećem · plaćanje pouzećem · Lokalna podrška</p>
               <div className="flex flex-wrap justify-center gap-4 text-sm text-white/80 mb-6">
                 {[
                   { icon: Truck, text: "Besplatna dostava u BiH" },
                   { icon: Banknote, text: "Plaćanje pouzećem" },
-                  { icon: RotateCcw, text: "14 dana povrat" },
-                  { icon: Shield, text: "12 mj. garancija" },
+                  { icon: RotateCcw, text: "plaćanje pouzećem" },
+                  { icon: Shield, text: "detaljno uputstvo" },
                 ].map(({ icon: Icon, text }, i) => (
                   <div key={i} className="flex items-center gap-1.5">
                     <Icon className="w-4 h-4" />

@@ -74,11 +74,6 @@ export default function Footer() {
                   Politika dostave
                 </Link>
               </li>
-              <li>
-                <Link href="/politika-povrata" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
-                  Politika povrata
-                </Link>
-              </li>
             </ul>
           </div>
 

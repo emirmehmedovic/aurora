@@ -300,7 +300,7 @@ export default function IntimnostLanding({ product }: IntimnostLandingProps) {
 
             <div style={{ marginTop: "32px", display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "var(--muted-brown)" }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--rose-gold)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-              <span>Besplatna dostava • Pouzećem • 14 dana povrat</span>
+              <span>Besplatna dostava • Pouzećem • plaćanje pouzećem</span>
             </div>
           </div>
 
@@ -665,7 +665,7 @@ export default function IntimnostLanding({ product }: IntimnostLandingProps) {
       {/* Footer */}
       <footer style={{ textAlign: "center", padding: "20px 24px", borderTop: "1px solid var(--light-border)" }}>
         <p style={{ fontSize: "12px", color: "var(--muted-brown)" }}>
-          © 2026 Ice Cool PRO™ · Aurora Shop · <a href="https://aurorashop.ba/politika-privatnosti" style={{ color: "var(--rose-gold)", textDecoration: "none" }}>Politika privatnosti</a> · <a href="https://aurorashop.ba/politika-povrata" style={{ color: "var(--rose-gold)", textDecoration: "none" }}>Politika povrata</a>
+          © 2026 Ice Cool PRO™ · Aurora Shop · <a href="https://aurorashop.ba/politika-privatnosti" style={{ color: "var(--rose-gold)", textDecoration: "none" }}>Politika privatnosti</a> · <a href="https://aurorashop.ba/politika-dostave" style={{ color: "var(--rose-gold)", textDecoration: "none" }}>Politika dostave</a>
         </p>
       </footer>
 

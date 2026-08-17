@@ -109,10 +109,10 @@ const liteContent: LandingContent = {
     { label: "Pogodno za", value: "Lice, gornja usna, brada, pazuh, bikini zona, noge" },
     { label: "Tip kože", value: "Fitzpatrick I-V (svijetla do tamna)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, precizan nastavak, korisnički priručnik" },
-    { label: "Garancija", value: "12 mjeseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "Jedan uređaj. Sve zone. 165 KM jednom zauvijek.",
-  closingText: "Počni za lice i bikini. Nastavi za noge i cijelo tijelo. Ista snaga kao PRO — kompaktniji i 10 KM jeftiniji. Plaćanje pouzećem · Besplatna dostava u BiH · 14 dana povrat bez pitanja.",
+  closingText: "Počni za lice i bikini. Nastavi za noge i cijelo tijelo. Ista snaga kao PRO — kompaktniji i 10 KM jeftiniji. Plaćanje pouzećem · Besplatna dostava u BiH · plaćanje pouzećem.",
   beforeAfterImages: [
     {
       image: "/testimonials/before-after/lite1.png",
@@ -176,14 +176,6 @@ export default async function KompaktniIplLandingPage() {
           }
         }
       },
-      "hasMerchantReturnPolicy": {
-        "@type": "MerchantReturnPolicy",
-        "applicableCountry": "BA",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-        "merchantReturnDays": 14,
-        "returnMethod": "https://schema.org/ReturnByMail",
-        "returnFees": "https://schema.org/FreeReturn"
-      }
     },
     "aggregateRating": {
       "@type": "AggregateRating",

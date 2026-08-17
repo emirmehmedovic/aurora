@@ -78,7 +78,7 @@ const liteContent: AdvertorialContent = {
       "Lagan i kompaktan — stane u torbicu, ide na more i putovanje",
       "Ice Cool™ hlađenje — bez crvenila čak ni na najosjetljivijoj koži lica",
       "500.000 bljeskova = 10+ godina tretmana za manje zone",
-      "12 mj. garancija + 14 dana pravo na povrat",
+      "detaljno uputstvo + besplatna dostava u BiH",
     ],
   },
   articleClosingHighlight:
@@ -162,7 +162,7 @@ const liteContent: AdvertorialContent = {
       },
       {
         q: "Što ako ne budu rezultati za mene?",
-        a: "14 dana prava na povrat bez pitanja. Ako LITE ne odgovara tvom tipu kože ili nisi zadovoljna — vraćaš ga i dobivaš povrat. Bez komplikacija, bez objašnjavanja.",
+        a: "Prije narudžbe možeš nas pitati da li LITE odgovara tvom tipu kože i dlačica. Dobijaš jasne upute za korištenje i podršku pri kupovini.",
       },
     ],
   },
@@ -180,11 +180,11 @@ const liteContent: AdvertorialContent = {
     { label: "Pogodno za", value: "Lice, gornja usna, pazuh, bikini zona, manja područja" },
     { label: "Tip kože", value: "Fitzpatrick I–V (svijetla do tamna)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, precizan nastavak, korisnički priručnik" },
-    { label: "Garancija", value: "12 mieseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "Glatka koža za 165 KM. Kompleks za svagda iza tebe.",
   closingText:
-    "Manje od 3 posjete salonu za vosak. LITE radi isti posao — samo stane u torbicu i traje godinama. 14 dana povrat · Besplatna dostava · Plaćanje pouzećem.",
+    "Manje od 3 posjete salonu za vosak. LITE radi isti posao — samo stane u torbicu i traje godinama. plaćanje pouzećem · Besplatna dostava · Plaćanje pouzećem.",
 };
 
 export default async function MojNajveciKompleksPage() {

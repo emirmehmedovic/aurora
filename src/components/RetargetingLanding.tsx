@@ -132,7 +132,7 @@ export default function RetargetingLanding({
               <span className="text-[#2d6a4f]">✓</span> Besplatna dostava
             </span>
             <span className="flex items-center gap-1">
-              <span className="text-[#2d6a4f]">✓</span> 14 dana povrat
+              <span className="text-[#2d6a4f]">✓</span> plaćanje pouzećem
             </span>
           </div>
         </div>
@@ -268,10 +268,10 @@ export default function RetargetingLanding({
               >
                 <p className="text-[14px] font-medium text-black mb-2">{obj.question}</p>
                 <p className="text-[14px] text-gray-700 leading-relaxed">
-                  {obj.answer.split(/(\b14 dana povrat, bez pitanja\b|\bHlađenje je tu upravo zbog toga\b|\bPopuniš ime, telefon i adresu. To je sve\b|\bNije instant, ali je stvarno\b|\bIPL tehnologija je ista\b)/gi).map((part, idx) => {
+                  {obj.answer.split(/(\bplaćanje pouzećem, bez pitanja\b|\bHlađenje je tu upravo zbog toga\b|\bPopuniš ime, telefon i adresu. To je sve\b|\bNije instant, ali je stvarno\b|\bIPL tehnologija je ista\b)/gi).map((part, idx) => {
                     const lowerPart = part.toLowerCase();
                     if (
-                      lowerPart.includes('14 dana povrat') ||
+                      lowerPart.includes('plaćanje pouzećem') ||
                       lowerPart.includes('hlađenje je tu') ||
                       lowerPart.includes('popuniš ime') ||
                       lowerPart.includes('nije instant') ||
@@ -316,7 +316,7 @@ export default function RetargetingLanding({
               </span>
             </div>
             <p className="text-[13px] text-gray-600">
-              Plaćanje pouzećem · Besplatna dostava · 14 dana povrat
+              Plaćanje pouzećem · Besplatna dostava · plaćanje pouzećem
             </p>
           </div>
 
@@ -366,11 +366,11 @@ export default function RetargetingLanding({
             </div>
             <div>
               <span className="text-[22px] block mb-1">🔄</span>
-              14 dana povrat bez pitanja
+              plaćanje pouzećem
             </div>
             <div>
               <span className="text-[22px] block mb-1">🏅</span>
-              12 mj. garancija
+              detaljno uputstvo
             </div>
           </div>
         </div>
@@ -390,7 +390,7 @@ export default function RetargetingLanding({
             onClick={() => scrollToForm("closer")}
             className="px-8 py-4 bg-white text-black rounded-xl text-base font-medium hover:opacity-85 transition-opacity"
           >
-            {product.price} KM · Pouzećem · 14 dana povrat
+            {product.price} KM · Pouzećem · plaćanje pouzećem
           </button>
         </div>
       </section>
@@ -398,7 +398,7 @@ export default function RetargetingLanding({
       {/* FOOTER */}
       <footer className="border-t border-[#e8e6e1] px-6 py-6 text-center text-xs text-gray-500 leading-relaxed">
         <p>
-          © 2026 Ice Cool PRO™ · <a href="https://aurorashop.ba/politika-privatnosti" className="underline hover:text-gray-700">Politika privatnosti</a> · <a href="https://aurorashop.ba/politika-povrata" className="underline hover:text-gray-700">Politika povrata</a>
+          © 2026 Ice Cool PRO™ · <a href="https://aurorashop.ba/politika-privatnosti" className="underline hover:text-gray-700">Politika privatnosti</a> · <a href="https://aurorashop.ba/politika-dostave" className="underline hover:text-gray-700">Politika dostave</a>
         </p>
         <p className="mt-2">
           <a href="tel:+38761904759" className="underline hover:text-gray-700">+387 61 904 759</a> · <a href="mailto:info@icecoolpro.ba" className="underline hover:text-gray-700">info@icecoolpro.ba</a>

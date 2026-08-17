@@ -44,7 +44,7 @@ const philipsAlternativeContent: AdvertorialContent = {
   heroImageRightSrc: heroRightImage.src,
   heroImageRightAlt: "Kućni IPL uređaj sa hlađenjem za 175 KM",
   intro:
-    "Mnoge žene odustanu prije nego uopšte probaju kućni IPL tretman — samo zbog cijene. Premium uređaji koštaju preko 1.000 KM, a mnoge ne žele platiti toliko bez garancije da će im odgovarati. Zato postoji pristupačnija opcija: uređaj za smanjenje dlačica pomoću svjetlosnih impulsa, s ugrađenim hlađenjem kože, koji koristiš kod kuće — za 175 KM.",
+    "Mnoge žene odustanu prije nego uopšte probaju kućni IPL tretman — samo zbog cijene. Premium uređaji koštaju preko 1.000 KM, a mnoge ne žele platiti toliko prije nego što provjere da li im takav tretman odgovara. Zato postoji pristupačnija opcija: uređaj za smanjenje dlačica pomoću svjetlosnih impulsa, s ugrađenim hlađenjem kože, koji koristiš kod kuće — za 175 KM.",
   sections: [
     {
       heading: "Ako razmišljaš o Philips Lumei, vjerovatno tražiš ove 3 stvari",
@@ -115,7 +115,7 @@ const philipsAlternativeContent: AdvertorialContent = {
       "Ice Cool™ hlađenje — tretman ugodniji nego kod uređaja bez hlađenja",
       "999.999 bljeskova — doživotni uređaj bez zamjene lampice",
       "Sve zone: noge, pazuhe, bikini zona, ruke, lice",
-      "14 dana povrat bez pitanja · 12 mj. garancija · Plaćanje pouzećem",
+      "plaćanje pouzećem · detaljno uputstvo · Plaćanje pouzećem",
     ],
   },
   articleClosingHighlight:
@@ -214,11 +214,11 @@ const philipsAlternativeContent: AdvertorialContent = {
     { label: "Pogodno za", value: "Noge, ruke, pazuhe, bikini zona, lice" },
     { label: "Tip kože", value: "Fitzpatrick I–V (svijetla do tamna)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, korisnički priručnik" },
-    { label: "Garancija", value: "12 mjeseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "Kućna upotreba, ugodniji tretman, pristupačna cijena.",
   closingText:
-    "ICE COOL PRO — 175 KM jednom, besplatna dostava u BiH, plaćanje pouzećem, 14 dana povrat bez pitanja.",
+    "ICE COOL PRO — 175 KM jednom, besplatna dostava u BiH, plaćanje pouzećem, plaćanje pouzećem.",
   highlights: [
     { value: "175 KM", label: "umjesto 1.000+ KM" },
     { value: "Ice Cool™", label: "ugrađeno hlađenje" },

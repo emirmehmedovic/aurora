@@ -447,7 +447,7 @@ export default function SpontanostLanding({ product }: SpontanostLandingProps) {
       {/* Footer */}
       <footer style={{ textAlign: "center", padding: "20px 24px", borderTop: "1px solid var(--light-border)" }}>
         <p style={{ fontSize: "12px", color: "var(--muted-brown)" }}>
-          © 2026 Ice Cool PRO™ · Aurora Shop · <a href="https://aurorashop.ba/politika-privatnosti" style={{ color: "var(--rose-gold)", textDecoration: "none" }}>Politika privatnosti</a> · <a href="https://aurorashop.ba/politika-povrata" style={{ color: "var(--rose-gold)", textDecoration: "none" }}>Politika povrata</a>
+          © 2026 Ice Cool PRO™ · Aurora Shop · <a href="https://aurorashop.ba/politika-privatnosti" style={{ color: "var(--rose-gold)", textDecoration: "none" }}>Politika privatnosti</a> · <a href="https://aurorashop.ba/politika-dostave" style={{ color: "var(--rose-gold)", textDecoration: "none" }}>Politika dostave</a>
         </p>
       </footer>
 

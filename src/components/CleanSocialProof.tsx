@@ -188,7 +188,7 @@ export default function CleanSocialProof({
             </div>
             <div className="flex items-center justify-center gap-2">
               <Check className="w-4 h-4" />
-              <span>14 dana garancija povrata</span>
+              <span>besplatna dostava u BiH</span>
             </div>
             <div className="flex items-center justify-center gap-2">
               <Check className="w-4 h-4" />

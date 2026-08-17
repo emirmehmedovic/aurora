@@ -67,7 +67,7 @@ const productData: Record<string, any> = {
       },
       {
         question: "Šta ako ne bude radilo za mene?",
-        answer: "Imaš 14 dana da ga probaš. Ako nisi zadovoljna, vrati ga i dobiješ novac nazad. Bez pitanja, bez komplikacija."
+        answer: "Možeš nas kontaktirati prije narudžbe ako nisi sigurna koji model odgovara tvojoj koži i zoni tretmana. Dostava je besplatna, a plaćaš pouzećem."
       },
       {
         question: "Koliko često moram raditi tretman?",
@@ -193,7 +193,7 @@ const productData: Record<string, any> = {
       },
       {
         question: "Šta ako ne bude radilo za mene?",
-        answer: "Imaš 14 dana da ga probaš. Ako nisi zadovoljna, vrati ga i dobiješ novac nazad. Bez pitanja."
+        answer: "Možeš nas kontaktirati prije narudžbe ako nisi sigurna koji model odgovara tvojoj koži i zoni tretmana. Dostava je besplatna, a plaćaš pouzećem."
       }
     ],
     testimonials: [
@@ -316,7 +316,7 @@ const productData: Record<string, any> = {
       },
       {
         question: "Šta ako ne bude radilo za mene?",
-        answer: "14 dana za povrat bez pitanja. Probaš ga bez rizika — ako nisi zadovoljna rezultatima, vratiš ga i dobiješ novac nazad. Besplatna dostava u BiH, plaćanje pouzećem."
+        answer: "Ako nisi sigurna da li LITE odgovara tvom tipu kože, dlačicama ili zoni tretmana, piši nam prije narudžbe. Dostava je besplatna u BiH, a plaćanje je pouzećem."
       }
     ],
     testimonials: [
@@ -535,13 +535,13 @@ export default function ProductLanding({ slug, product: customProduct }: Product
                     <div className="p-2 bg-purple-100 rounded-lg">
                       <RotateCcw className="w-5 h-5 text-purple-700" />
                     </div>
-                    <span className="text-sm font-medium text-gray-700">14 dana povrat</span>
+                    <span className="text-sm font-medium text-gray-700">Besplatna dostava</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-amber-100 rounded-lg">
                       <Shield className="w-5 h-5 text-amber-700" />
                     </div>
-                    <span className="text-sm font-medium text-gray-700">12 mj. garancija</span>
+                    <span className="text-sm font-medium text-gray-700">detaljno uputstvo</span>
                   </div>
                 </div>
 
@@ -561,7 +561,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 </Link>
                 <p className="text-center text-xs text-gray-500 mt-3 flex items-center justify-center gap-3">
-                  <Truck className="w-4 h-4" /> Besplatna dostava u BiH · Plaćanje pouzećem · 14 dana povrat
+                  <Truck className="w-4 h-4" /> Besplatna dostava u BiH · Plaćanje pouzećem · Detaljno uputstvo
                 </p>
               </div>
             </div>
@@ -855,7 +855,7 @@ export default function ProductLanding({ slug, product: customProduct }: Product
                 Naruči {product.name} — {product.price.toFixed(2)} KM <ArrowRight className="w-5 h-5" />
               </Link>
               <p className="mt-3 text-sm text-gray-500 flex items-center justify-center gap-3">
-                <Banknote className="w-4 h-4" /> Plaćanje pouzećem · Besplatna dostava · 14 dana povrat
+                <Banknote className="w-4 h-4" /> Plaćanje pouzećem · Besplatna dostava · Detaljno uputstvo
               </p>
             </div>
           </div>

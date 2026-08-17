@@ -53,12 +53,12 @@ const faqs = [
   {
     id: 10,
     question: "Šta ako nisam zadovoljan proizvodom?",
-    answer: "Nudimo 14 dana garancije povrata novca. Ako niste zadovoljni, možete vratiti proizvod u originalnom pakovanju i dobiti pun povrat novca."
+    answer: "Prije narudžbe možete nas kontaktirati za preporuku modela i dodatna pitanja o korištenju. Dostava je besplatna, a plaćanje se vrši pouzećem."
   },
   {
     id: 11,
-    question: "Da li dolazi sa garancijom?",
-    answer: "Da, svi naši uređaji dolaze sa 12 mjeseci garancije proizvođača koja pokriva sve proizvodne defekte."
+    question: "Da li dobijam uputstvo za korištenje?",
+    answer: "Da, uz uređaj dobijaš informacije za pravilno korištenje. Ako imaš dodatna pitanja prije narudžbe ili tokom korištenja, možeš nas kontaktirati direktno."
   },
   {
     id: 12,
@@ -70,7 +70,7 @@ const faqs = [
 export const metadata: Metadata = {
   title: "FAQ | IPL Epilator, Dostava i Sigurnost | Aurora Shop",
   description:
-    "Odgovori na najčešća pitanja o IPL epilatorima, rezultatima, sigurnosti, dostavi i garanciji za kupce u BiH.",
+    "Odgovori na najčešća pitanja o IPL epilatorima, rezultatima, sigurnosti, dostavi i korištenju za kupce u BiH.",
   alternates: {
     canonical: "/faq",
   },

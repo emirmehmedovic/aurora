@@ -22,7 +22,7 @@ export default function FinalCtaSection() {
               Svaki dan koji odgađaš je još jedno jutro sa brijačem u ruci. Počni danas — rezultati za 8 sedmica.
             </p>
             <p className="text-sm text-white/60 mb-10 max-w-xl mx-auto">
-              Ako ne budeš zadovoljna, vrati uređaj u roku 14 dana i dobiješ novac nazad. Bez pitanja, bez komplikacija.
+              Ako imaš pitanje prije narudžbe, piši nam direktno. Dobijaš jasne informacije, besplatnu dostavu i plaćanje pouzećem.
             </p>
 
             <Link 
@@ -45,7 +45,7 @@ export default function FinalCtaSection() {
               </div>
               <div className="flex items-center gap-2">
                 <RotateCcw className="w-5 h-5 text-white/80" />
-                <span className="text-sm font-medium text-white/90">14 dana povrat</span>
+                <span className="text-sm font-medium text-white/90">plaćanje pouzećem</span>
               </div>
             </div>
           </div>

@@ -97,7 +97,7 @@ const proContent: AdvertorialContent = {
       "5 nivoa intenziteta za prilagodbu svakom tipu kože",
       "Ice Cool™ hlađenje — tretman bez neugodnosti čak i na osjetljivim zonama",
       "Cijelo tijelo: noge, pazuhe, bikini zona, lice, leđa",
-      "12 mj. garancija + 14 dana pravo na povrat bez pitanja",
+      "detaljno uputstvo + besplatna dostava u BiH",
     ],
   },
   articleClosingHighlight:
@@ -142,7 +142,7 @@ const proContent: AdvertorialContent = {
   ],
   vsSection: {
     label: "Usporedba",
-    title: "Salon ili PRO — gdje završi razlika za 12 mieseci",
+    title: "Salon ili PRO — gdje završi razlika za detaljno uputstvo",
     subtitle:
       "Isti cilj, potpuno drugačiji trošak. Pogledaj matematiku.",
     rows: [
@@ -167,7 +167,7 @@ const proContent: AdvertorialContent = {
       },
       {
         q: "Što ako ne budu rezultati za mene?",
-        a: "14 dana prava na povrat bez pitanja. Ako PRO ne odgovara tvom tipu kože ili nisi zadovoljna — vraćaš ga i dobivaš povrat novca. Svaka narudžba uključuje garanciju zadovoljstva.",
+        a: "Prije narudžbe možeš nas pitati da li PRO odgovara tvom tipu kože i dlačica. Dobijaš jasne upute za korištenje i podršku pri kupovini.",
       },
       {
         q: "Je li bezbjedno koristiti kod kuće bez estetičara?",
@@ -193,11 +193,11 @@ const proContent: AdvertorialContent = {
     { label: "Pogodno za", value: "Noge, ruke, pazuh, bikini zona, lice, leđa" },
     { label: "Tip kože", value: "Fitzpatrick I–V (svijetla do tamna)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, korisnički priručnik" },
-    { label: "Garancija", value: "12 mieseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "175 KM jednom. Salone ostavljaš iza sebe.",
   closingText:
-    "Svaki tretman u salonu koji preskočiš je novac koji ostaje tebi. PRO se isplati već nakon drugog tretmana koji biste platili vani. Besplatna dostava · Plaćanje pouzećem · 14 dana povrat.",
+    "Svaki tretman u salonu koji preskočiš je novac koji ostaje tebi. PRO se isplati već nakon drugog tretmana koji biste platili vani. Besplatna dostava · Plaćanje pouzećem · plaćanje pouzećem.",
 };
 
 export default async function KakoSamPrestalaIciUSalonPage() {

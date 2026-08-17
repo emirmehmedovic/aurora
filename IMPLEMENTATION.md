@@ -41,7 +41,7 @@
 - ✅ Politika privatnosti (`/politika-privatnosti`)
 - ✅ Uslovi korištenja (`/uslovi-koristenja`)
 - ✅ Politika dostave (`/politika-dostave`)
-- ✅ Politika povrata (`/politika-povrata`)
+- ✅ Politika dostave i podrške (`/politika-dostave`)
 
 ### **5. Database & Seed Data**
 - ✅ Prisma schema sa svim modelima

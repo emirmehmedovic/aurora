@@ -110,12 +110,12 @@ export default function HeroSectionClient({ heroProducts, fallbackProducts }: He
                 <div className="text-xs text-gray-600">Dostava u BiH</div>
               </div>
               <div className="text-center p-3 bg-white/50 rounded-xl border border-violet-100/50">
-                <div className="text-sm font-bold text-[#563435]">14 dana</div>
-                <div className="text-xs text-gray-600">Povrat</div>
+                <div className="text-sm font-bold text-[#563435]">Pouzećem</div>
+                <div className="text-xs text-gray-600">Plaćanje</div>
               </div>
               <div className="text-center p-3 bg-white/50 rounded-xl border border-violet-100/50">
-                <div className="text-sm font-bold text-[#563435]">12 mj.</div>
-                <div className="text-xs text-gray-600">Garancija</div>
+                <div className="text-sm font-bold text-[#563435]">Podrška</div>
+                <div className="text-xs text-gray-600">Prije kupovine</div>
               </div>
             </div>
           </div>

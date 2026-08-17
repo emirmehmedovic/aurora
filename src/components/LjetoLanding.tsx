@@ -259,7 +259,7 @@ export default function LjetoLanding({ product }: LjetoLandingProps) {
               fontSize: "12px",
               color: "var(--choco2)",
               backdropFilter: "blur(8px)",
-            }}>✓ 14 dana povrat</div>
+            }}>✓ plaćanje pouzećem</div>
           </div>
 
           <a href="#naruci" style={{
@@ -963,7 +963,7 @@ export default function LjetoLanding({ product }: LjetoLandingProps) {
       {/* Footer */}
       <footer style={{ textAlign: "center", padding: "20px 24px", position: "relative", zIndex: 1 }}>
         <p style={{ fontSize: "12px", color: "var(--muted)" }}>
-          © 2026 Ice Cool PRO™ · Aurora Shop · <a href="https://aurorashop.ba/politika-privatnosti" style={{ color: "var(--gold)", textDecoration: "none" }}>Politika privatnosti</a> · <a href="https://aurorashop.ba/politika-povrata" style={{ color: "var(--gold)", textDecoration: "none" }}>Politika povrata</a>
+          © 2026 Ice Cool PRO™ · Aurora Shop · <a href="https://aurorashop.ba/politika-privatnosti" style={{ color: "var(--gold)", textDecoration: "none" }}>Politika privatnosti</a> · <a href="https://aurorashop.ba/politika-dostave" style={{ color: "var(--gold)", textDecoration: "none" }}>Politika dostave</a>
         </p>
       </footer>
       </div>

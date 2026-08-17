@@ -171,7 +171,7 @@ export default function JednaOdlukaLanding({
             </button>
 
             <div className="flex flex-wrap gap-2">
-              {["Plaćanje pouzećem", "14 dana povrat", "12 mj. garancija"].map((item, i) => (
+              {["Plaćanje pouzećem", "plaćanje pouzećem", "detaljno uputstvo"].map((item, i) => (
                 <span
                   key={i}
                   className="inline-flex items-center gap-1.5 text-[11px] md:text-xs text-gray-600 font-light bg-white border border-[#e8e4de] px-2.5 md:px-3 py-1 md:py-1.5 rounded-full"
@@ -275,10 +275,10 @@ export default function JednaOdlukaLanding({
                 Plaćanje pouzećem
               </span>
               <span className="inline-flex items-center gap-1.5 text-xs text-[#666] font-light bg-[#f6f3ed] border border-[#e5e0d8] px-3 py-1 rounded-full before:content-['✓'] before:text-[#2d6a4f] before:text-[11px]">
-                14 dana povrat
+                plaćanje pouzećem
               </span>
               <span className="inline-flex items-center gap-1.5 text-xs text-[#666] font-light bg-[#f6f3ed] border border-[#e5e0d8] px-3 py-1 rounded-full before:content-['✓'] before:text-[#2d6a4f] before:text-[11px]">
-                12 mj. garancija
+                detaljno uputstvo
               </span>
             </div>
           </div>
@@ -342,7 +342,7 @@ export default function JednaOdlukaLanding({
                 <br />
                 Ako nisi zadovoljna —{" "}
                 <strong className="font-medium text-[#0f0f0f]">
-                  vraćaš za 14 dana, bez ikakvog objašnjavanja.
+                  javiš nam se prije narudžbe ako želiš provjeriti koji model je najbolji za tebe.
                 </strong>
               </p>
             </div>
@@ -483,7 +483,7 @@ export default function JednaOdlukaLanding({
               </span>
             </div>
             <p className="text-[13px] text-[#777] font-light mt-1">
-              Besplatna dostava · Pouzećem · 14 dana povrat · 12 mj. garancija
+              Besplatna dostava · Pouzećem · plaćanje pouzećem · detaljno uputstvo
             </p>
           </div>
 
@@ -524,11 +524,11 @@ export default function JednaOdlukaLanding({
             </div>
             <div className="text-xs text-[#777] leading-[1.5] font-light">
               <span className="text-[22px] block mb-1">🔄</span>
-              14 dana povrat bez pitanja
+              plaćanje pouzećem
             </div>
             <div className="text-xs text-[#777] leading-[1.5] font-light">
               <span className="text-[22px] block mb-1">🏅</span>
-              12 mj. garancija
+              detaljno uputstvo
             </div>
           </div>
         </div>
@@ -544,7 +544,7 @@ export default function JednaOdlukaLanding({
           <em className="italic text-[#e8c4cc]">175 KM. To je sve.</em>
         </p>
         <p className="text-sm text-[#555] font-light mb-8">
-          Besplatna dostava · Plaćanje pouzećem · 14 dana povrat
+          Besplatna dostava · Plaćanje pouzećem · plaćanje pouzećem
         </p>
         <button
           onClick={() => handleCtaClick("closer")}
@@ -566,7 +566,7 @@ export default function JednaOdlukaLanding({
           </a>{" "}
           ·{" "}
           <a href="#" className="text-[#888] underline">
-            Politika povrata
+            Politika dostave
           </a>
         </span>
         <span>

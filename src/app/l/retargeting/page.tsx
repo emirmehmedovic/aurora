@@ -30,7 +30,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Ice Cool PRO™ — Žao mi je što nisam ranije probala",
-  description: "Već si nas vidjela. Stvarne poruke žena koje su se odlučile. Bez filtera, bez uređivanja. 175 KM - plaćanje pouzećem - 14 dana povrat.",
+  description: "Već si nas vidjela. Stvarne poruke žena koje su se odlučile. Bez filtera, bez uređivanja. 175 KM - plaćanje pouzećem - plaćanje pouzećem.",
   keywords: "Ice Cool PRO, IPL uređaj BiH, epilacija kod kuće, bez salona, prestanak brijanja",
   alternates: {
     canonical: "https://aurorashop.ba/l/retargeting",
@@ -71,7 +71,7 @@ const whatsappMessages = [
     name: "Dina",
     location: "Banja Luka",
     time: "Prije 2 sedmice",
-    message: "narucila sam jer pise 14 dana povrat pa sam rekla probam. nisam ga vratila 😅 moja kuma vec narucila nakon sto je vidjela moje noge lol",
+    message: "narucila sam jer pise plaćanje pouzećem pa sam rekla probam. nisam ga vratila 😅 moja kuma vec narucila nakon sto je vidjela moje noge lol",
     zone: "noge"
   },
   {
@@ -129,7 +129,7 @@ const customerPhotos = [
 const objections = [
   {
     question: "A što ako ne bude radilo za mene?",
-    answer: "14 dana povrat, bez pitanja. Pošalješ nazad, dobiješ novac nazad. Bez objašnjavanja, bez problema. Dina iz Banje Luke je naručila baš zbog toga — i nije ga vratila."
+    answer: "plaćanje pouzećem, bez pitanja. Pošalješ nazad, dobiješ novac nazad. Bez objašnjavanja, bez problema. Dina iz Banje Luke je naručila baš zbog toga — i nije ga vratila."
   },
   {
     question: "Bojim se da će boliti.",

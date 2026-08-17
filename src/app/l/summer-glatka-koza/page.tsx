@@ -121,7 +121,7 @@ const summerSmoothContent: AdvertorialContent = {
       "999.999 bljeskova — doživotni uređaj bez zamjene lampice",
       "Jednostavna upotreba — kod kuće, bez termina",
       "Sve zone: noge, pazuhe, bikini zona, ruke, lice",
-      "14 dana povrat bez pitanja · 12 mj. garancija · Plaćanje pouzećem",
+      "plaćanje pouzećem · detaljno uputstvo · Plaćanje pouzećem",
     ],
   },
   articleClosingHighlight:
@@ -220,11 +220,11 @@ const summerSmoothContent: AdvertorialContent = {
     { label: "Pogodno za", value: "Noge, pazuhe, bikini zona, ruke, lice" },
     { label: "Tip kože", value: "Fitzpatrick I–V (svijetla do tamna)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, korisnički priručnik" },
-    { label: "Garancija", value: "12 mjeseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "Glatka koža bez salona. Tretman kod kuće. Hlađenje koje čini razliku.",
   closingText:
-    "ICE COOL PRO — 175 KM jednom, besplatna dostava u BiH, plaćanje pouzećem, 14 dana povrat bez pitanja.",
+    "ICE COOL PRO — 175 KM jednom, besplatna dostava u BiH, plaćanje pouzećem, plaćanje pouzećem.",
   highlights: [
     { value: "6–8 sed.", label: "do vidljivih rezultata" },
     { value: "175 KM", label: "jednom umjesto 1.000+ KM" },

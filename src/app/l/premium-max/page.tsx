@@ -21,7 +21,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Ice Cool PRO MAX™ — IGBT IPL epilator | Aurora Shop",
-  description: "Najbrža IPL tehnologija. IGBT flash 0.8s. Neograničeni impulsi. MAX 19.8J energija. 190 KM - Besplatna dostava - 14 dana povrat.",
+  description: "Najbrža IPL tehnologija. IGBT flash 0.8s. Neograničeni impulsi. MAX 19.8J energija. 190 KM - Besplatna dostava - plaćanje pouzećem.",
   keywords: "Ice Cool PRO MAX, IGBT IPL, laser epilator, trajna depilacija, neograničeni impulsi, bikini zona, epilator BiH",
   alternates: {
     canonical: "https://aurorashop.ba/l/premium-max",
@@ -39,7 +39,7 @@ const specifications = [
   { label: "Talasna dužina", value: "600-1200nm crvena svjetlost" },
   { label: "Ekran", value: "HD LCD displej" },
   { label: "Režimi rada", value: "Automatski + ručni" },
-  { label: "Garancija", value: "12 mjeseci" },
+  { label: "Podrška", value: "Dostupna prije kupovine" },
 ];
 
 // Timeline rezultata
@@ -131,7 +131,7 @@ const comparisonData = [
     salon: null,
   },
   {
-    criterion: "14 dana povrat",
+    criterion: "plaćanje pouzećem",
     iceCoolProMax: true,
     philipsLumea: "Ovisi od prodavca",
     salon: null,

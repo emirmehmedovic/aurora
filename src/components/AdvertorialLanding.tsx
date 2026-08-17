@@ -418,7 +418,7 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
       </button>
       <div className="text-center bg-white/60 text-[#563435] px-5 py-2.5 rounded-xl font-medium text-sm border border-[#563435]/15 flex items-center justify-center gap-2 shadow-sm">
-        <Truck className="w-4 h-4" /> Besplatna dostava · Plaćanje pouzećem · 14 dana povrat
+        <Truck className="w-4 h-4" /> Besplatna dostava · Plaćanje pouzećem · plaćanje pouzećem
       </div>
       <div className="grid grid-cols-2 gap-3">
         <a
@@ -960,8 +960,8 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
               <div className="flex flex-wrap justify-center gap-6 text-sm text-white/70">
                 <span className="flex items-center gap-1.5"><Truck className="w-4 h-4" /> Besplatna dostava</span>
                 <span className="flex items-center gap-1.5"><Banknote className="w-4 h-4" /> Plaćanje pouzećem</span>
-                <span className="flex items-center gap-1.5"><RotateCcw className="w-4 h-4" /> 14 dana povrat</span>
-                <span className="flex items-center gap-1.5"><Shield className="w-4 h-4" /> 12 mj. garancija</span>
+                <span className="flex items-center gap-1.5"><RotateCcw className="w-4 h-4" /> plaćanje pouzećem</span>
+                <span className="flex items-center gap-1.5"><Shield className="w-4 h-4" /> detaljno uputstvo</span>
               </div>
             </div>
           </div>
@@ -1013,7 +1013,7 @@ export default function AdvertorialLanding({ product, content, comparisonProduct
             </div>
           </div>
           <p className="text-center text-sm text-gray-500 mt-4">
-            Svi modeli dolaze s besplatnom dostavom u BiH, 12 mjeseci garancije i 14 dana prava na povrat.
+            Svi modeli dolaze s besplatnom dostavom u BiH, plaćanjem pouzećem i detaljnim uputstvom za upotrebu.
           </p>
         </div>
 

@@ -430,8 +430,8 @@ export default function LandingOrderForm({ product }: LandingOrderFormProps) {
                 <Clock className="w-4 h-4 text-purple-700" />
               </div>
               <div>
-                <p className="font-bold text-gray-800 text-sm">14 dana za povrat</p>
-                <p className="text-xs text-gray-500">Ako nisi zadovoljna — bez pitanja</p>
+                <p className="font-bold text-gray-800 text-sm">Uputstvo i podrška</p>
+                <p className="text-xs text-gray-500">Dobijaš jasne upute za pravilno korištenje</p>
               </div>
             </div>
           </div>

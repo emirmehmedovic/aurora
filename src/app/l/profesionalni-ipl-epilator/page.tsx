@@ -105,10 +105,10 @@ const maxContent: LandingContent = {
     { label: "Pogodno za", value: "Noge, ruke, pazuh, bikini zona, lice, leđa" },
     { label: "Tip kože", value: "Fitzpatrick I-V (svijetla do tamna)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, nastavci, korisnički priručnik" },
-    { label: "Garancija", value: "12 mjeseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "Salon u džepu. 190 KM jednom — zauvijek.",
-  closingText: "Svaka seansa u salonu je novac koji više ne moraš davati. Max se isplati već nakon drugog tretmana. Besplatna dostava u BiH · Plaćanje pouzećem · 14 dana povrat bez pitanja.",
+  closingText: "Svaka seansa u salonu je novac koji više ne moraš davati. Max se isplati već nakon drugog tretmana. Besplatna dostava u BiH · Plaćanje pouzećem · plaćanje pouzećem.",
   beforeAfterImages: [
     {
       image: "/testimonials/before-after/max1.png",
@@ -172,14 +172,6 @@ export default async function ProfesionalniIplLandingPage() {
           }
         }
       },
-      "hasMerchantReturnPolicy": {
-        "@type": "MerchantReturnPolicy",
-        "applicableCountry": "BA",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-        "merchantReturnDays": 14,
-        "returnMethod": "https://schema.org/ReturnByMail",
-        "returnFees": "https://schema.org/FreeReturn"
-      }
     },
     "aggregateRating": {
       "@type": "AggregateRating",

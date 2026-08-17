@@ -79,7 +79,7 @@ const proContent: LandingContent = {
     items: [
       {
         q: '„Hoće li stvarno raditi za mene?"',
-        a: "IPL funkcioniše na principu svjetlosnog impulsa koji cilja folikul dlačice. Radi na svim tipovima kože i dlaka (izuzev najsvjetlijih nijansi). Ako nisi zadovoljna — imaš 14 dana za povrat bez pitanja. Nula rizika s tvoje strane.",
+        a: "IPL funkcioniše na principu svjetlosnog impulsa koji cilja folikul dlačice. Radi na svim tipovima kože i dlaka (izuzev najsvjetlijih nijansi). Ako nisi zadovoljna — imaš besplatna dostava bez pitanja. Nula rizika s tvoje strane.",
       },
       {
         q: '„Da li boli?"',
@@ -104,10 +104,10 @@ const proContent: LandingContent = {
     { label: "Pogodno za", value: "Noge, ruke, pazuh, bikini zona, lice" },
     { label: "Tip kože", value: "Fitzpatrick I-V (svijetla do tamna)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, adapter, naočale, korisnički priručnik" },
-    { label: "Garancija", value: "12 mjeseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "Jednom kupiš. 10 godina ne briješ.",
-  closingText: "Svaki dan koji odgađaš je još jedno jutro sa brijačem u ruci. Besplatna dostava u BiH · Plaćanje pouzećem · 14 dana povrat bez pitanja.",
+  closingText: "Svaki dan koji odgađaš je još jedno jutro sa brijačem u ruci. Besplatna dostava u BiH · Plaćanje pouzećem · plaćanje pouzećem.",
   beforeAfterImages: [
     {
       image: "/testimonials/before-after/pro1.png",
@@ -171,14 +171,6 @@ export default async function IplAparatLandingPage() {
           }
         }
       },
-      "hasMerchantReturnPolicy": {
-        "@type": "MerchantReturnPolicy",
-        "applicableCountry": "BA",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-        "merchantReturnDays": 14,
-        "returnMethod": "https://schema.org/ReturnByMail",
-        "returnFees": "https://schema.org/FreeReturn"
-      }
     },
     "aggregateRating": {
       "@type": "AggregateRating",

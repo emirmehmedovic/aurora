@@ -258,7 +258,7 @@ export default function SocialProofLandingV2({
                   <Truck className="w-4 h-4" /> Besplatna dostava
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Shield className="w-4 h-4" /> 14 dana povrat
+                  <Shield className="w-4 h-4" /> plaćanje pouzećem
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4" /> 1-3 dana dostava
@@ -476,7 +476,7 @@ export default function SocialProofLandingV2({
                 </div>
                 <div className="flex items-center gap-3 text-gray-600">
                   <Shield className="w-5 h-5 text-[#C19A91]" />
-                  <span>14 dana garancija povrata novca</span>
+                  <span>besplatna dostava u BiH</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-600">
                   <Clock className="w-5 h-5 text-[#C19A91]" />
@@ -535,7 +535,7 @@ export default function SocialProofLandingV2({
           <div className="max-w-3xl mx-auto">
             <div className="bg-[#F5F1ED] border-l-4 border-[#C19A91] rounded-lg p-6 mb-12">
               <p className="text-gray-700 leading-relaxed">
-                <span className="font-semibold text-gray-900">Već si napravila pravi izbor.</span> Samo završi narudžbu — besplatna dostava, plaćanje pouzećem i 14 dana garancija povrata.
+                <span className="font-semibold text-gray-900">Već si napravila pravi izbor.</span> Samo završi narudžbu — besplatna dostava, plaćanje pouzećem i besplatna dostava u BiH.
               </p>
             </div>
 

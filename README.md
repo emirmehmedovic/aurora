@@ -196,7 +196,7 @@ Dodaj u Vercel dashboard:
 ## 🎯 Conversion Optimization (CRO)
 
 - **Hero sekcija** - jasna value proposition
-- **Trust badges** - besplatna dostava, povrat, garancija
+- **Trust badges** - besplatna dostava, plaćanje pouzećem, uputstvo i podrška
 - **Social proof** - testimonials sa pravim imenima
 - **Urgency** - ograničena ponuda, popust
 - **Sticky CTA** - "Naruči odmah" dugme
@@ -221,7 +221,7 @@ Dodaj u Vercel dashboard:
 ### Prioritet 3 (Marketing)
 - [ ] Blog sistem za SEO content
 - [ ] FAQ stranica
-- [ ] Politika dostave, povrata, privatnosti
+- [ ] Politika dostave, reklamacija, privatnosti
 - [ ] Kontakt forma
 
 ## 🎨 Zamjena Slika

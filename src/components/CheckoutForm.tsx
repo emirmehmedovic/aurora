@@ -405,7 +405,7 @@ export default function CheckoutForm({ initialProduct, products }: CheckoutFormP
           </p>
         </div>
 
-        {/* Guarantees */}
+        {/* Trust badges */}
         <div className="grid grid-cols-1 gap-3">
           <div className="bg-white/40 backdrop-blur-md border border-white/30 rounded-xl p-4 flex items-center gap-3">
             <div className="p-2 bg-green-100 rounded-lg">

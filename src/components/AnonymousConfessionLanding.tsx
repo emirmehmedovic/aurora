@@ -204,7 +204,7 @@ export default function AnonymousConfessionLanding({ product }: AnonymousConfess
           </div>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
-            {["4.9/5 ocjena", "300+ korisnica", "14 dana povrat"].map((item) => (
+            {["4.9/5 ocjena", "300+ korisnica", "plaćanje pouzećem"].map((item) => (
               <div key={item} className="rounded-2xl border border-[#EDE4D8] bg-white/70 px-4 py-3 shadow-sm backdrop-blur">
                 <div className="flex items-center gap-1 text-[#C9A28F]">
                   <Star className="h-4 w-4 fill-current" />

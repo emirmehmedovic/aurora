@@ -235,7 +235,7 @@ export default function KontaktPage() {
                         <option value="product">Pitanje o proizvodu</option>
                         <option value="order">Status narudžbe</option>
                         <option value="delivery">Dostava</option>
-                        <option value="return">Povrat proizvoda</option>
+                        <option value="return">Reklamacija</option>
                         <option value="technical">Tehnička podrška</option>
                         <option value="other">Ostalo</option>
                       </select>

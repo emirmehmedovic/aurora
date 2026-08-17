@@ -90,10 +90,10 @@ const bikiniContent: LandingContent = {
     { label: "Pogodno za", value: "Bikini zona, lice, pazuhe, noge, ruke" },
     { label: "Tip kože", value: "Fitzpatrick I-IV (svijetla do maslinasta)" },
     { label: "Sadržaj pakovanja", value: "Uređaj, USB-C kabel, naočale, nastavci, priručnik" },
-    { label: "Garancija", value: "12 mjeseci" },
+    { label: "Podrška", value: "Dostupna prije kupovine" },
   ],
   closingTitle: "Bikini zona bez kompromisa. 165 KM jednom.",
-  closingText: "Manje od dva salona. Tretman u udobnosti tvog doma. Besplatna dostava u BiH · Plaćanje pouzećem · 14 dana povrat bez pitanja.",
+  closingText: "Manje od dva salona. Tretman u udobnosti tvog doma. Besplatna dostava u BiH · Plaćanje pouzećem · plaćanje pouzećem.",
 };
 
 export default async function IplZaBikiniZonuPage() {
@@ -125,14 +125,6 @@ export default async function IplZaBikiniZonuPage() {
           handlingTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 1, unitCode: "DAY" },
           transitTime: { "@type": "QuantitativeValue", minValue: 1, maxValue: 3, unitCode: "DAY" },
         },
-      },
-      hasMerchantReturnPolicy: {
-        "@type": "MerchantReturnPolicy",
-        applicableCountry: "BA",
-        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
-        merchantReturnDays: 14,
-        returnMethod: "https://schema.org/ReturnByMail",
-        returnFees: "https://schema.org/FreeReturn",
       },
     },
     aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "28" },

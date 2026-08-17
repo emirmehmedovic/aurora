@@ -170,7 +170,7 @@ export default function PremiumProductLanding({
           </button>
 
           <div className="flex flex-wrap gap-2">
-            {["Plaćanje pouzećem", "14 dana povrat", "12 mj. garancija"].map((item, i) => (
+            {["Plaćanje pouzećem", "Besplatna dostava", "Detaljno uputstvo"].map((item, i) => (
               <span
                 key={i}
                 className="inline-flex items-center gap-1.5 text-[11px] md:text-xs text-gray-600 font-light bg-white border border-[#e8e4de] px-2.5 md:px-3 py-1 md:py-1.5 rounded-full"
@@ -415,8 +415,8 @@ export default function PremiumProductLanding({
               { label: "Dostava", value: "Besplatno", highlight: true },
               { label: "Plaćanje", value: "Pouzećem na vrata" },
               { label: "Rok dostave", value: "1–2 radna dana" },
-              { label: "Povrat", value: "14 dana bez pitanja" },
-              { label: "Garancija", value: "12 mjeseci" },
+              { label: "Dostava", value: "Besplatna u BiH" },
+              { label: "Podrška", value: "Dostupna prije kupovine" },
             ].map((item, i) => (
               <div
                 key={i}
@@ -449,8 +449,8 @@ export default function PremiumProductLanding({
             Politika privatnosti
           </a>{" "}
           ·{" "}
-          <a href="https://aurorashop.ba/politika-povrata" className="underline hover:text-gray-700">
-            Politika povrata
+          <a href="https://aurorashop.ba/politika-dostave" className="underline hover:text-gray-700">
+            Politika dostave
           </a>
         </span>
         <span>

@@ -141,7 +141,7 @@ Philips nema zvaničnu distribuciju u BiH za Lumea liniju. Tvoje opcije su:
 
 - **Narudžba iz EU** (Amazon, Media Markt, Philips.com) — čekanje 2–4 tjedna, carina pri uvozu (10–17% + PDV na carinsku vrijednost), mogući problemi s reklamacijom
 - **Traženje u HR ili RS** — Lumea 9000 i 8000 serija ponekad se nađu, ali cijena je 350–600 EUR (685–1.175 KM)
-- **Kupovina "iz ruke"** — nemate nikakvu garanciju ni mogućnost povrata
+- **Kupovina "iz ruke"** — nemate lokalnu podršku ni jasne informacije o porijeklu uređaja
 
 Ni jedna od ovih opcija nije ni jednostavna ni jeftina.
 
@@ -163,7 +163,7 @@ Aurora ICE COOL serija koristi isti princip, s dodatkom koji Lumea nema u nižim
 | Hlađenje kože | Opciono (Cooling cap) | **Ugrađeno** |
 | Bljeskovi | 450.000 | **400.000** |
 | Dostupnost u BiH | Nema direktne distribucije | **Odmah, pouzećem** |
-| Garancija/povrat | Servisni centar u HR/RS | **14 dana povrat, direktno** |
+| Podrška/dostava | Servisni centar u HR/RS | **Direktna podrška i plaćanje pouzećem** |
 | Intenziteti | 5 | **5** |
 
 Lumea ima neke prednosti u software dijelu (SenseIQ app, personalizirani programi). ICE COOL ima prednost u cijeni, dostupnosti i ugrađenom hlađenju.
@@ -174,7 +174,7 @@ Lumea ima neke prednosti u software dijelu (SenseIQ app, personalizirani program
 
 Postoji jedna stvar koja je bitna kada kupuješ online u BiH: šta se desi kad nešto ne valja?
 
-S Philips Lumea naručenom iz Njemčke — vraćaš u Njemčku, platiš poštarinu, čekaš 3–4 tjedna. S Aurora ICE COOL — zoveš ili pišeš, šalješ nazad, dobijajš povrat ili zamjenu. Lokalna firma, lokalna podrška.
+S Philips Lumea naručenom iz Njemčke — za svako pitanje ideš kroz prodavca ili servis van BiH. S Aurora ICE COOL — zoveš ili pišeš direktno i dobijaš lokalnu podršku prije narudžbe i tokom korištenja.
 
 Za istu cijenu jedne Lumea (400+ EUR) možeš kupiti **dva Aurora ICE COOL Max uređaja** i pokloniti jedan sestri ili mami.
 
@@ -201,8 +201,8 @@ Formalno ne — sve pošiljke iznad 75 EUR vrijednosti podliježu carinskom post
 **Koliko dugo traje Aurora ICE COOL?**
 500.000 bljeskova za PRO i Max modele. Ako radiš tretmane tjedno (8 sedmica), pa jednom mjesečno — to je 10–15 godina redovnog korišćenja.
 
-**Ima li Aurora garanciju?**
-Da — 14 dana povrat bez pitanja i garancija na uređaj. Kontakt direktno kroz aurorashop.ba.
+**Kako mogu provjeriti koji model mi odgovara?**
+Možeš dobiti podršku prije narudžbe i platiti pouzećem pri preuzimanju. Kontakt direktno kroz aurorashop.ba.
 
 ---
 ---
@@ -262,7 +262,7 @@ Stane u ladicu, torbicu, kofer. Malen kao šminkarska spužvica — ali radi pos
 ### CTA section
 
 **ICE COOL LITE — 165 KM**
-Besplatna dostava · Plaćanje pouzećem · 14 dana povrat
+Besplatna dostava · Plaćanje pouzećem · Podrška prije kupovine
 
 Naruči do 15h — šalje se danas.
 
@@ -361,7 +361,7 @@ Uvijek provjeri ton kože na unutarnjoj strani lakta 24h prije prvog tretmana. K
 ### CTA
 
 **ICE COOL LITE — 165 KM | ICE COOL PRO — 175 KM**
-Besplatna dostava · Plaćanje pouzećem · 14 dana povrat
+Besplatna dostava · Plaćanje pouzećem · Podrška prije kupovine
 
 [→ Odaberi model i naruči]
 
@@ -455,7 +455,7 @@ Matematika govori sama za sebe.
 
 **ICE COOL PRO — 175 KM**
 Za trajno glatke noge, ruke i cijelo tijelo.
-Besplatna dostava · Plaćanje pouzećem · 14 dana povrat
+Besplatna dostava · Plaćanje pouzećem · Podrška prije kupovine
 
 Naruči do 15h — šalje se danas.
 
@@ -478,7 +478,7 @@ Da — preporučuje se obrijati noge dan-dva prije svakog tretmana. IPL cilja fo
 IPL radi na Fitzpatrick I–IV tipovima kože (od very fair do olive). Na tamnijim tonovima (Fitzpatrick V) uz niži intenzitet. Na Fitzpatrick VI — nije preporučeno.
 
 **Šta ako nisam zadovoljna rezultatima?**
-14 dana povrat — bez pitanja. Pošalješ nazad, dobijajš povrat.
+Podrška prije kupovine — pišeš direktno i dobijaš preporuku modela.
 
 ---
 ---
@@ -580,7 +580,7 @@ Nakon kursa tretmana — manje dlačica, manje tretmana, manje potencijalnih iri
 **ICE COOL Max (190 KM)** — preporučeno za osjetljivu kožu zbog Ice Cool+™ dvostrukog hlađenja
 **ICE COOL PRO (175 KM)** — standardno hlađenje, odlično za umjereno osjetljivu kožu
 
-Besplatna dostava · Plaćanje pouzećem · 14 dana povrat
+Besplatna dostava · Plaćanje pouzećem · Podrška prije kupovine
 
 [→ Odaberi model za svoju kožu]
 
@@ -601,7 +601,7 @@ Hlađenje je ključno. Korisnice s izrazito osjetljivom kožom prijavljuju minim
 ICE COOL Max s Ice Cool+™ dvostrukim hlađenjem je optimalan za najosjetljiviju kožu. PRO model je dobar za umjereno osjetljivu kožu.
 
 **Šta ako dobijem reakciju?**
-U prvom koraku — smanjiti intenzitet. Ako reakcija perzistira — stop i konzultacija s dermatologom. Imaš 14 dana za povrat uređaja bez pitanja.
+U prvom koraku — smanjiti intenzitet. Ako reakcija perzistira — stop i konzultacija s dermatologom. Za dodatna pitanja kontaktiraj nas prije ili nakon narudžbe.
 
 ---
 ---

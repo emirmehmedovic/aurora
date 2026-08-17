@@ -272,8 +272,8 @@ export default function BlogPostIplVsSalon() {
                 {[
                   { icon: Truck, text: "Dostava sutra" },
                   { icon: Banknote, text: "Plaćanje pouzećem" },
-                  { icon: RotateCcw, text: "14 dana povrat" },
-                  { icon: Shield, text: "12 mj. garancija" },
+                  { icon: RotateCcw, text: "plaćanje pouzećem" },
+                  { icon: Shield, text: "detaljno uputstvo" },
                 ].map(({ icon: Icon, text }, i) => (
                   <div key={i} className="flex items-center gap-1.5">
                     <Icon className="w-4 h-4" />

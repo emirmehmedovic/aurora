@@ -133,7 +133,7 @@ export default async function OfferSection() {
                       Želim ovaj →
                     </Link>
 
-                    {/* Guarantees */}
+                    {/* Trust badges */}
                     <div className="grid grid-cols-3 gap-4 border-t border-gray-200/60 pt-8">
                       <div className="text-center">
                         <Truck className="w-6 h-6 text-gray-400 mx-auto mb-2" />
@@ -141,7 +141,7 @@ export default async function OfferSection() {
                       </div>
                       <div className="text-center">
                         <ShieldCheck className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-                        <span className="text-xs text-gray-500 font-medium block">12 mj. garancija</span>
+                        <span className="text-xs text-gray-500 font-medium block">detaljno uputstvo</span>
                       </div>
                       <div className="text-center">
                         <Clock className="w-6 h-6 text-gray-400 mx-auto mb-2" />
