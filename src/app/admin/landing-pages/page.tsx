@@ -27,6 +27,17 @@ interface LandingPageEntry {
 
 const LANDING_PAGES: LandingPageEntry[] = [
   {
+    slug: "anonimna-ispovijest",
+    title: "Nisam htjela javno, ali moram vam reći...",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Anonimna ispovijest — testimonial angle",
+    description:
+      "🆕 NAJNOVIJI — Landing napravljen prema mockupu za anonimnu ispovijest korisnice, ali vizuelno usklađen sa postojećim Aurora LP stilom: cream/beige pozadina, rose-gold CTA, soft-gold akcenti i premium kartice. Hero sadrži Facebook-ad creative, sakriveno ime zbog privatnosti, testimonial copy, diskretan ton i postojeću narudžbenu formu sa WhatsApp/Viber opcijama. Fokus: skepticizam, realno iskustvo, manje iritacije i kućna IPL rutina.",
+    tags: ["PRO", "🆕 NOVO", "Anonimna ispovijest", "Testimonial", "Diskrecija", "Rose-Gold"],
+  },
+  {
     slug: "intimnost-ne-ceka",
     title: "Intimnost ne bi trebala čekati da se koža smiri",
     productName: "ICE COOL Pro Max",
@@ -327,6 +338,9 @@ const tagColors: Record<string, string> = {
   "Intimnost": "bg-rose-100 text-rose-700",
   "Bikini zona": "bg-pink-100 text-pink-600",
   "Spontanost": "bg-fuchsia-100 text-fuchsia-700",
+  "Anonimna ispovijest": "bg-sky-100 text-sky-700",
+  "Testimonial": "bg-cyan-100 text-cyan-700",
+  "Diskrecija": "bg-slate-100 text-slate-700",
 };
 
 export default function LandingPagesAdminPage() {
