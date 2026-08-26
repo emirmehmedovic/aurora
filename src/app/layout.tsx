@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Suspense } from "react";
+import AttributionTracker from "@/components/AttributionTracker";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import "./globals.css";
 
@@ -131,6 +133,9 @@ export default function RootLayout({
         )}
       </head>
       <body className="antialiased">
+        <Suspense fallback={null}>
+          <AttributionTracker />
+        </Suspense>
         {children}
         <WhatsAppButton />
       </body>

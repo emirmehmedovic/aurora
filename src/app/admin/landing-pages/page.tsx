@@ -27,6 +27,28 @@ interface LandingPageEntry {
 
 const LANDING_PAGES: LandingPageEntry[] = [
   {
+    slug: "da-li-stvarno-radi",
+    title: "Da li aparat od 175 KM zaista radi?",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Realna očekivanja — iskustva kupica",
+    description:
+      "🆕 NAJNOVIJI — Landing prema novom mockupu sa edukativnim uglom: objašnjava kako Ice Cool PRO radi, šta kupica realno može očekivati i zašto rezultat zavisi od redovnosti, zone, kože i dlačica. Sadrži WhatsApp testimonial mockupe sa stvarnim imenima iz postojećih LP iskustava, sigurnosne napomene, FAQ i standardnu narudžbenu formu.",
+    tags: ["PRO", "🆕 NOVO", "Edukativni", "Testimonial", "Realna očekivanja"],
+  },
+  {
+    slug: "bikini-zona-nema-sezonu",
+    title: "Bikini zona nema sezonu",
+    productName: "ICE COOL PRO",
+    productSlug: "ice-cool-pro",
+    price: "175 KM",
+    badge: "Bikini zona — privatnost i kućna rutina",
+    description:
+      "🆕 NAJNOVIJI — Landing prema novom mockupu fokusiran na vanjsku bikini liniju, privatnost i rutinu kod kuće tokom cijele godine. Copy naglašava manje potrebe za čestim brijanjem, korištenje bez salona i ugrađeno hlađenje. Uključuje anonimnu WhatsApp ispovijest, sigurnosni blok, FAQ i standardnu narudžbenu formu.",
+    tags: ["PRO", "🆕 NOVO", "Bikini zona", "Privatnost", "Kućna rutina"],
+  },
+  {
     slug: "anonimna-ispovijest",
     title: "Nisam htjela javno, ali moram vam reći...",
     productName: "ICE COOL PRO",

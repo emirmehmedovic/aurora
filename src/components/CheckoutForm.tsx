@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Check, Truck, ShieldCheck, Clock, CreditCard, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { trackInitiateCheckout, trackPurchase, trackLead, updateAdvancedMatching } from "@/lib/analytics";
+import { getAttributionForOrder } from "@/lib/attribution";
 import { DeliveryTruck } from "@/components/admin/DeliveryTruck";
 import { DeliveredPackage } from "@/components/admin/DeliveredPackage";
 
@@ -69,7 +70,7 @@ export default function CheckoutForm({ initialProduct, products }: CheckoutFormP
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, ...getAttributionForOrder() }),
       });
 
       const data = await response.json();

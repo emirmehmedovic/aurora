@@ -28,6 +28,10 @@ type ConversionEventData = {
     city?: string;
     zipCode?: string;
     country?: string;
+    clientIpAddress?: string;
+    clientUserAgent?: string;
+    fbp?: string;
+    fbc?: string;
   };
   customData?: {
     value?: number;
@@ -55,8 +59,8 @@ export async function sendMetaConversionEvent(data: ConversionEventData): Promis
 
     // Build user_data object with hashed values
     const user_data: any = {
-      client_ip_address: '0.0.0.0', // Placeholder - ideally pass real IP
-      client_user_agent: 'Mozilla/5.0', // Placeholder - ideally pass real user agent
+      client_ip_address: data.userData.clientIpAddress || '0.0.0.0',
+      client_user_agent: data.userData.clientUserAgent || 'Mozilla/5.0',
     };
 
     if (data.userData.email) user_data.em = hashData(data.userData.email);
@@ -66,6 +70,8 @@ export async function sendMetaConversionEvent(data: ConversionEventData): Promis
     if (data.userData.city) user_data.ct = hashData(data.userData.city);
     if (data.userData.zipCode) user_data.zp = hashData(data.userData.zipCode);
     if (data.userData.country) user_data.country = hashData(data.userData.country);
+    if (data.userData.fbp) user_data.fbp = data.userData.fbp;
+    if (data.userData.fbc) user_data.fbc = data.userData.fbc;
 
     // Build the event payload
     const eventPayload = {
@@ -134,6 +140,10 @@ export async function sendMetaPurchaseEvent(data: {
   };
   eventSourceUrl?: string;
   actionSource?: 'website' | 'phone_call' | 'physical_store' | 'email' | 'other';
+  clientIpAddress?: string;
+  clientUserAgent?: string;
+  fbp?: string;
+  fbc?: string;
 }) {
   await sendMetaConversionEvent({
     eventName: 'Purchase',
@@ -146,6 +156,10 @@ export async function sendMetaPurchaseEvent(data: {
       city: data.customer.city || undefined,
       zipCode: data.customer.zipCode || undefined,
       country: 'ba', // Bosnia and Herzegovina
+      clientIpAddress: data.clientIpAddress,
+      clientUserAgent: data.clientUserAgent,
+      fbp: data.fbp,
+      fbc: data.fbc,
     },
     customData: {
       value: data.value,
@@ -170,6 +184,10 @@ export async function sendMetaLeadEvent(data: {
   };
   eventSourceUrl?: string;
   actionSource?: 'website' | 'phone_call' | 'physical_store' | 'email' | 'other';
+  clientIpAddress?: string;
+  clientUserAgent?: string;
+  fbp?: string;
+  fbc?: string;
 }) {
   await sendMetaConversionEvent({
     eventName: 'Lead',
@@ -182,6 +200,10 @@ export async function sendMetaLeadEvent(data: {
       city: data.customer.city || undefined,
       zipCode: data.customer.zipCode || undefined,
       country: 'ba',
+      clientIpAddress: data.clientIpAddress,
+      clientUserAgent: data.clientUserAgent,
+      fbp: data.fbp,
+      fbc: data.fbc,
     },
     customData: {
       contentName: 'Checkout Form',

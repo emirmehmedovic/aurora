@@ -12,9 +12,25 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { formatOrderSourceLabel, formatWebOrderSource } from "@/lib/order-source";
 import { sendMetaPurchaseEvent, sendMetaLeadEvent } from "@/lib/metaConversionsAPI";
 import { sendOrderConfirmation } from "@/lib/messaging";
+import { parseCookieJson, type AttributionPayload, type AttributionTouch } from "@/lib/attribution";
 import { z } from "zod";
 
 const MIN_FORM_FILL_MS = 1000;
+
+const attributionTouchSchema = z.object({
+  landingPage: z.string().max(500).optional(),
+  referrer: z.string().max(500).optional(),
+  utmSource: z.string().max(200).optional(),
+  utmMedium: z.string().max(200).optional(),
+  utmCampaign: z.string().max(200).optional(),
+  utmContent: z.string().max(200).optional(),
+  utmTerm: z.string().max(200).optional(),
+  fbclid: z.string().max(500).optional(),
+  gclid: z.string().max(500).optional(),
+  fbp: z.string().max(500).optional(),
+  fbc: z.string().max(500).optional(),
+  capturedAt: z.string().max(100).optional(),
+});
 
 const publicOrderSchema = z.object({
   fullName: z.string().trim().min(2).max(120),
@@ -28,7 +44,32 @@ const publicOrderSchema = z.object({
   sourcePath: z.string().trim().max(200).optional().or(z.literal("")),
   website: z.string().max(0).optional().or(z.literal("")),
   formStartedAt: z.number().int().positive().optional(),
+  utm_source: z.string().trim().max(200).optional(),
+  utm_medium: z.string().trim().max(200).optional(),
+  utm_campaign: z.string().trim().max(200).optional(),
+  utm_content: z.string().trim().max(200).optional(),
+  utm_term: z.string().trim().max(200).optional(),
+  fbclid: z.string().trim().max(500).optional(),
+  gclid: z.string().trim().max(500).optional(),
+  attribution: z.object({
+    visitorId: z.string().max(200).optional(),
+    sessionId: z.string().max(200).optional(),
+    firstTouch: attributionTouchSchema.optional(),
+    lastTouch: attributionTouchSchema.optional(),
+  }).optional(),
 });
+
+function firstValue(...values: Array<string | null | undefined>) {
+  return values.find((value) => value && value.trim() !== "")?.trim();
+}
+
+function getCookieTouch(request: NextRequest, name: string): AttributionTouch | undefined {
+  return parseCookieJson<AttributionTouch>(request.cookies.get(name)?.value);
+}
+
+function cleanJson<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value)) as T;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -84,10 +125,61 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Extract UTM parameters from headers or query
-    const utmSource = request.nextUrl.searchParams.get("utm_source") || "direct";
-    const utmMedium = request.nextUrl.searchParams.get("utm_medium") || "none";
-    const utmCampaign = request.nextUrl.searchParams.get("utm_campaign") || "none";
+    const cookieAttribution: AttributionPayload = {
+      visitorId: request.cookies.get("aurora_vid")?.value,
+      sessionId: request.cookies.get("aurora_sid")?.value,
+      firstTouch: getCookieTouch(request, "aurora_first_touch"),
+      lastTouch: getCookieTouch(request, "aurora_last_touch"),
+    };
+    const attribution = parsed.data.attribution || cookieAttribution;
+    const firstTouch = attribution.firstTouch || cookieAttribution.firstTouch;
+    const lastTouch = attribution.lastTouch || cookieAttribution.lastTouch;
+
+    const utmSource = firstValue(
+      parsed.data.utm_source,
+      request.nextUrl.searchParams.get("utm_source"),
+      lastTouch?.utmSource,
+      firstTouch?.utmSource,
+    ) || "direct";
+    const utmMedium = firstValue(
+      parsed.data.utm_medium,
+      request.nextUrl.searchParams.get("utm_medium"),
+      lastTouch?.utmMedium,
+      firstTouch?.utmMedium,
+    ) || "none";
+    const utmCampaign = firstValue(
+      parsed.data.utm_campaign,
+      request.nextUrl.searchParams.get("utm_campaign"),
+      lastTouch?.utmCampaign,
+      firstTouch?.utmCampaign,
+    ) || "none";
+    const utmContent = firstValue(
+      parsed.data.utm_content,
+      request.nextUrl.searchParams.get("utm_content"),
+      lastTouch?.utmContent,
+      firstTouch?.utmContent,
+    ) || null;
+    const utmTerm = firstValue(
+      parsed.data.utm_term,
+      request.nextUrl.searchParams.get("utm_term"),
+      lastTouch?.utmTerm,
+      firstTouch?.utmTerm,
+    ) || null;
+    const fbclid = firstValue(
+      parsed.data.fbclid,
+      request.nextUrl.searchParams.get("fbclid"),
+      lastTouch?.fbclid,
+      firstTouch?.fbclid,
+    ) || null;
+    const gclid = firstValue(
+      parsed.data.gclid,
+      request.nextUrl.searchParams.get("gclid"),
+      lastTouch?.gclid,
+      firstTouch?.gclid,
+    ) || null;
+    const fbp = firstValue(lastTouch?.fbp, firstTouch?.fbp, request.cookies.get("_fbp")?.value);
+    const fbc = firstValue(lastTouch?.fbc, firstTouch?.fbc, request.cookies.get("_fbc")?.value);
+    const clientUserAgent = request.headers.get("user-agent") || undefined;
 
     // Normalize for matching
     const phoneNorm = normalizePhone(phone);
@@ -107,12 +199,20 @@ export async function POST(request: NextRequest) {
         throw new Error('Customer not found');
       }
 
-      // Update if more complete data provided
+      // Keep the customer record aligned with the latest submitted order data.
+      // Orders currently display customer fields in admin, so stale customer data
+      // makes a new order look like it belongs to an older test/customer entry.
       const updateData: any = {};
-      if (!customer.email && email) updateData.email = email;
-      if (!customer.address && address) updateData.address = address;
-      if (!customer.city && city) updateData.city = city;
-      if (!customer.zipCode && zipCode) updateData.zipCode = zipCode;
+      if (customer.fullName !== fullName) {
+        updateData.fullName = fullName;
+        updateData.fullNameNormalized = nameNorm;
+      }
+      if (customer.phone !== phone) updateData.phone = phone;
+      if (customer.phoneNormalized !== phoneNorm) updateData.phoneNormalized = phoneNorm;
+      if (email && customer.email !== email) updateData.email = email;
+      if (customer.address !== address) updateData.address = address;
+      if (customer.city !== city) updateData.city = city;
+      if ((zipCode || null) !== customer.zipCode) updateData.zipCode = zipCode || null;
 
       if (Object.keys(updateData).length > 0) {
         customer = await prisma.customer.update({
@@ -148,7 +248,21 @@ export async function POST(request: NextRequest) {
         notes: notes || null,
         utmSource,
         utmMedium,
-        utmCampaign
+        utmCampaign,
+        utmContent,
+        utmTerm,
+        fbclid,
+        firstTouch: firstTouch?.utmCampaign || firstTouch?.utmSource || firstTouch?.landingPage || null,
+        lastTouch: lastTouch?.utmCampaign || lastTouch?.utmSource || lastTouch?.landingPage || null,
+        touchPoints: cleanJson({
+          visitorId: attribution.visitorId || cookieAttribution.visitorId,
+          sessionId: attribution.sessionId || cookieAttribution.sessionId,
+          firstTouch,
+          lastTouch,
+          gclid,
+          fbp,
+          fbc,
+        }),
       }
     });
 
@@ -166,6 +280,9 @@ export async function POST(request: NextRequest) {
         utmSource,
         utmMedium,
         utmCampaign,
+        utmContent,
+        utmTerm,
+        fbclid,
         notes: notes || null,
         items: {
           create: [
@@ -229,6 +346,10 @@ export async function POST(request: NextRequest) {
         },
         eventSourceUrl: `https://aurorashop.ba${sourcePath || '/naruci'}`,
         actionSource: 'website',
+        clientIpAddress: ip,
+        clientUserAgent,
+        fbp,
+        fbc,
       });
 
       // Send Lead event
@@ -243,6 +364,10 @@ export async function POST(request: NextRequest) {
         },
         eventSourceUrl: `https://aurorashop.ba${sourcePath || '/naruci'}`,
         actionSource: 'website',
+        clientIpAddress: ip,
+        clientUserAgent,
+        fbp,
+        fbc,
       });
 
       console.log('[Meta Conversions API] Purchase and Lead events sent successfully');

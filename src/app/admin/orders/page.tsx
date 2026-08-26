@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw, Filter, Search, X as XIcon, Download, Edit, Trash2, User, ExternalLink, Plus, FileText, Loader2, Copy, Calendar } from "lucide-react";
+import { ArrowLeft, Package, Phone, Mail, MapPin, Printer, ChevronDown, ChevronUp, CheckCircle, Truck, XCircle, ShoppingBag, Clock, RotateCcw, Filter, Search, X as XIcon, Download, Edit, Trash2, User, ExternalLink, Plus, FileText, Loader2, Copy, Calendar, RefreshCw } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import BulkActionBar from "@/components/admin/BulkActionBar";
@@ -150,7 +150,7 @@ export default function OrdersPage() {
     const timer = setTimeout(() => {
       if (session) {
         setCurrentPage(1); // Reset to first page when filters change
-        fetchOrders();
+        fetchOrders({ page: 1 });
       }
     }, hasTypingFilters ? 800 : 0); // 800ms debounce for search/dates, immediate for status filter
 
@@ -160,7 +160,7 @@ export default function OrdersPage() {
   // Fetch when page changes (no debounce)
   useEffect(() => {
     if (session && currentPage > 1) {
-      fetchOrders();
+      fetchOrders({ page: currentPage });
     }
   }, [currentPage]);
 
@@ -170,29 +170,41 @@ export default function OrdersPage() {
     }
   }, [showCreateModal, availableProducts.length]);
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (options: {
+    page?: number;
+    status?: string;
+    search?: string;
+    dateFrom?: string;
+    dateTo?: string;
+  } = {}) => {
     try {
       setLoading(true);
 
+      const page = options.page ?? currentPage;
+      const selectedStatus = options.status ?? statusFilter;
+      const selectedSearch = options.search ?? searchQuery;
+      const selectedDateFrom = options.dateFrom ?? dateFrom;
+      const selectedDateTo = options.dateTo ?? dateTo;
+
       // Build query parameters
       const params = new URLSearchParams();
-      params.append('page', currentPage.toString());
+      params.append('page', page.toString());
       params.append('limit', pageLimit.toString());
 
-      if (statusFilter && statusFilter !== 'ALL') {
-        params.append('status', statusFilter);
+      if (selectedStatus && selectedStatus !== 'ALL') {
+        params.append('status', selectedStatus);
       }
 
-      if (searchQuery.trim()) {
-        params.append('search', searchQuery.trim());
+      if (selectedSearch.trim()) {
+        params.append('search', selectedSearch.trim());
       }
 
-      if (dateFrom) {
-        params.append('dateFrom', dateFrom);
+      if (selectedDateFrom) {
+        params.append('dateFrom', selectedDateFrom);
       }
 
-      if (dateTo) {
-        params.append('dateTo', dateTo);
+      if (selectedDateTo) {
+        params.append('dateTo', selectedDateTo);
       }
 
       const response = await fetch(`/api/orders?${params.toString()}`);
@@ -832,6 +844,13 @@ export default function OrdersPage() {
     setDateFrom("");
     setDateTo("");
     setCurrentPage(1); // Reset to first page
+    fetchOrders({
+      page: 1,
+      status: "ALL",
+      search: "",
+      dateFrom: "",
+      dateTo: "",
+    });
   };
 
   const hasActiveFilters = statusFilter !== "ALL" || searchQuery !== "" || dateFrom !== "" || dateTo !== "";
@@ -885,6 +904,17 @@ export default function OrdersPage() {
           </div>
 
           <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => {
+                setCurrentPage(1);
+                fetchOrders({ page: 1 });
+              }}
+              disabled={loading}
+              className="px-4 py-3 rounded-2xl border border-gray-200 bg-white text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center gap-2 disabled:opacity-60"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+              Osvježi
+            </button>
             <button
               onClick={exportConfirmedPendingOrdersPdf}
               disabled={exportingPendingPdf}

@@ -1,3 +1,5 @@
+import { getStoredAttribution } from "@/lib/attribution";
+
 // Google Analytics 4
 export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
@@ -280,6 +282,20 @@ export const getUtmParams = (): Record<string, string> => {
       const stored = sessionStorage.getItem('utm_params');
       if (stored) return JSON.parse(stored);
     } catch {}
+
+    const attribution = getStoredAttribution();
+    const touch = attribution.lastTouch || attribution.firstTouch;
+    if (touch) {
+      return {
+        ...(touch.utmSource ? { utm_source: touch.utmSource } : {}),
+        ...(touch.utmMedium ? { utm_medium: touch.utmMedium } : {}),
+        ...(touch.utmCampaign ? { utm_campaign: touch.utmCampaign } : {}),
+        ...(touch.utmTerm ? { utm_term: touch.utmTerm } : {}),
+        ...(touch.utmContent ? { utm_content: touch.utmContent } : {}),
+        ...(touch.fbclid ? { fbclid: touch.fbclid } : {}),
+        ...(touch.gclid ? { gclid: touch.gclid } : {}),
+      };
+    }
   }
 
   return utms;

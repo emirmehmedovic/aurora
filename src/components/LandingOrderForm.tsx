@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Check, Truck, ShieldCheck, CreditCard, ChevronRight, Clock, Gift, ArrowRight } from "lucide-react";
 import { trackInitiateCheckout, trackPurchase, trackLead, trackFormStart, trackFormAbandon, getUtmParams, trackCtaClick } from "@/lib/analytics";
+import { getAttributionForOrder } from "@/lib/attribution";
 import { DeliveryTruck } from "@/components/admin/DeliveryTruck";
 import { DeliveredPackage } from "@/components/admin/DeliveredPackage";
 
@@ -69,7 +70,7 @@ export default function LandingOrderForm({ product }: LandingOrderFormProps) {
     try {
       // Append UTM params to order data
       const utms = getUtmParams();
-      const orderData = { ...formData, ...utms };
+      const orderData = { ...formData, ...utms, ...getAttributionForOrder() };
 
       const response = await fetch("/api/orders", {
         method: "POST",
